@@ -1,8 +1,10 @@
 import React from 'react'
 import HeaderPage from '../home/HeaderPage'
 
-export const Header = () => {
+export default function Header() {
   return (
-    <div><HeaderPage /></div>
+    <div>
+      <HeaderPage />
+    </div>
   )
 }
