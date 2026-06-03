@@ -40,7 +40,7 @@ export const metadata = {
     siteName: "FoodSide",
     images: [
       {
-        url: "https://foodside.co.in/logo_foodeside.png",
+        url: "https://foodside.co.in/main_log_fd.png",
         width: 1200,
         height: 630,
         alt: "FoodSide Highway Food Delivery",
@@ -54,11 +54,11 @@ export const metadata = {
     title: "FoodSide | Highway Food Delivery Platform",
     description:
       "Order fresh food from trusted highway restaurants across India.",
-    images: ["https://foodside.co.in/logo_foodeside.png"],
+    images: ["https://foodside.co.in/main_log_fd.png"],
   },
 
   icons: {
-    icon: "https://foodside.co.in/logo_foodeside.png",
+    icon: "https://foodside.co.in/main_log_fd.png",
   },
 };
 
