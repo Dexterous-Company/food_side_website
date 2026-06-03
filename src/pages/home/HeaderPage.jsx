@@ -220,8 +220,8 @@ const HeaderPage = () => {
                 <FaPhoneAlt className="opacity-90" size={12} /> +91 8688043861
               </span>
               <span className="flex items-center gap-2 pr-5 border-r border-white/40">
-                <FaMapMarkerAlt className="opacity-90" size={12} /> Beverley Rd
-                Brooklyn, New York 11226, USA.
+                {/* <FaMapMarkerAlt className="opacity-90" size={12} />  */}
+                BOLLINENI VENTURES
               </span>
               <span className="flex items-center gap-2">
                 <FaClock className="opacity-90" size={12} /> Opening Hour: Mon
