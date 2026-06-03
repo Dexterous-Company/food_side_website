@@ -1,6 +1,7 @@
 // components/Menu.jsx
+
 "use client";
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import AOS from '../../../utils/aos';
 
 // Real menu data from fooddelivery.menus.json (10 items)
@@ -137,18 +138,8 @@ const Menu = () => {
   const [lastAddedItem, setLastAddedItem] = useState('');
 
   useEffect(() => {
-    // Initialize AOS after component mounts
-    setTimeout(() => {
-      AOS.init();
-    }, 100);
+    AOS.init();
   }, []);
-
-  // Re-initialize AOS when activeTab changes
-  useEffect(() => {
-    setTimeout(() => {
-      AOS.refresh();
-    }, 100);
-  }, [activeTab]);
 
   const tabs = [
     { id: 'all', label: 'All Items', icon: 'fa-border-all' },
@@ -158,17 +149,15 @@ const Menu = () => {
     { id: 'breads', label: 'Breads', icon: 'fa-bread-slice' }
   ];
 
-  const getCategoryCount = useCallback((categoryId) => {
+  const getCategoryCount = (categoryId) => {
     if (categoryId === 'all') return menuData.length;
     return menuData.filter(item => item.category === categoryId).length;
-  }, []);
+  };
 
-  const filteredItems = useMemo(() => {
-    if (activeTab === 'all') {
-      return menuData;
-    }
+  const getFilteredItems = () => {
+    if (activeTab === 'all') return menuData;
     return menuData.filter(item => item.category === activeTab);
-  }, [activeTab]);
+  };
 
   const addToCart = (item) => {
     setCartItems(prev => [...prev, item]);
@@ -177,9 +166,11 @@ const Menu = () => {
     setTimeout(() => setShowCartAlert(false), 2000);
   };
 
-  const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
-  };
+  const currentItems = getFilteredItems();
+
+  // Debug log to verify filtering
+  console.log('Active Tab:', activeTab);
+  console.log('Filtered Items:', currentItems.map(item => ({ name: item.name, category: item.category })));
 
   return (
     <section className="py-20 bg-gradient-to-br from-white to-orange-50/30">
@@ -211,27 +202,29 @@ const Menu = () => {
                 <i className="fa-solid fa-utensils text-[#ff581b]"></i>
                 <span>{menuData.length}+ Items</span>
               </div>
-              <div className="group bg-[#ff581b] text-white rounded-full py-3 px-6 font-bold relative overflow-hidden inline-flex items-center gap-2 shadow-lg hover:shadow-xl transition-all">
+              <button className="group bg-[#ff581b] text-white rounded-full py-3 px-6 font-bold relative overflow-hidden inline-flex items-center gap-2 shadow-lg hover:shadow-xl transition-all">
                 View Full Menu
                 <svg className="w-4 h-4 transition-transform group-hover:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
-              </div>
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Filter Tabs */}
+        {/* Filter Tabs - FIXED: Changed div back to button for better click handling */}
         <div className="flex flex-wrap gap-2 justify-center mb-12 overflow-x-auto pb-2 scrollbar-hide" data-aos="fade-up">
           {tabs.map((tab) => (
-            <div
+            <button
               key={tab.id}
-              type="button"
-              onClick={() => handleTabClick(tab.id)}
+              onClick={() => {
+                console.log('Clicked tab:', tab.id);
+                setActiveTab(tab.id);
+              }}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
                 activeTab === tab.id
-                  ? 'bg-[#ff581b] text-white shadow-lg shadow-[#ff581b]/30 scale-105'
-                  : 'bg-white border border-gray-200 text-gray-600 hover:border-[#ff581b] hover:text-[#ff581b] hover:scale-105'
+                  ? 'bg-[#ff581b] text-white shadow-lg shadow-[#ff581b]/30'
+                  : 'bg-white border border-gray-200 text-gray-600 hover:border-[#ff581b] hover:text-[#ff581b]'
               }`}
             >
               <i className={`fa-solid ${tab.icon} text-sm`}></i>
@@ -239,14 +232,14 @@ const Menu = () => {
               <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
                 activeTab === tab.id ? 'bg-white/25 text-white' : 'bg-gray-100 text-gray-500'
               }`}>{getCategoryCount(tab.id)}</span>
-            </div>
+            </button>
           ))}
         </div>
 
         {/* Menu Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.length > 0 ? (
-            filteredItems.map((item, idx) => (
+          {currentItems.length > 0 ? (
+            currentItems.map((item, idx) => (
               <div 
                 key={item.id} 
                 className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 group" 
@@ -328,13 +321,13 @@ const Menu = () => {
                   
                   {/* Action Buttons */}
                   <div className="flex gap-2 mt-2">
-                    <div 
+                    <button 
                       onClick={() => addToCart(item)}
                       className="flex-1 bg-[#ff581b] text-white rounded-full py-2.5 text-sm font-semibold hover:bg-[#e04e16] transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg cursor-pointer"
                     >
                       <i className="fa-solid fa-cart-shopping text-xs"></i>
                       Add to Cart
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -345,6 +338,16 @@ const Menu = () => {
             </div>
           )}
         </div>
+
+        {/* View More Button */}
+        {currentItems.length >= 6 && (
+          <div className="text-center mt-12" data-aos="fade-up">
+            <button className="group bg-transparent border-2 border-[#ff581b] text-[#ff581b] rounded-full py-3 px-8 font-bold hover:bg-[#ff581b] hover:text-white transition-all inline-flex items-center gap-2 cursor-pointer">
+              Load More Items
+              <i className="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+            </button>
+          </div>
+        )}
 
         {/* Cart Summary Bar */}
         {cartItems.length > 0 && (

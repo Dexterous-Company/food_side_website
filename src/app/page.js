@@ -13,13 +13,13 @@ const page = () => {
   return (
     <div>
       <HeroSection />
-      <SelectionProcess />
+      {/* <SelectionProcess /> */}
       <About />
-      <History />
+      {/* <History /> */}
       <Menu />
       {/* <Stats /> */}
-      <Chefs />
-      <Testimonials />
+      {/* <Chefs /> */}
+      {/* <Testimonials /> */}
       {/* <Newsletter /> */}
     </div>
   );

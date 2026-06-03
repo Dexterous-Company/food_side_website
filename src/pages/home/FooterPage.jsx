@@ -325,17 +325,15 @@ const FooterPage = () => {
                       Contact Us
                     </h5>
                     <div className="contact-info space-y-4 lg:space-y-5">
-                      <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
+                      {/* <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
                         <FaMapMarkerAlt className="text-[#ff581b] text-base lg:text-lg mt-1 group-hover:text-white group-hover:scale-110 transition-all" />
                         <div>
                           <p className="text-white/70 text-sm lg:text-base">
-                            Beverley Rd, Brooklyn
+                          BOLLINENI VENTURES
                           </p>
-                          <p className="text-white/70 text-sm lg:text-base">
-                            New York 11226, USA
-                          </p>
+                       
                         </div>
-                      </div>
+                      </div> */}
                       <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
                         <FaPhoneAlt className="text-[#ff581b] text-base lg:text-lg group-hover:text-white group-hover:scale-110 transition-all" />
                         <p className="text-white/70 text-sm lg:text-base">

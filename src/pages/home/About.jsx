@@ -10,7 +10,7 @@ const About = () => {
   }, []);
 
   return (
-    <section className="py-20 md:py-28 bg-white relative overflow-hidden">
+    <section className="py-0 md:py-28 bg-white relative overflow-hidden">
       {/* Background Blobs */}
       <div className="absolute w-[700px] h-[700px] rounded-full bg-gradient-radial from-[#ff581b]/5 to-transparent top-[-200px] right-[-200px] pointer-events-none" />
       <div className="absolute w-[400px] h-[400px] rounded-full bg-gradient-radial from-[#ff581b]/5 to-transparent bottom-[-100px] left-[-100px] pointer-events-none" />
@@ -123,7 +123,7 @@ const About = () => {
               </div>
             </div>
             
-            <button className="group bg-[#ff581b] text-white rounded-full py-4 px-8 font-bold relative overflow-hidden transition-all">
+            <div className="group bg-[#ff581b] text-white rounded-full py-4 px-8 font-bold relative overflow-hidden transition-all w-55">
               <span className="relative z-10 flex items-center gap-2">
                 Explore Our Menu
                 <svg className="w-4 h-4 transition-transform group-hover:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,7 +131,7 @@ const About = () => {
                 </svg>
               </span>
               {/* <div className="absolute inset-0 bg-black transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300" /> */}
-            </button>
+            </div>
           </div>
         </div>
       </div>
