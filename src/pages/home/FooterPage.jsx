@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import {
   FaFacebookF,
@@ -136,20 +137,20 @@ const FooterPage = () => {
                   {/* Brand Column */}
                   <div className="footer-column footer-brand-column animate-[fadeInUp_0.8s_ease-out_0.2s_both]">
                     <div className="footer-logo mb-6">
-                      <a href="/">
+                      <Link href="/">
                         <img
-                          src="/assets/images/logo.png"
+                          src="/main_log_fd.png"
                           alt="Food Side"
                           className="w-48 lg:w-64 transition-all"
                         />
-                      </a>
+                      </Link>
                     </div>
                     <p className="footer-description text-white/70 text-sm lg:text-base leading-relaxed mb-6">
                       Delivering premium culinary experiences with passion,
                       quality ingredients, and exceptional service.
                     </p>
                     <div className="footer-social-links flex gap-3 lg:gap-4">
-                      <a
+                      <Link
                         href="https://www.facebook.com/"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -157,8 +158,8 @@ const FooterPage = () => {
                       >
                         <FaFacebookF className="text-base lg:text-lg relative z-10" />
                         <span className="absolute inset-0 bg-[#ff581b] rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></span>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         href="https://www.instagram.com/"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -166,8 +167,8 @@ const FooterPage = () => {
                       >
                         <FaInstagram className="text-base lg:text-lg relative z-10" />
                         <span className="absolute inset-0 bg-[#ff581b] rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></span>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         href="https://x.com/"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -175,8 +176,8 @@ const FooterPage = () => {
                       >
                         <FaTwitter className="text-base lg:text-lg relative z-10" />
                         <span className="absolute inset-0 bg-[#ff581b] rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></span>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         href="https://www.linkedin.com/"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -184,7 +185,7 @@ const FooterPage = () => {
                       >
                         <FaLinkedinIn className="text-base lg:text-lg relative z-10" />
                         <span className="absolute inset-0 bg-[#ff581b] rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></span>
-                      </a>
+                      </Link>
                     </div>
                   </div>
 
@@ -195,52 +196,68 @@ const FooterPage = () => {
                     </h5>
                     <ul className="footer-links space-y-3">
                       <li>
-                        <a
+                        <Link
                           href="/"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Home
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           href="/menu"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Menu
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
-                          href="/about"
+                        <Link
+                          href="/about_us"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           About Us
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
+                          href="/contact_us"
+                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                        >
+                          Contact Us
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/refundPolicy"
+                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                        >
+                          Refund Policy
+                        </Link> 
+                      </li>
+                      <li>
+                        <Link
                           href="/reservation"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Reservation
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           href="/shop"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Shop
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           href="/blog"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Blog
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -252,52 +269,52 @@ const FooterPage = () => {
                     </h5>
                     <ul className="footer-links space-y-3">
                       <li>
-                        <a
+                        <Link
                           href="/shop"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Food Delivery
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           href="/menu"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Private Dining
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           href="/shop"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Takeaway Pickup
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           href="/contact"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Wedding Catering
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           href="/reservation"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Party Booking
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
-                          href="/contact"
+                        <Link
+                          href="/contact_us"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Corporate Lunches
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -322,13 +339,13 @@ const FooterPage = () => {
                       <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
                         <FaPhoneAlt className="text-[#ff581b] text-base lg:text-lg group-hover:text-white group-hover:scale-110 transition-all" />
                         <p className="text-white/70 text-sm lg:text-base">
-                          +00 (99) 939 7777
+                          +91 8688043861
                         </p>
                       </div>
                       <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
                         <FaEnvelope className="text-[#ff581b] text-base lg:text-lg group-hover:text-white group-hover:scale-110 transition-all" />
                         <p className="text-white/70 text-sm lg:text-base">
-                          hello@restrova.com
+                          info@foodside.co.in
                         </p>
                       </div>
                       <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
@@ -360,19 +377,19 @@ const FooterPage = () => {
                         |
                       </span>
                       <br className="lg:hidden" />
-                      <a
-                        href="/privacy-policy"
+                      <Link
+                        href="/privacypolicy"
                         className="text-[#ff581b] hover:text-white transition-colors mx-1"
                       >
                         Privacy Policy
-                      </a>
+                      </Link>
                       <span className="opacity-40 mx-1">|</span>
-                      <a
-                        href="/terms-conditions"
+                      <Link
+                        href="/terms_conditions"
                         className="text-[#ff581b] hover:text-white transition-colors mx-1"
                       >
                         Terms & Conditions
-                      </a>
+                      </Link>
                     </p>
                     <div className="payment-methods flex items-center gap-3 flex-wrap justify-center">
                       <span className="payment-label text-white/60 text-[10px] lg:text-xs uppercase tracking-wide font-semibold">

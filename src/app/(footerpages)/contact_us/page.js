@@ -1,9 +1,10 @@
+import ContactUs from '@/pages/footer_pages/ContactUs';
 import React from 'react';
 
 const page = () => {
   return (
     <div>
-      <h1>Contact us</h1>
+      <ContactUs />
     </div>
   );
 }

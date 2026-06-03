@@ -1,9 +1,10 @@
+import TermsAndCondtion from '@/pages/footer_pages/TermsAndCondtion'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <h1>Terms and Conditions</h1>
+      <TermsAndCondtion />
     </div>
   )
 }
