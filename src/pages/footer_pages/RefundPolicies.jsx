@@ -177,7 +177,7 @@ const RefundPolicies = () => {
               Our <span className="text-[#ff581b] font-title">Commitment</span> to Fairness
             </h2>
             <p className="text-white/70 text-base md:text-lg" data-aos="fade-up" data-aos-delay="200">
-              Food Side App by Bollineni Ventures — Effective Date: June 2026
+              Food Side  by Bollineni Ventures — Effective Date: June 2026
             </p>
           </div>
         </div>
