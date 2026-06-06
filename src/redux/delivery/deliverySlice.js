@@ -480,7 +480,7 @@ export const {
 // ========== Selectors ==========
 
 // Select specific pieces of state
-export const selectFromLocation = state => state.delivery.fromLocation;
+export const BselectFromLocation = state => state.delivery.fromLocation;
 export const selectFromLocationDetailed = state =>
   state.delivery.fromLocationDetailed;
 export const selectTowardsLocation = state => state.delivery.towardsLocation;

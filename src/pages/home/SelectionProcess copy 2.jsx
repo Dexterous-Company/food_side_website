@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import "antd/dist/reset.css";
 import { CalendarOutlined } from "@ant-design/icons";
 import { FaClock } from "react-icons/fa";
+import { formatTime } from "../selectRoutes/constants";
 
 const GOOGLE_API_KEY = "AIzaSyBS8mqUuvOWZ4WQRMEvhBA7jUb0jM1Ge-Q";
 
@@ -61,10 +62,6 @@ const SelectionProcess = () => {
     return date.format("DD MMM YYYY");
   };
 
-  const formatTime = (time) => {
-    if (!time) return "Select Time";
-    return time.format("hh:mm A");
-  };
 
   // Get address from coordinates using Google Geocoding API
   const getAddressFromCoords = async (lat, lng) => {
