@@ -22,7 +22,7 @@ export default function BannerCarousel({ banners, onBannerChange }) {
   };
 
   return (
-    <div className="relative w-full h-28 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+    <div className="relative w-full h-45 sm:h-44 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
       <img
         src={banners[bannerIdx]}
         alt="Banner"

@@ -19,24 +19,26 @@ import {
   normalizeErrorMessage,
 } from "../../../utils/deliveryApi";
 
-const normalizeRouteKey = value =>
+const normalizeRouteKey = (value) =>
   String(value || "")
     .trim()
     .toLowerCase();
 
-const isValidRouteValue = value => {
+const isValidRouteValue = (value) => {
   if (value === null || value === undefined) return false;
   const normalizedValue = normalizeRouteKey(value);
   return normalizedValue !== "" && normalizedValue !== "0";
 };
 
-const getPointRouteIds = point => {
+const getPointRouteIds = (point) => {
   if (Array.isArray(point?.routeId)) {
     return point.routeId
-      .flatMap(item => {
+      .flatMap((item) => {
         if (typeof item === "string") return [item];
         if (!item || typeof item !== "object") return [];
-        return [item.routeId, item.rootIdName, item.name, item._id].filter(Boolean);
+        return [item.routeId, item.rootIdName, item.name, item._id].filter(
+          Boolean,
+        );
       })
       .map(normalizeRouteKey)
       .filter(isValidRouteValue);
@@ -55,13 +57,15 @@ const getPointRouteIds = point => {
   }
 
   if (typeof point?.routeId === "string") {
-    return isValidRouteValue(point.routeId) ? [normalizeRouteKey(point.routeId)] : [];
+    return isValidRouteValue(point.routeId)
+      ? [normalizeRouteKey(point.routeId)]
+      : [];
   }
 
   return [];
 };
 
-const getRoutesForDestination = routeSearch =>
+const getRoutesForDestination = (routeSearch) =>
   Array.isArray(routeSearch?.matchedRoutes) ? routeSearch.matchedRoutes : [];
 
 const filterDeliveryPointsForRoute = (points, route) => {
@@ -79,12 +83,14 @@ const filterDeliveryPointsForRoute = (points, route) => {
     .filter(isValidRouteValue);
 
   return (Array.isArray(points) ? points : [])
-    .filter(point => {
+    .filter((point) => {
       if (point?.status?.isActive === false) return false;
       if (selectedRouteKeys.length === 0) return true;
 
       const pointRouteIds = getPointRouteIds(point);
-      return pointRouteIds.some(routeId => selectedRouteKeys.includes(routeId));
+      return pointRouteIds.some((routeId) =>
+        selectedRouteKeys.includes(routeId),
+      );
     })
     .sort(
       (firstPoint, secondPoint) =>
@@ -150,10 +156,14 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
           ? await getDeliveryPointsByRoute(routeObjectId)
           : [];
         const sourcePoints =
-          apiPoints.length > 0 ? apiPoints : routeSearch?.matchedDeliveryPoints || [];
+          apiPoints.length > 0
+            ? apiPoints
+            : routeSearch?.matchedDeliveryPoints || [];
 
         if (isMounted) {
-          setDeliveryPoints(filterDeliveryPointsForRoute(sourcePoints, selRoute));
+          setDeliveryPoints(
+            filterDeliveryPointsForRoute(sourcePoints, selRoute),
+          );
         }
       } catch (error) {
         const fallbackPoints = filterDeliveryPointsForRoute(
@@ -186,21 +196,21 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     return true;
   }, [step, selDest, selRoute, selDP]);
 
-  const handleSelectDestination = destination => {
+  const handleSelectDestination = (destination) => {
     setSelDest(destination);
     setSelRoute(null);
     setSelDP(null);
     setDeliveryPoints([]);
   };
 
-  const handleSelectRoute = route => {
+  const handleSelectRoute = (route) => {
     setSelRoute(route);
     setSelDP(null);
     setDeliveryPoints([]);
     dispatch(setSelectedRoute(route));
   };
 
-  const handleSelectDeliveryPoint = point => {
+  const handleSelectDeliveryPoint = (point) => {
     setSelDP(point);
     dispatch(setSelectedDeliveryPoint(point));
     dispatch(generateBookingSummary());
@@ -229,43 +239,40 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm p-0 sm:items-center sm:p-4"
+      className="fixed inset-0 flex sm:items-end sm:justify-center bg-black/40 backdrop-blur-sm p-0 sm:p-4"
       onClick={(e) => e.target === e.currentTarget && onClose?.()}
+      style={{ zIndex: [9999] }}
     >
-      <div
-        className="bg-white w-full max-w-[860px] rounded-t-2xl sm:rounded-2xl shadow-2xl shadow-black/10 flex overflow-hidden"
-        style={{
-          height: "min(92dvh, 720px)",
-          maxHeight: "calc(100dvh - 1rem)",
-        }}
-      >
+      <div className="bg-white w-full max-w-none sm:max-w-3xl sm:rounded-2xl shadow-2xl shadow-black/10 flex overflow-hidden h-full sm:h-[min(92dvh,720px)] max-h-none sm:max-h-[calc(100dvh-1rem)]">
         <div className="hidden md:flex">
           <StepSidebar currentStep={step} />
         </div>
 
-        <div className="flex-1 flex flex-col p-4 sm:p-5 md:p-6 min-w-0 overflow-hidden">
-          <div className="flex items-start justify-between gap-3 mb-3 sm:mb-4 flex-shrink-0">
-            <h3 className="text-base font-semibold text-gray-900">
-              {STEPS[step - 1]}
-            </h3>
-            <button
-              onClick={onClose}
-              className="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-            >
-              <svg
-                className="w-3.5 h-3.5 text-gray-500"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2.5}
-                viewBox="0 0 24 24"
+        <div className="flex-1 flex flex-col sm:p-5 md:p-6 min-w-0 overflow-hidden">
+          <div className="sm:block hidden">
+            <div className="flex items-start justify-between gap-3 mb-3 sm:mb-4 flex-shrink-0">
+              <h3 className="text-base font-semibold text-gray-900">
+                {STEPS[step - 1]}
+              </h3>
+              <button
+                onClick={onClose}
+                className="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+                <svg
+                  className="w-3.5 h-3.5 text-gray-500"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
 
           <div className="flex-1 min-h-0 overflow-hidden">
@@ -273,6 +280,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
               <Step1SelectTowards
                 selDest={selDest}
                 onSelectDest={handleSelectDestination}
+                onNext={handleNext}
               />
             )}
             {step === 2 && (
@@ -281,6 +289,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
                 selRoute={selRoute}
                 onSelectRoute={handleSelectRoute}
                 routes={routes}
+                onBack={handlePrev}
               />
             )}
             {step === 3 && (
@@ -291,6 +300,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
                 deliveryPoints={deliveryPoints}
                 loading={deliveryPointLoading}
                 error={deliveryPointError}
+                onBack={handlePrev}
               />
             )}
             {step === 4 && (
@@ -300,35 +310,39 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
                 selDP={selDP}
                 details={details}
                 onDetailsChange={handleDetailsChange}
+                onBack={handlePrev}
               />
             )}
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-3 sm:pt-4 border-t border-gray-100 mt-3 sm:mt-4 flex-shrink-0">
+          <div className="flex flex-col gap-3 sm:p-0 p-2 sm:flex-row sm:items-center sm:justify-between pt-3 sm:pt-4 border-t border-gray-100 mt-3 sm:mt-4 flex-shrink-0">
             <button
               onClick={handlePrev}
               disabled={step === 1}
-              className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              className="hidden md:inline-flex w-full sm:w-auto px-5 py-2.5 text-sm font-medium border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
               Previous
             </button>
 
             <div className="flex items-center justify-between gap-3 sm:justify-start">
-              <div className="flex gap-1.5">
-                {STEPS.map((_, i) => (
-                  <div
-                    key={i}
-                    className={`h-1.5 rounded-full transition-all duration-300
-                      ${i + 1 === step ? "w-4 bg-[#ff581b]" : i + 1 < step ? "w-1.5 bg-[#ff581b] opacity-40" : "w-1.5 bg-gray-200"}
+              <div className="sm:block hidden">
+                <div className="flex gap-1.5">
+                  {STEPS.map((_, i) => (
+                    <div
+                      key={i}
+                      className={`h-1.5 w-full rounded-full transition-all duration-300
+                    ${i + 1 === step ? "w-4 bg-[#ff581b]" : i + 1 < step ? "w-1.5 bg-[#ff581b] opacity-40" : "w-1.5 bg-gray-200"}
                     `}
-                  />
-                ))}
+                    />
+                  ))}
+                </div>
               </div>
 
               <button
                 onClick={handleNext}
                 disabled={!canNext()}
-                className={`min-w-28 px-6 py-2.5 text-sm font-semibold rounded-xl text-white transition-all duration-150
+                className={` w-full flex items-center justify-center sm:w-28 px-6 py-3 sm:py-2.5 text-sm font-semibold rounded-xl text-white transition-all duration-150
+                  ${step === 1 ? "hidden md:inline-flex" : "inline-flex"}
                   ${
                     canNext()
                       ? "bg-[#ff581b] hover:bg-[#e04d16] active:scale-95"

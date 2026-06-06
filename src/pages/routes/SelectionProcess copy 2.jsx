@@ -54,7 +54,7 @@ const SelectionProcess = () => {
   );
 
   return (
-    <section className="w-full py-3 px-4 font-['Inter',system-ui,sans-serif]">
+    <section className="w-full bg-gradient-to-br from-gray-50 to-gray-100 py-3 px-4 font-['Inter',system-ui,sans-serif]">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           
