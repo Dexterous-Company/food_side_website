@@ -276,7 +276,7 @@ const HeaderPage = () => {
             <img
               src="/main_log_fd.png"
               alt="Food Side"
-              className="h-12 lg:h-[65px] w-50 transition-all object-contain duration-300 "
+              className="h-12 lg:h-[65px] w-50 transition-all object-contain duration-300"
             />
           </a>
 
@@ -312,13 +312,12 @@ const HeaderPage = () => {
             flex flex-col
           `}
           >
-            {/* Mobile Menu HeaderPage */}
+            {/* Mobile Menu Header - FIXED: Removed invalid border-b attribute */}
             <div className="flex justify-between items-center p-5 border-b border-gray-100">
               <Image
                 src="/main_log_fd.png"
                 alt="Food Side"
-                className="h-40 w-0"
-                border-b
+                className="h-12 w-auto"
                 width={120}
                 height={60}
               />
@@ -589,7 +588,7 @@ const HeaderPage = () => {
               ))}
             </ul>
 
-            {/* Desktop HeaderPage Actions */}
+            {/* Desktop Header Actions */}
             <div className="flex items-center gap-4 lg:gap-5">
               <button className="relative w-10 h-10 lg:w-11 lg:h-11 rounded-full text-[#ff581b] hover:text-white transition-all duration-300 group overflow-hidden cursor-pointer">
                 <div className="absolute inset-0 bg-[#ff581b] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full"></div>
