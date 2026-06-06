@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { formatTime } from "./constants";
 
 // ─── Dummy Data ────────────────────────────────────────────────────────────────
 // Replace these with your real API calls (same shape as your RN app's Redux state)
@@ -73,9 +74,6 @@ function formatDate(date) {
   return date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
 
-function formatTime(date) {
-  return date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-}
 
 // ─── Sub-components ────────────────────────────────────────────────────────────
 
