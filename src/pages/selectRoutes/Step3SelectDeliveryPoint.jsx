@@ -16,16 +16,16 @@ export default function Step3SelectDeliveryPoint({
   const routeDuration = selRoute?.durationMinutes || selRoute?.totalTime || 0;
 
   return (
-    <div className="flex flex-col gap-3 h-full overflow-hidden">
+    <div className="flex flex-col gap-3 h-full min-h-0 overflow-hidden">
       <div>
         <img
           src={"/car_food.png"}
           alt="Banner"
-          className="w-full h-45 object-cover transition-opacity duration-500 border-rose-50 rounded-xl"
+          className="w-full h-32 sm:h-40 md:h-45 object-cover transition-opacity duration-500 border-rose-50 rounded-xl"
         />
       </div>
       {selRoute && (
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-start sm:items-center gap-2 flex-shrink-0 min-w-0">
           <svg
             className="w-3.5 h-3.5 text-[#ff581b]"
             fill="none"
@@ -39,10 +39,10 @@ export default function Step3SelectDeliveryPoint({
               d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
             />
           </svg>
-          <span className="text-sm font-semibold text-gray-700">
+          <span className="text-sm font-semibold text-gray-700 min-w-0 break-words">
             {selRoute.name || selRoute.routeId}
           </span>
-          <span className="text-xs text-gray-400">
+          <span className="hidden sm:inline text-xs text-gray-400 whitespace-nowrap">
             - {routeDistance} km - {formatDuration(routeDuration)}
           </span>
         </div>
@@ -52,7 +52,7 @@ export default function Step3SelectDeliveryPoint({
         {deliveryPoints.length} points available
       </p>
 
-      <div className="flex flex-col gap-2.5 flex-1 overflow-y-auto pr-0.5">
+      <div className="flex flex-col gap-2.5 flex-1 min-h-0 overflow-y-auto pr-0.5">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-8 text-gray-400 gap-3">
             <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#ff581b] border-t-transparent" />
@@ -108,8 +108,8 @@ export default function Step3SelectDeliveryPoint({
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-gray-800">{p.name}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">
+                  <p className="text-sm font-bold text-gray-800 break-words">{p.name}</p>
+                  <p className="text-xs text-gray-400 mt-0.5 break-words">
                     {[area, city, state].filter(Boolean).join(", ")}
                   </p>
                 </div>

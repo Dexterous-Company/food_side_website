@@ -229,19 +229,22 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm p-0 sm:items-center sm:p-4"
       onClick={(e) => e.target === e.currentTarget && onClose?.()}
     >
       <div
-        className="bg-white w-full max-w-[860px] rounded-2xl shadow-2xl shadow-black/10 flex overflow-hidden"
-        style={{ maxHeight: "calc(100vh - 2rem)", minHeight: 560 }}
+        className="bg-white w-full max-w-[860px] rounded-t-2xl sm:rounded-2xl shadow-2xl shadow-black/10 flex overflow-hidden"
+        style={{
+          height: "min(92dvh, 720px)",
+          maxHeight: "calc(100dvh - 1rem)",
+        }}
       >
         <div className="hidden md:flex">
           <StepSidebar currentStep={step} />
         </div>
 
-        <div className="flex-1 flex flex-col p-6 min-w-0 overflow-hidden">
-          <div className="flex items-center justify-between mb-4 flex-shrink-0">
+        <div className="flex-1 flex flex-col p-4 sm:p-5 md:p-6 min-w-0 overflow-hidden">
+          <div className="flex items-start justify-between gap-3 mb-3 sm:mb-4 flex-shrink-0">
             <h3 className="text-base font-semibold text-gray-900">
               {STEPS[step - 1]}
             </h3>
@@ -265,7 +268,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
             </button>
           </div>
 
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 min-h-0 overflow-hidden">
             {step === 1 && (
               <Step1SelectTowards
                 selDest={selDest}
@@ -301,16 +304,16 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-4 flex-shrink-0">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-3 sm:pt-4 border-t border-gray-100 mt-3 sm:mt-4 flex-shrink-0">
             <button
               onClick={handlePrev}
               disabled={step === 1}
-              className="px-5 py-2.5 text-sm font-medium border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
               Previous
             </button>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between gap-3 sm:justify-start">
               <div className="flex gap-1.5">
                 {STEPS.map((_, i) => (
                   <div
@@ -325,7 +328,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
               <button
                 onClick={handleNext}
                 disabled={!canNext()}
-                className={`px-6 py-2.5 text-sm font-semibold rounded-xl text-white transition-all duration-150
+                className={`min-w-28 px-6 py-2.5 text-sm font-semibold rounded-xl text-white transition-all duration-150
                   ${
                     canNext()
                       ? "bg-[#ff581b] hover:bg-[#e04d16] active:scale-95"

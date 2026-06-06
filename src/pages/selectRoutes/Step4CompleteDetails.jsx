@@ -45,7 +45,7 @@ export default function Step4CompleteDetails({ selDest, selRoute, selDP, details
   };
 
   return (
-    <div className="flex flex-col gap-4 h-full overflow-y-auto px-1 pb-4">
+    <div className="flex flex-col gap-4 h-full min-h-0 overflow-y-auto px-0.5 sm:px-1 pb-4">
       {/* Shipment Card Component */}
       <ShipmentCard 
         onPress={handleCardPress}
@@ -54,14 +54,14 @@ export default function Step4CompleteDetails({ selDest, selRoute, selDP, details
       />
 
       {/* Original Details Box - Enhanced */}
-      <div className="bg-gradient-to-br from-orange-50/90 to-amber-50/70 border border-orange-100/80 rounded-2xl p-4 flex flex-col gap-3 shadow-sm backdrop-blur-sm">
+      <div className="bg-gradient-to-br from-orange-50/90 to-amber-50/70 border border-orange-100/80 rounded-2xl p-3.5 sm:p-4 flex flex-col gap-3 shadow-sm backdrop-blur-sm">
         {[
           { icon: <HiOutlineMap className="w-4 h-4 text-amber-500" />, label: "Destination", value: destinationName },
           { icon: <MdOutlineRoute className="w-4 h-4 text-emerald-500" />, label: "Route", value: routeName },
           { icon: <HiOutlineCube className="w-4 h-4 text-purple-500" />, label: "Delivery Point", value: deliveryPointName },
         ].map((item) => (
-          <div key={item.label} className="flex items-center gap-3 group hover:translate-x-0.5 transition-transform duration-200">
-            <div className="w-8 h-8 rounded-xl bg-white/80 shadow-sm flex items-center justify-center">
+          <div key={item.label} className="flex items-start sm:items-center gap-3 group hover:translate-x-0.5 transition-transform duration-200 min-w-0">
+            <div className="w-8 h-8 rounded-xl bg-white/80 shadow-sm flex items-center justify-center flex-shrink-0">
               {item.icon}
             </div>
             <span className="text-xs font-medium text-gray-400 w-24 flex-shrink-0 tracking-wide">{item.label}</span>

@@ -24,16 +24,16 @@ export default function Step2SelectRoute({
   routes = [],
 }) {
   return (
-    <div className="flex flex-col gap-3 h-full overflow-hidden">
+    <div className="flex flex-col gap-3 h-full min-h-0 overflow-hidden">
       <div>
         <img
           src={"/car_food.png"}
           alt="Banner"
-          className="w-full h-45 object-cover transition-opacity duration-500 border-rose-50 rounded-xl"
+          className="w-full h-32 sm:h-40 md:h-45 object-cover transition-opacity duration-500 border-rose-50 rounded-xl"
         />
       </div>
       {selDest && (
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-start sm:items-center gap-2 flex-shrink-0 min-w-0">
           <svg
             className="w-3.5 h-3.5 text-[#ff581b]"
             fill="currentColor"
@@ -41,10 +41,10 @@ export default function Step2SelectRoute({
           >
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
           </svg>
-          <span className="text-sm font-semibold text-gray-700">
+          <span className="text-sm font-semibold text-gray-700 min-w-0 break-words">
             {selDest.primaryText || selDest.destination || selDest.name}
           </span>
-          <span className="text-xs text-gray-400">
+          <span className="hidden sm:inline text-xs text-gray-400 min-w-0 truncate">
             - {selDest.secondaryText || selDest.origin || selDest.loc || "Matching route"}
           </span>
         </div>
@@ -54,7 +54,7 @@ export default function Step2SelectRoute({
         {routes.length} routes found
       </p>
 
-      <div className="flex flex-col gap-2.5 flex-1 overflow-y-auto pr-0.5">
+      <div className="flex flex-col gap-2.5 flex-1 min-h-0 overflow-y-auto pr-0.5">
         {routes.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-gray-400 gap-2">
             <svg className="w-8 h-8 opacity-40" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -104,7 +104,7 @@ export default function Step2SelectRoute({
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-bold text-gray-800">
+                      <span className="text-sm font-bold text-gray-800 break-words">
                         {formatRouteName(r.name || r.routeId)}
                       </span>
                       <span
@@ -127,27 +127,27 @@ export default function Step2SelectRoute({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-0 bg-orange-50/60 rounded-lg px-3 py-2 mb-2.5 pl-3.5">
-                  <div className="flex items-center flex-1">
+                <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-0 bg-orange-50/60 rounded-lg px-3 py-2 mb-2.5">
+                  <div className="flex items-center flex-1 min-w-[110px]">
                     <span className="text-[11px] font-semibold text-[#6b6058]">
                       {"<->"} {distance} km
                     </span>
                   </div>
-                  <div className="w-px h-3 bg-orange-200 mx-2" />
-                  <div className="flex items-center flex-1">
+                  <div className="hidden sm:block w-px h-3 bg-orange-200 mx-2" />
+                  <div className="flex items-center flex-1 min-w-[110px]">
                     <span className="text-[11px] font-semibold text-[#6b6058]">
                       Time {formatDuration(duration)}
                     </span>
                   </div>
-                  <div className="w-px h-3 bg-orange-200 mx-2" />
-                  <div className="flex items-center flex-1">
+                  <div className="hidden sm:block w-px h-3 bg-orange-200 mx-2" />
+                  <div className="flex items-center flex-1 min-w-[110px]">
                     <span className="text-[11px] font-semibold text-[#6b6058]">
                       Pin {getStopsCount(r)} stops
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 pl-1">
+                <div className="flex items-center gap-2 pl-1 min-w-0">
                   <svg
                     className="w-3 h-3 text-[#ff581b] flex-shrink-0"
                     fill="currentColor"

@@ -258,15 +258,15 @@ export default function Step1SelectTowards({ selDest, onSelectDest }) {
   };
 
   return (
-    <div className="flex flex-col gap-3 h-full">
+    <div className="flex flex-col gap-3 h-full min-h-0">
       <BannerCarousel banners={BANNERS} />
 
-      <div className="flex items-start gap-2.5 border border-gray-200 rounded-xl px-3.5 py-3 bg-white">
+      <div className="flex items-start gap-2.5 border border-gray-200 rounded-xl px-3 py-2.5 sm:px-3.5 sm:py-3 bg-white">
         <svg className="w-4 h-4 mt-0.5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
         </svg>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-gray-800 leading-tight">
+          <p className="text-sm font-semibold text-gray-800 leading-tight break-words">
             {locationLoading ? "Detecting your location..." : fromLocation}
           </p>
           <p className="text-xs text-gray-400 mt-0.5 truncate">
@@ -297,7 +297,7 @@ export default function Step1SelectTowards({ selDest, onSelectDest }) {
         loading={routeSearch?.loading}
       />
 
-      <div className="flex flex-col gap-1.5 flex-1 overflow-y-auto">
+      <div className="flex flex-col gap-1.5 flex-1 min-h-0 overflow-y-auto pr-0.5">
         {routeSearch?.error ? (
           <div className="flex flex-col items-center justify-center py-8 text-red-400 gap-2">
             <p className="text-sm">{routeSearch.error}</p>
@@ -326,7 +326,7 @@ export default function Step1SelectTowards({ selDest, onSelectDest }) {
               <button
                 key={itemKey}
                 onClick={() => handleSelectDestination(d)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border text-left transition-all duration-150
+                className={`flex items-center gap-2.5 sm:gap-3 px-3 py-2.5 rounded-xl border text-left transition-all duration-150
                   ${isSelected
                     ? "border-[#ff581b] bg-orange-50/60"
                     : "border-gray-100 bg-white hover:border-orange-200 hover:bg-orange-50/30"
@@ -342,7 +342,7 @@ export default function Step1SelectTowards({ selDest, onSelectDest }) {
                   <p className="text-sm font-semibold text-gray-800 truncate">{itemName}</p>
                   <p className="text-xs text-gray-400 mt-0.5 truncate">{itemLocation}</p>
                 </div>
-                <span className="text-xs text-[#ff581b] font-medium whitespace-nowrap">
+                <span className="hidden sm:inline text-xs text-[#ff581b] font-medium whitespace-nowrap">
                   {routeCount ? `${routeCount} routes` : ""}
                 </span>
                 <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all
