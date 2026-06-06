@@ -1,7 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import { formatTime } from "./constants";
+import { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+import dayjs from "dayjs";
+import { formatDate, formatTime } from "./constants";
+
+// Dynamically import to avoid SSR issues
+const ClientDatePicker = dynamic(
+  () => import("antd").then((mod) => mod.DatePicker),
+  { ssr: false },
+);
+
+const ClientTimePicker = dynamic(
+  () => import("antd").then((mod) => mod.TimePicker),
+  { ssr: false },
+);
 
 export default function DateTimePill({
   date,
@@ -12,10 +25,13 @@ export default function DateTimePill({
 }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [tempDate, setTempDate] = useState(date);
+  const [mounted, setMounted] = useState(false);
+  const dateButtonRef = useRef(null);
+  const timeButtonRef = useRef(null);
 
-  const minDate = new Date();
-  minDate.setHours(0, 0, 0, 0);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const getMinimumAllowedTime = (selectedDate) => {
     const selectedDateObj = new Date(selectedDate);
@@ -32,240 +48,67 @@ export default function DateTimePill({
     return minimumTime;
   };
 
-  const formatDate = (date) => {
-    if (!date) return "";
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
-  const handleDateSelect = (selectedDate) => {
-    setTempDate(selectedDate);
-  };
-
-  const handleDateConfirm = () => {
-    onDateChange?.(tempDate);
+  const handleAntDateChange = (dateValue) => {
+    if (dateValue) {
+      const selectedDate = dateValue.toDate();
+      onDateChange?.(selectedDate);
+    }
     setShowDatePicker(false);
   };
 
-  const renderDatePicker = () => {
-    if (!showDatePicker) return null;
+  const handleAntTimeChange = (timeValue) => {
+    if (timeValue) {
+      const selectedTime = timeValue.toDate();
+      const minTime = getMinimumAllowedTime(date);
 
-    const currentYear = tempDate.getFullYear();
-    const currentMonth = tempDate.getMonth();
-    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const timeForDate = new Date(date);
+      timeForDate.setHours(
+        selectedTime.getHours(),
+        selectedTime.getMinutes(),
+        0,
+        0,
+      );
 
-    const weekDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-    const days = [];
-
-    // Add empty cells for days before month starts
-    for (let i = 0; i < firstDayOfMonth; i++) {
-      days.push(null);
-    }
-
-    // Add days of the month
-    for (let i = 1; i <= daysInMonth; i++) {
-      days.push(new Date(currentYear, currentMonth, i));
-    }
-
-    const isDateDisabled = (dateToCheck) => {
-      return dateToCheck < minDate;
-    };
-
-    const isDateSelected = (dateToCheck) => {
-      return tempDate && tempDate.toDateString() === dateToCheck.toDateString();
-    };
-
-    const changeMonth = (increment) => {
-      setTempDate(new Date(currentYear, currentMonth + increment, 1));
-    };
-
-    return (
-      <div
-        className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-        onClick={() => setShowDatePicker(false)}
-      >
-        <div
-          className="bg-white rounded-2xl max-w-md w-full p-5"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="flex items-center justify-between mb-4">
-            <button
-              onClick={() => changeMonth(-1)}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
-
-            <h3 className="text-lg font-semibold">
-              {tempDate.toLocaleString("default", { month: "long" })}{" "}
-              {currentYear}
-            </h3>
-
-            <button
-              onClick={() => changeMonth(1)}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </button>
-          </div>
-
-          <div className="grid grid-cols-7 gap-1 mb-3">
-            {weekDays.map((day) => (
-              <div
-                key={day}
-                className="text-center text-xs font-semibold text-gray-400 py-2"
-              >
-                {day}
-              </div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-7 gap-1">
-            {days.map((day, index) => (
-              <div key={index} className="aspect-square p-1">
-                {day && (
-                  <button
-                    onClick={() =>
-                      !isDateDisabled(day) && handleDateSelect(day)
-                    }
-                    disabled={isDateDisabled(day)}
-                    className={`w-full h-full rounded-full text-sm font-medium transition-colors
-                      ${
-                        isDateDisabled(day)
-                          ? "text-gray-300 cursor-not-allowed"
-                          : isDateSelected(day)
-                            ? "bg-[#ff581b] text-white"
-                            : "hover:bg-orange-50 text-gray-700"
-                      }
-                    `}
-                  >
-                    {day.getDate()}
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-
-          <div className="flex gap-2 mt-5 pt-3 border-t">
-            <button
-              onClick={() => setShowDatePicker(false)}
-              className="flex-1 px-4 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleDateConfirm}
-              className="flex-1 px-4 py-2 bg-[#ff581b] text-white rounded-lg hover:bg-[#e04d16] transition-colors"
-            >
-              Confirm
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderTimePicker = () => {
-    if (!showTimePicker) return null;
-
-    const times = [];
-    const selectedDateObj = new Date(date);
-    const minTime = getMinimumAllowedTime(selectedDateObj);
-    const startHour = minTime.getHours();
-    const startMinute = minTime.getMinutes();
-
-    if (startHour <= 23) {
-      for (let hour = startHour; hour < 24; hour++) {
-        const firstMinute = hour === startHour ? startMinute : 0;
-        for (let minute = firstMinute; minute < 60; minute += 30) {
-          const time = new Date(selectedDateObj);
-          time.setHours(hour, minute, 0, 0);
-          times.push(time);
-        }
+      if (timeForDate >= minTime) {
+        onTimeChange?.(selectedTime);
       }
     }
+    setShowTimePicker(false);
+  };
 
-    const formatTimeOption = (time) => {
-      let hours = time.getHours();
-      const minutes = time.getMinutes().toString().padStart(2, "0");
-      const ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      return `${hours}:${minutes} ${ampm}`;
+  const disabledDate = (current) => {
+    return current && current < dayjs().startOf("day");
+  };
+
+  const disabledTime = () => {
+    const minTime = getMinimumAllowedTime(date);
+    const minHour = minTime.getHours();
+    const minMinute = minTime.getMinutes();
+
+    return {
+      disabledHours: () => {
+        const hours = [];
+        for (let i = 0; i < minHour; i++) {
+          hours.push(i);
+        }
+        return hours;
+      },
+      disabledMinutes: (selectedHour) => {
+        if (selectedHour === minHour) {
+          const minutes = [];
+          for (let i = 0; i < minMinute; i++) {
+            minutes.push(i);
+          }
+          return minutes;
+        }
+        return [];
+      },
     };
-
-    return (
-      <div
-        className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-        onClick={() => setShowTimePicker(false)}
-      >
-        <div
-          className="bg-white rounded-2xl max-w-sm w-full p-5"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <h3 className="text-lg font-semibold mb-4">Select Time</h3>
-
-          {times.length === 0 ? (
-            <div className="py-8 text-center text-gray-500">
-              <p>No available time slots for today</p>
-              <p className="text-sm mt-1">Please select another date</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-2 max-h-80 overflow-y-auto">
-              {times.map((time, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    onTimeChange?.(time);
-                    setShowTimePicker(false);
-                  }}
-                  className="px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium hover:border-[#ff581b] hover:bg-orange-50 transition-colors"
-                >
-                  {formatTimeOption(time)}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <button
-            onClick={() => setShowTimePicker(false)}
-            className="w-full mt-4 px-4 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    );
   };
 
   const items = [
     {
+      ref: dateButtonRef,
       icon: (
         <svg
           className="w-4 h-4 text-[#ff581b]"
@@ -290,6 +133,7 @@ export default function DateTimePill({
       onClick: () => setShowDatePicker(true),
     },
     {
+      ref: timeButtonRef,
       icon: (
         <svg
           className="w-4 h-4 text-[#ff581b]"
@@ -310,10 +154,11 @@ export default function DateTimePill({
 
   return (
     <>
-      <div className="flex gap-2 flex-shrink-0">
+      <div className="grid sm:grid-cols-2 grid-cols-1 gap-2">
         {items.map((item) => (
           <button
             key={item.label}
+            ref={item.ref}
             onClick={item.onClick}
             className="flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2.5 flex-1 bg-white hover:border-orange-200 transition-colors text-left"
           >
@@ -330,8 +175,103 @@ export default function DateTimePill({
         ))}
       </div>
 
-      {renderDatePicker()}
-      {renderTimePicker()}
+      {/* Date Picker - rendered but invisible, popup will show */}
+      {mounted && (
+        <ClientDatePicker
+          value={dayjs(date)}
+          onChange={handleAntDateChange}
+          disabledDate={disabledDate}
+          format="DD-MM-YYYY"
+          placeholder="Select date"
+          open={showDatePicker}
+          onOpenChange={(open) => {
+            if (!open) setShowDatePicker(false);
+          }}
+          getPopupContainer={() => document.body}
+          popupClassName="date-time-picker-popup"
+          style={{
+            position: "absolute",
+            width: 0,
+            height: 0,
+            opacity: 0,
+            pointerEvents: "none",
+            overflow: "hidden",
+          }}
+          key="date-picker"
+        />
+      )}
+
+      {/* Time Picker - rendered but invisible, popup will show */}
+      {mounted && (
+        <ClientTimePicker
+          value={dayjs(getMinimumAllowedTime(date))}
+          onChange={handleAntTimeChange}
+          format="hh:mm A"
+          minuteStep={30}
+          disabledTime={disabledTime}
+          placeholder="Select time"
+          open={showTimePicker}
+          onOpenChange={(open) => {
+            if (!open) setShowTimePicker(false);
+          }}
+          getPopupContainer={() => document.body}
+          popupClassName="date-time-picker-popup"
+          style={{
+            position: "absolute",
+            width: 0,
+            height: 0,
+            opacity: 0,
+            pointerEvents: "none",
+            overflow: "hidden",
+          }}
+          use12Hours
+          key="time-picker"
+        />
+      )}
+
+      <style jsx global>{`
+        .date-time-picker-popup {
+          z-index: 99999;
+        }
+        .date-time-picker-popup .ant-picker-today-btn {
+          color: #ff581b;
+        }
+        .date-time-picker-popup
+          .ant-picker-cell-in-view.ant-picker-cell-selected
+          .ant-picker-cell-inner {
+          background: #ff581b;
+        }
+        .date-time-picker-popup
+          .ant-picker-cell-in-view.ant-picker-cell-today
+          .ant-picker-cell-inner::before {
+          border-color: #ff581b;
+        }
+        .date-time-picker-popup .ant-picker-header button:hover {
+          color: #ff581b;
+        }
+        .date-time-picker-popup
+          .ant-picker-time-panel-column
+          > li.ant-picker-time-panel-cell-selected
+          .ant-picker-time-panel-cell-inner {
+          background: #ff581b;
+        }
+        .date-time-picker-popup .ant-picker-ok button {
+          background: #ff581b;
+        }
+        .date-time-picker-popup .ant-picker-ok button:hover {
+          background: #e04d16;
+        }
+
+        /* Ensure pickers don't affect layout */
+        .ant-picker {
+          position: absolute !important;
+          width: 0 !important;
+          height: 0 !important;
+          opacity: 0 !important;
+          pointer-events: none !important;
+          overflow: hidden !important;
+        }
+      `}</style>
     </>
   );
 }

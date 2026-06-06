@@ -17,8 +17,11 @@ const page = () => {
 
   return (
     <div>
-      <HeroSection />
+      <div className="relative">
+        <HeroSection />
+      </div>
       {/* <SelectionCompletedProcess isOpen={open} onClose={() => setOpen(false)} /> */}
+
       <DeliverySelectionModal
         isOpen={open}
         onClose={() => setOpen(false)}
@@ -27,7 +30,9 @@ const page = () => {
           console.log(bookingData);
         }}
       />
-      <SelectionProcess />
+      <div className="-mt-30 relative" style={{zIndex:99}}>
+        <SelectionProcess />
+      </div>
       <Menu />
       <About />
       {/* <History /> */}
