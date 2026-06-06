@@ -380,7 +380,7 @@ const RestaurantDetails = () => {
                   </div>
                   <div className="flex gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-primary/20 hover:bg-primary/5 transition-all duration-300">
                     <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                      <FaMapMarkerAlt />
+                      <FaLocationDot />
                     </div>
                     <div>
                       <div className="font-extrabold text-gray-800">Single-Origin Beef</div>

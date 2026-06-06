@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ClientLayout from "@/pages/Mainlayout/ClientLayout";
+import Footer from "@/pages/components/Footer";
+import Header from "@/pages/components/Header";
+import ReduxLayoutProviders from "@/pages/Mainlayout/ReduxLayoutProviders";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,11 +29,10 @@ export const metadata = {
   ],
 
   metadataBase: new URL("https://foodside.co.in"),
-
+  // ✅ CANONICAL URL
   alternates: {
     canonical: "https://foodside.co.in",
   },
-
   openGraph: {
     title: "FoodSide | Highway Food Delivery Platform",
     description:
@@ -48,7 +49,6 @@ export const metadata = {
     ],
     type: "website",
   },
-
   twitter: {
     card: "summary_large_image",
     title: "FoodSide | Highway Food Delivery Platform",
@@ -64,12 +64,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
-    >
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-screen flex flex-col">
-        <ClientLayout>{children}</ClientLayout>
+        <ReduxLayoutProviders>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </ReduxLayoutProviders>
       </body>
     </html>
   );
