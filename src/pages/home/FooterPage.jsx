@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   FaFacebookF,
   FaInstagram,
@@ -20,7 +21,8 @@ import {
 
 const FooterPage = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
-
+  const router = useRouter();
+const [email, setEmail] = useState("");
   // Handle scroll to top button visibility
   useEffect(() => {
     const handleScroll = () => {
@@ -43,7 +45,7 @@ const FooterPage = () => {
 
   return (
     <>
-      <footer className="footer-modern relative text-[#555555] overflow-hidden mt-10 lg:mt-[100px] z-[1]">
+      <footer className="footer-modern relative text-[#555555] overflow-hidden mt-10 lg:mt-[1px] z-[1]">
         {/* Footer Background */}
         <div className="footer-background absolute inset-0 overflow-hidden transition-all duration-300 z-[1]">
           <div
@@ -69,11 +71,7 @@ const FooterPage = () => {
             <div className="footer-cta-section relative py-12 lg:py-20 text-white overflow-hidden bg-[#f4b400] before:content-[''] before:absolute before:top-0 before:right-[-10%] before:w-[60%] before:h-full before:bg-[#ff581b] before:rounded-tl-[200px] before:rounded-bl-[200px] before:z-[1] before:bg-[radial-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] before:bg-[length:10px_10px]">
               <div className="container mx-auto px-4 lg:px-8 max-w-[1480px] relative z-[2] flex flex-col lg:flex-row items-start justify-between gap-8">
                 {/* Left Content - Newsletter */}
-                <div
-                  className="footer-cta-content w-full lg:max-w-[560px]"
-                  data-aos="fade-up"
-                  data-aos-duration="800"
-                >
+               <div className="footer-cta-content w-full lg:max-w-[560px]">
                   <h3 className="footer-cta-title text-3xl lg:text-5xl font-extrabold text-white font-['Raleway',sans-serif] tracking-[-1px] mb-3 lg:mb-4">
                     Join Our{" "}
                     <span className="footer-text-highlight text-black font-['Yesteryear',cursive]">
@@ -83,33 +81,37 @@ const FooterPage = () => {
                   <p className="footer-cta-subtitle text-sm lg:text-base text-white/80 mb-4 lg:mb-5 leading-relaxed">
                     Subscribe to exclusive offers and mouth-watering updates
                   </p>
-                  <form
-                    className="footer-newsletter flex flex-col sm:flex-row gap-0 max-w-full w-full"
-                    onSubmit={(e) => e.preventDefault()}
-                  >
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      required
-                      className="flex-1 px-4 py-3 lg:px-6 lg:py-4 bg-[#ff581b] text-white text-sm lg:text-base rounded-full sm:rounded-r-none border border-white/20 focus:outline-none"
-                    />
-                    <button
-                      type="submit"
-                      className="btn-footer-subscribe px-6 py-3 lg:px-8 lg:py-4 bg-black text-white rounded-full sm:rounded-l-none text-sm lg:text-base font-semibold hover:bg-black/80 transition-all hover:-translate-y-0.5 shadow-lg flex items-center justify-center gap-2"
-                    >
-                      <FaPaperPlane />
-                    </button>
-                  </form>
+               <form
+  className="footer-newsletter flex flex-row gap-0 max-w-full w-full"
+  onSubmit={(e) => {
+    e.preventDefault();
+
+    router.push("/contact_us");
+
+  setEmail("");
+  }}
+>
+ <input
+  type="email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  placeholder="Enter your email"
+  required
+  className="flex-1 min-w-0 px-4 py-3 lg:px-6 lg:py-4 bg-[#ff581b] text-white text-sm lg:text-base rounded-full sm:rounded-r-none border border-white/20 focus:outline-none"
+/>
+
+  <button
+    type="submit"
+    className="btn-footer-subscribe px-6 py-3 lg:px-8 lg:py-4 bg-black text-white rounded-full sm:rounded-l-none text-sm lg:text-base font-semibold hover:bg-black/80 transition-all hover:-translate-y-0.5 shadow-lg flex items-center justify-center gap-2"
+  >
+    <FaPaperPlane />
+  </button>
+</form>
                 </div>
 
                 {/* Right Side - App Download */}
 
-                <div
-                  className="footer-app-download w-full lg:w-auto pt-4 lg:pt-0 border-t lg:border-t-0 border-white/10"
-                  data-aos="fade-left"
-                  data-aos-delay="100"
-                  data-aos-duration="800"
-                >
+               <div className="footer-app-download w-full lg:w-auto pt-0 lg:pt-0 border-t lg:border-t-0 border-white/10">
                   <p className="app-text text-3xl lg:text-4xl font-extrabold text-white font-['Raleway',sans-serif] mb-2">
                     Download Our App
                   </p>
@@ -204,12 +206,12 @@ const FooterPage = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link
+                        {/* <Link
                           href="/menu"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Menu
-                        </Link>
+                        </Link> */}
                       </li>
                       <li>
                         <Link
@@ -235,89 +237,101 @@ const FooterPage = () => {
                           Refund Policy
                         </Link> 
                       </li>
-                      <li>
+
+                        <li>
+                        <Link
+                          href="/faq"
+                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                        >
+                        FAQ
+                        </Link> 
+                      </li>
+
+
+
+                      {/* <li>
                         <Link
                           href="/reservation"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Reservation
                         </Link>
-                      </li>
-                      <li>
+                      </li> */}
+                      {/* <li>
                         <Link
                           href="/shop"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Shop
                         </Link>
-                      </li>
-                      <li>
+                      </li> */}
+                      {/* <li>
                         <Link
                           href="/blog"
                           className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Blog
                         </Link>
-                      </li>
+                      </li> */}
+
+
+
+
                     </ul>
                   </div>
 
                   {/* Services */}
-                  <div className="footer-column animate-[fadeInUp_0.8s_ease-out_0.4s_both]">
-                    <h5 className="footer-column-title text-white text-sm lg:text-base font-bold uppercase tracking-wider mb-5 lg:mb-8 relative pb-3 lg:pb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 lg:after:w-12 after:h-0.5 after:bg-[#ff581b] after:rounded-sm">
-                      Our Services
-                    </h5>
-                    <ul className="footer-links space-y-3">
-                      <li>
-                        <Link
-                          href="/shop"
-                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
-                        >
-                          Food Delivery
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/menu"
-                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
-                        >
-                          Private Dining
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/shop"
-                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
-                        >
-                          Takeaway Pickup
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/contact"
-                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
-                        >
-                          Wedding Catering
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/reservation"
-                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
-                        >
-                          Party Booking
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/contact_us"
-                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
-                        >
-                          Corporate Lunches
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
+                    <div className="footer-column animate-[fadeInUp_0.8s_ease-out_0.4s_both]">
+                      <h5 className="footer-column-title text-white text-sm lg:text-base font-bold uppercase tracking-wider mb-5 lg:mb-8 relative pb-3 lg:pb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 lg:after:w-12 after:h-0.5 after:bg-[#ff581b] after:rounded-sm">
+                       My Account
+                      </h5>
+                      <ul className="footer-links space-y-3">
+
+ <li>
+                          <Link
+                            href="/accounts/login"
+                            className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                          >
+                          Account
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link
+                            href="/login"
+                            className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                          >
+                           login
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/menu"
+                            className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                          >
+                           Orders
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/shop"
+                            className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                          >
+                            View Cart
+                          </Link>
+                        </li>
+                       
+                        <li>
+                          <Link
+                            href="/resgister_new"
+                            className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                          >
+                           SignUp
+                          </Link>
+                        </li>
+                      
+                      </ul>
+                    </div>
 
                   {/* Contact Information */}
                   <div className="footer-column animate-[fadeInUp_0.8s_ease-out_0.5s_both]">
@@ -342,9 +356,15 @@ const FooterPage = () => {
                       </div>
                       <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
                         <FaEnvelope className="text-[#ff581b] text-base lg:text-lg group-hover:text-white group-hover:scale-110 transition-all" />
-                        <p className="text-white/70 text-sm lg:text-base">
+                        <a href="mailto:info@foodside.co.in" className="text-white/70 text-sm lg:text-base">
                           info@foodside.co.in
-                        </p>
+                        </a>
+                      </div>
+                      <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
+                        <FaEnvelope className="text-[#ff581b] text-base lg:text-lg group-hover:text-white group-hover:scale-110 transition-all" />
+                        <a href="mailto:admin@foodside.co.in" className="text-white/70 text-sm lg:text-base">
+                      admin@foodside.co.in
+                        </a>
                       </div>
                       <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
                         <FaClock className="text-[#ff581b] text-base lg:text-lg group-hover:text-white group-hover:scale-110 transition-all" />
@@ -362,15 +382,12 @@ const FooterPage = () => {
                 </div>
 
                 {/* Footer Bottom */}
-                <div
-                  className="footer-bottom"
-                  data-aos="fade-up"
-                  data-aos-delay="400"
-                  data-aos-duration="700"
-                >
+                {/* Footer Bottom */}
+<div className="footer-bottom">
                   <div className="footer-bottom-content flex flex-col lg:flex-row justify-between items-center gap-6">
                     <p className="copyright-text text-white/60 text-xs lg:text-sm text-center lg:text-left">
-                      &copy; 2026 Dexterous Technologie. All Rights Reserved.
+                      {/* &copy; 2026 Dexterous Technologie. All Rights Reserved. */}
+                       &copy; {new Date().getFullYear()} Dexterous Technologie. All Rights Reserved.
                       <span className="hidden lg:inline mx-2 opacity-40">
                         |
                       </span>
