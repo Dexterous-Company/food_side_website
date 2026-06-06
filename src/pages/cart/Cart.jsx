@@ -1,81 +1,169 @@
+"use client";
 
-"use client"
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import {
+  FaLock,
+  FaSnowflake,
+  FaRotateLeft,
+  FaBagShopping,
+  FaChevronRight,
+  FaTrashCan,
+  FaUsers,
+  FaFire,
+  FaClock,
+  FaWeightHanging,
+  FaSeedling,
+  FaTag,
+  FaCircleCheck,
+  FaArrowLeft,
+  FaReceipt,
+  FaTruckFast,
+  FaBox,
+  FaPercent,
+  FaApple,
+  FaCcVisa,
+  FaCcMastercard,
+  FaCcAmex,
+  FaApplePay,
+  FaGooglePay,
+  FaLeaf,
+  FaLocationDot,
+  FaDrumstickBite,
+} from "react-icons/fa6";
+import { PiPlus, PiMinus } from "react-icons/pi";
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Wagyu Ribeye at Home Kit",
-      category: "Meal Kit · Signature",
-      price: 89,
-      originalPrice: 110,
-      quantity: 1,
-      image: "/assets/images/shop/product-10.jpg",
-      badge: "Best Seller",
-      badgeColor: "primary",
-      serves: "Serves 2",
-      kcal: "820 kcal",
-      shipTime: "Ships 24h",
-      tags: ["A5 Wagyu", "28-Day Aged", "Truffle Butter", "Gluten Free"]
-    },
-    {
-      id: 2,
-      name: "House Truffle Butter (250g)",
-      category: "Sauces & Oils",
-      price: 28,
-      originalPrice: null,
-      quantity: 2,
-      image: "/assets/images/shop/product-9.jpg",
-      badge: "Fan Fav",
-      badgeColor: "dark",
-      weight: "250g",
-      temp: "Chilled",
-      diet: "Vegetarian",
-      tags: ["Black Truffle", "Périgord", "House-Made"]
-    },
-    {
-      id: 3,
-      name: "Restrova Signature Steak Rub (80g)",
-      category: "Spices & Rubs",
-      price: 12,
-      originalPrice: null,
-      quantity: 1,
-      image: "/assets/images/shop/product-8.jpg",
-      badge: "#1 Product",
-      badgeColor: "green",
-      weight: "80g",
-      shelfLife: "Best Before 12 mo",
-      diet: "Vegan",
-      tags: ["Smoked Paprika", "Rosemary", "Maldon Salt"]
-    }
-  ]);
+  // Cart items state - using your 3 real documents
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [promoCode, setPromoCode] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState(null);
+  const [promoDiscount, setPromoDiscount] = useState(0);
 
-  const [promoCode, setPromoCode] = useState("RESTROVA20");
-  const [appliedPromo, setAppliedPromo] = useState("RESTROVA20");
-  const [promoDiscount, setPromoDiscount] = useState(28.60);
+  // Load cart items on mount (simulating API call with your 3 documents)
+  useEffect(() => {
+    // Your actual API call would be here
+    // For now, using your 3 documents as the cart items
+    const loadCartItems = () => {
+      // These are your actual 3 documents from the backend
+      const items = [
+        {
+          id: "69fb08d8eab765dad2e24bec",
+          name: "Dal Tadka",
+          description: "Classic North Indian dal made with yellow lentils, tempered with ghee, garlic, cumin, and traditional spices. Best enjoyed with jeera rice or roti.",
+          price: 180,
+          discount_price: 159,
+          image: "https://res.cloudinary.com/dssdvnei1/image/upload/v1778059478/Menu/Items/omuhmif1ccn8givy62mc.jpg",
+          isVeg: true,
+          rating: 5,
+          recommended: true,
+          trending: false,
+          estimateTimePrepareMenuItem: 25,
+          quantity: 1,
+          category: "Main Course · Dal",
+          serves: "Serves 3",
+          kcal: "320 kcal",
+          shipTime: "Ready in 25 min",
+          tags: ["Lentils", "Tempered", "Gluten Free"],
+          badge: "Trending",
+          badgeColor: "primary",
+          stock: 40,
+        },
+        {
+          id: "69fb2b2aeab765dad2e24edc",
+          name: "Tandoori Aloo",
+          description: "Baby potatoes marinated in a spicy yogurt-based masala with traditional Indian spices, then roasted in a tandoor until crispy outside and soft inside. Served with mint chutney and fresh salad.",
+          price: 280,
+          discount_price: 239,
+          image: "https://res.cloudinary.com/dssdvnei1/image/upload/v1778068263/Menu/Items/e3uqkic6v975bzdgcea6.jpg",
+          isVeg: true,
+          rating: 5,
+          recommended: true,
+          trending: true,
+          estimateTimePrepareMenuItem: 25,
+          quantity: 1,
+          category: "Starters · Tandoor",
+          serves: "Serves 2",
+          kcal: "450 kcal",
+          shipTime: "Ready in 25 min",
+          tags: ["Tandoori", "Crispy", "Gluten Free"],
+          badge: "Bestseller",
+          badgeColor: "dark",
+          stock: 35,
+        },
+        {
+          id: "69fb0ab5eab765dad2e24c32",
+          name: "Mutton Rogan Josh",
+          description: "Authentic North Indian mutton curry made with tender mutton pieces slow-cooked in rich onion-tomato gravy and aromatic spices. Best paired with naan or steamed rice.",
+          price: 420,
+          discount_price: 389,
+          image: "https://res.cloudinary.com/dssdvnei1/image/upload/v1778059954/Menu/Items/fmlanxng2opcrf0bkjh5.jpg",
+          isVeg: false,
+          rating: 5,
+          recommended: true,
+          trending: true,
+          estimateTimePrepareMenuItem: 40,
+          quantity: 1,
+          category: "Main Course · Mutton",
+          serves: "Serves 2",
+          kcal: "680 kcal",
+          shipTime: "Ready in 40 min",
+          tags: ["Signature", "Tender Meat", "Slow Cooked"],
+          badge: "Chef's Special",
+          badgeColor: "green",
+          stock: 18,
+        },
+      ];
+
+      setCartItems(items);
+      setLoading(false);
+    };
+
+    loadCartItems();
+  }, []);
+
+  // Calculate subtotal (using discounted price if available)
+  const subtotal = cartItems.reduce(
+    (sum, item) =>
+      sum + (item.discount_price || item.price) * item.quantity,
+    0
+  );
+
+  // Dynamic delivery charge: free if subtotal >= 500, else ₹40
+  const deliveryCharge = subtotal >= 500 ? 0 : 40;
 
   const updateQuantity = (id, delta) => {
-    setCartItems(prev => prev.map(item => 
-      item.id === id 
-        ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-        : item
-    ));
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? { ...item, quantity: Math.max(1, Math.min(item.quantity + delta, item.stock)) }
+          : item
+      )
+    );
   };
 
   const removeItem = (id) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
   const clearCart = () => {
-    setCartItems([]);
+    if (window.confirm("Are you sure you want to clear your cart?")) {
+      setCartItems([]);
+    }
   };
 
   const applyPromo = () => {
     if (promoCode === "RESTROVA20") {
       setAppliedPromo("RESTROVA20");
-      setPromoDiscount(28.60);
+      setPromoDiscount(subtotal * 0.2);
+    } else if (promoCode === "WELCOME10") {
+      setAppliedPromo("WELCOME10");
+      setPromoDiscount(subtotal * 0.1);
+    } else if (promoCode === "" && appliedPromo) {
+      // handled by remove
+    } else {
+      alert("Invalid promo code");
     }
   };
 
@@ -84,153 +172,576 @@ const Cart = () => {
     setPromoDiscount(0);
   };
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const total = subtotal - promoDiscount;
-  const vat = 12.68;
+  const total = subtotal - promoDiscount + deliveryCharge;
+  // const vat = total * 0.05; // 5% VAT
+  const grandTotal = total;
+  const totalSavings = cartItems.reduce(
+    (sum, item) =>
+      sum +
+      ((item.price - (item.discount_price || item.price)) * item.quantity),
+    0
+  ) + promoDiscount;
+
+  // Veg/Non-veg badge component
+  const VegBadge = ({ isVeg }) => (
+    <div
+      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold ${isVeg
+        ? "bg-green-100 text-green-700 border border-green-300"
+        : "bg-red-100 text-red-700 border border-red-300"
+        }`}
+    >
+      {isVeg ? (
+        <FaLeaf className="text-[8px]" />
+      ) : (
+        <FaDrumstickBite className="text-[8px]" />
+      )}
+      {isVeg ? "VEG" : "NON-VEG"}
+    </div>
+  );
+
+  // SVG Icons
+  const FastDeliveryIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+        fill="#ff581b"
+      />
+      <path
+        d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4z"
+        fill="#ff581b"
+        opacity="0.7"
+      />
+    </svg>
+  );
+
+  const TodayIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+        fill="#ff581b"
+      />
+      <path
+        d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"
+        fill="#ff581b"
+      />
+    </svg>
+  );
+
+  const FreeShippingIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63c-.75.51-1.38 1.18-1.82 1.96H4c-1.1 0-2 .9-2 2v6h2c0 1.66 1.34 3 3 3s3-1.34 3-3h4c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-6c0-1.1-.9-2-2-2zm-11 8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm6 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"
+        fill="#ff581b"
+      />
+    </svg>
+  );
+
+  const LocationIcon = () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+        fill="#ff581b"
+      />
+    </svg>
+  );
+
+  if (loading) {
+    return (
+      
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[#ff581b] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-500 text-sm">Loading your cart...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="font-sans text-gray-600 bg-gray-50">
+    <div className="font-sans text-gray-600 bg-gray-50 ">
+      {/* Mobile Cart Header */}
+<div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2">
+  <div className="h-12 px-3 flex items-center justify-between">
+
+    {/* Back Button */}
+    <button
+      onClick={() => window.history.back()}
+      className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+    >
+      <FaArrowLeft className="text-gray-700 text-xs" />
+    </button>
+
+    {/* Title */}
+    <h1 className="font-['Raleway',sans-serif] text-lg font-black text-gray-900">
+      My Cart
+    </h1>
+
+    {/* Right Icon */}
+    <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+      <FaBagShopping className="text-gray-700 text-xs" />
+    </button>
+
+  </div>
+</div>
       {/* Breadcrumb Section */}
-      <section className="relative h-[300px] bg-black flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/assets/images/page-banner.jpg')] bg-cover bg-center opacity-40"></div>
+      <section className="hidden md:flex relative h-[250px] bg-black items-center overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/assets/images/page-banner.jpg')] bg-cover bg-center opacity-100"></div>
         <div className="container relative z-10 mx-auto px-4 max-w-[1480px]">
           <div className="text-white">
-            <div className="flex items-center gap-2 font-['Yesteryear',cursive] text-2xl text-[#ff581b] mb-4">
-              <span className="w-9 h-0.5 bg-[#ff581b] rounded-full"></span>
+            <div className="flex items-center gap-2 font-['Yesteryear',cursive] text-xl text-[#ff581b] mb-1">
+              <span className="w-7 h-0.5 bg-[#ff581b] rounded-full"></span>
               Cart
             </div>
-            <h2 className="font-['Raleway',sans-serif] text-5xl md:text-6xl font-extrabold text-white mb-2">
+            <h2 className="font-['Raleway',sans-serif] text-4xl md:text-5xl font-extrabold text-white mb-0.5">
               Your <span className="text-[#ff581b] font-['Yesteryear',cursive]">Cart</span>
             </h2>
-            <p className="text-white/70">Review your selected items and manage your order before checkout.</p>
+            <p className="text-white/70 text-xs">
+              Review your selected items and manage your order before checkout.
+            </p>
           </div>
-          <div className="absolute bottom-7 right-0 flex items-center gap-2 text-sm font-semibold">
-            <Link href="/" className="text-white hover:text-[#ff581b]">Home</Link>
-            <i className="fa-solid fa-chevron-right text-white text-[10px]"></i>
+          <div className="absolute bottom-3 right-0 flex items-center gap-2 text-xs font-semibold">
+            <Link href="/" className="text-white hover:text-[#ff581b]">
+              Home
+            </Link>
+            <FaChevronRight className="text-white text-[8px]" />
             <span className="text-[#ff581b]">Cart</span>
           </div>
         </div>
       </section>
 
-      {/* Progress Steps */}
-      <div className="bg-white border-b border-gray-100 py-5">
-        <div className="container mx-auto px-4 max-w-[1480px]">
-          <div className="flex items-center justify-center gap-0 max-w-[600px] mx-auto">
-            {[
-              { label: "Cart", icon: "fa-solid fa-bag-shopping", active: true },
-              { label: "Delivery", step: "2" },
-              { label: "Payment", step: "3" },
-              { label: "Confirm", step: "4" }
-            ].map((step, idx) => (
-              <div key={idx} className="flex items-center gap-2 flex-1 relative flex-col">
-                {idx < 3 && <div className="absolute left-[calc(50%+0px)] right-[calc(-50%+0px)] top-[18px] h-0.5 bg-gray-200 z-0"></div>}
-                <div className={`w-9 h-9 rounded-full grid place-items-center z-10 font-['Raleway',sans-serif] text-sm font-extrabold flex-shrink-0 transition-all duration-300 border-2 ${step.active ? 'bg-[#ff581b] border-[#ff581b] text-white shadow-[0_0_0_5px_rgba(255,88,27,0.15)]' : 'bg-gray-100 border-gray-200 text-gray-500'}`}>
-                  {step.icon ? <i className={step.icon}></i> : step.step}
+      {/* Delivery Information Section */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="container mx-auto px-4 max-w-[1480px] py-3">
+          {/* Savings Banner */}
+          {totalSavings > 0 && (
+            <div className="bg-[#fff3ed] rounded-lg py-1.5 text-center mb-3">
+              <span className="text-[#ff581b] text-xs font-bold">
+                ✨ You saved ₹{totalSavings.toFixed(2)} on this order!
+              </span>
+            </div>
+          )}
+
+          {/* Delivery Card */}
+          <div className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100">
+            {/* Header Section - Delivery Address & Free Delivery Badge */}
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-[#ff581b] flex items-center justify-center flex-shrink-0">
+                  <FaLocationDot className="text-white text-sm" />
                 </div>
-                <span className={`text-xs font-bold tracking-wide whitespace-nowrap ${step.active ? 'text-[#ff581b]' : 'text-gray-500'}`}>{step.label}</span>
+                <div>
+                  <h3 className="font-extrabold text-gray-900 text-sm leading-none">
+                    Delivery Information
+                  </h3>
+                  <p className="text-[10px] text-gray-400 mt-0.5">
+                    {subtotal >= 500
+                      ? "✨ Free delivery on this order!"
+                      : `Add ₹${(500 - subtotal).toFixed(2)} more for free delivery`}
+                  </p>
+                </div>
               </div>
-            ))}
+              <span
+                className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full w-fit ${deliveryCharge === 0
+                  ? "bg-green-100 text-green-700"
+                  : "bg-amber-100 text-amber-700"
+                  }`}
+              >
+                {deliveryCharge === 0 ? "FREE DELIVERY" : `₹${deliveryCharge} DELIVERY`}
+              </span>
+            </div>
+
+            {/* Desktop Version - Professional Delivery Details Grid */}
+            <div className="hidden md:grid md:grid-cols-4 gap-3">
+              {/* Current Location */}
+              <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 p-3 shadow-sm hover:shadow-md transition-all duration-300 group">
+                <div className="flex items-start gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-100 transition-colors">
+                    <FaLocationDot className="text-blue-500 text-sm" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-[10px] font-bold uppercase text-gray-400 tracking-wider mb-0.5">
+                      Current Location
+                    </p>
+                    <h4 className="text-sm font-bold text-gray-800 leading-tight">
+                      203 Kalyan Nagar
+                    </h4>
+                    <p className="text-[11px] text-gray-500 mt-0.5">Hyderabad</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Route */}
+              <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 p-3 shadow-sm hover:shadow-md transition-all duration-300 group">
+                <div className="flex items-start gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0 group-hover:bg-purple-100 transition-colors">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-purple-500">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-[10px] font-bold uppercase text-gray-400 tracking-wider mb-0.5">
+                      Route
+                    </p>
+                    <h4 className="text-sm font-bold text-gray-800 leading-tight">
+                      NH 44
+                    </h4>
+                    <p className="text-[11px] text-gray-500 mt-0.5">575 km - 587 mins</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Delivery Point */}
+              <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 p-3 shadow-sm hover:shadow-md transition-all duration-300 group">
+                <div className="flex items-start gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0 group-hover:bg-green-100 transition-colors">
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-[10px] font-bold uppercase text-gray-400 tracking-wider mb-0.5">
+                      Delivery Point
+                    </p>
+                    <h4 className="text-sm font-bold text-gray-800 leading-tight">
+                      Bengaluru Delivery
+                    </h4>
+                    <p className="text-[11px] text-gray-500 mt-0.5">Whitefield, Bengaluru</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Delivery Date & Time */}
+              <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 p-3 shadow-sm hover:shadow-md transition-all duration-300 group">
+                <div className="flex items-start gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-100 transition-colors">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-amber-500">
+                      <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" fill="currentColor" />
+                      <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" fill="currentColor" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-[10px] font-bold uppercase text-gray-400 tracking-wider mb-0.5">
+                      Delivery
+                    </p>
+                    <h4 className="text-sm font-bold text-gray-800 leading-tight">
+                      06-06-2026
+                    </h4>
+                    <p className="text-[11px] text-gray-500 mt-0.5">10:54 AM</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Version - Stacked Design (COMPLETELY UNCHANGED) */}
+            <div className="md:hidden">
+              <div className="mt-3">
+                <div className="flex gap-2">
+                  <div className="flex flex-col items-center">
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                    <div className="w-[1.5px] h-[45px] bg-gray-300"></div>
+                  </div>
+                  <div>
+                    <div className="text-[8px] font-bold uppercase text-gray-400 tracking-wide">
+                      Pickup Location
+                    </div>
+                    <p className="text-xs text-gray-600 mt-0.5 leading-5">
+                      Restrova Kitchen, Hitech City, Hyderabad
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-2 mt-0">
+                  <div className="flex flex-col items-center">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#ff581b]"></div>
+                  </div>
+                  <div>
+                    <div className="text-[8px] font-bold uppercase text-gray-400 tracking-wide">
+                      Deliver To
+                    </div>
+                    <button className="text-xs font-semibold text-gray-900 hover:text-[#ff581b]">
+                      8-3-199, Kalyan Nagar, Hyderabad
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Tags - Common */}
+            <div className="flex flex-wrap gap-1.5 mt-4 pt-2 border-t border-gray-100">
+              <div className="bg-[#fff3ed] text-[#ff581b] text-[10px] font-semibold px-2 py-1 rounded-full flex items-center gap-1 whitespace-nowrap">
+                <FastDeliveryIcon /> Fast Delivery
+              </div>
+              <div className="bg-[#fff3ed] text-[#ff581b] text-[10px] font-semibold px-2 py-1 rounded-full flex items-center gap-1 whitespace-nowrap">
+                <TodayIcon /> Today • 10:30 AM
+              </div>
+              <div className="bg-[#fff3ed] text-[#ff581b] text-[10px] font-semibold px-2 py-1 rounded-full flex items-center gap-1 whitespace-nowrap">
+                <FreeShippingIcon />{" "}
+                {subtotal >= 500 ? "Free shipping" : `₹${deliveryCharge} shipping`}
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Main Cart Section */}
-      <section className="py-16 md:py-24 bg-gray-50">
+      <section className="py-8 md:py-10 bg-gray-50">
         <div className="container mx-auto px-4 max-w-[1480px]">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 items-start">
-            
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1.2fr] gap-6 items-start">
             {/* LEFT: CART ITEMS */}
             <div>
-              {/* Column Header */}
-              <div className="flex items-center justify-between gap-4 flex-wrap mb-6">
+              <div className="flex items-center justify-between gap-4 flex-wrap mb-3">
                 <div>
-                  <div className="font-['Raleway',sans-serif] text-2xl font-black text-gray-900 tracking-tight">Order Items</div>
-                  <div className="text-sm text-gray-500 font-medium"><strong className="text-[#ff581b] font-['Raleway',sans-serif]">{cartItems.length}</strong> products in your cart</div>
+                  <div className="font-['Raleway',sans-serif] text-lg font-black text-gray-900 tracking-tight">
+                    Order Items
+                  </div>
+                  <div className="text-[10px] text-gray-500 font-medium">
+                    <strong className="text-[#ff581b] font-['Raleway',sans-serif]">
+                      {cartItems.length}
+                    </strong>{" "}
+                    products in your cart
+                  </div>
                 </div>
-                <button onClick={clearCart} className="text-sm font-bold text-gray-500 hover:text-red-600 flex items-center gap-1.5 transition-colors">
-                  <i className="fa-solid fa-trash-can"></i> Clear Cart
+                <button
+                  onClick={clearCart}
+                  className="text-[10px] font-bold text-gray-500 hover:text-red-600 flex items-center gap-1 transition-colors"
+                >
+                  <FaTrashCan className="text-[10px]" /> Clear Cart
                 </button>
               </div>
 
               {/* Cart Items */}
-              {cartItems.map((item, idx) => (
-                <div key={item.id} className="bg-white rounded-xl border border-gray-100 overflow-hidden mb-4 shadow-sm hover:shadow-md hover:border-[#ff581b]/20 transition-all duration-300 hover:-translate-y-1">
-                  <div className="h-1 bg-gradient-to-r from-[#ff581b] to-[#ff581b]/25"></div>
-                  
-                  {/* Desktop View */}
-                  <div className="hidden md:grid md:grid-cols-[140px_1fr_auto] gap-6 p-5 md:p-6">
-                    {/* Image */}
-                    <div className="relative w-[140px] h-[120px] rounded-xl overflow-hidden flex-shrink-0 group">
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"></div>
-                      <span className={`absolute top-2 left-2 text-white font-bold text-[9px] tracking-[1.5px] uppercase px-2.5 py-1 rounded-full backdrop-blur-sm z-10 ${
-                        item.badgeColor === 'primary' ? 'bg-[#ff581b] shadow-md' : 
-                        item.badgeColor === 'dark' ? 'bg-gray-900' : 'bg-emerald-700'
-                      }`}>{item.badge}</span>
+              {cartItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-lg border border-gray-100 overflow-hidden mb-3 shadow-sm hover:shadow-md transition-all duration-300"
+                >
+                  <div className="hidden md:block h-0.5 bg-gradient-to-r from-[#ff581b] to-[#ff581b]/25"></div>
+
+                  {/* Desktop View - NO CHANGES */}
+                  <div className="hidden md:grid md:grid-cols-[100px_1fr_auto] gap-3 p-3">
+                    <div className="relative w-[100px] h-[100px] rounded-xl overflow-hidden flex-shrink-0 group">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {
+                          e.target.src = "https://via.placeholder.com/100x100?text=No+Image";
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                      {item.badge && (
+                        <span
+                          className={`absolute top-2 left-2 text-white font-bold text-[8px] tracking-[1px] uppercase px-1.5 py-0.5 rounded-full backdrop-blur-sm z-10 shadow-sm ${item.badgeColor === "primary"
+                            ? "bg-[#ff581b]"
+                            : item.badgeColor === "dark"
+                              ? "bg-gray-900"
+                              : "bg-emerald-700"
+                            }`}
+                        >
+                          {item.badge}
+                        </span>
+                      )}
                     </div>
-                    
-                    {/* Info */}
-                    <div>
-                      <div className="text-[10px] font-bold tracking-[2.5px] uppercase text-[#ff581b] mb-1">{item.category}</div>
-                      <div className="font-['Raleway',sans-serif] text-lg font-extrabold text-gray-900 leading-tight mb-1.5">{item.name}</div>
-                      <div className="flex gap-3 flex-wrap mb-3.5">
-                        {item.serves && <span className="flex items-center gap-1 text-xs font-semibold text-gray-500"><i className="fa-solid fa-users text-[#ff581b] text-[10px]"></i> {item.serves}</span>}
-                        {item.kcal && <span className="flex items-center gap-1 text-xs font-semibold text-gray-500"><i className="fa-solid fa-fire text-[#ff581b] text-[10px]"></i> {item.kcal}</span>}
-                        {item.shipTime && <span className="flex items-center gap-1 text-xs font-semibold text-gray-500"><i className="fa-solid fa-clock text-[#ff581b] text-[10px]"></i> {item.shipTime}</span>}
-                        {item.weight && <span className="flex items-center gap-1 text-xs font-semibold text-gray-500"><i className="fa-solid fa-weight-hanging text-[#ff581b] text-[10px]"></i> {item.weight}</span>}
-                        {item.temp && <span className="flex items-center gap-1 text-xs font-semibold text-gray-500"><i className="fa-solid fa-snowflake text-[#ff581b] text-[10px]"></i> {item.temp}</span>}
-                        {item.diet && <span className="flex items-center gap-1 text-xs font-semibold text-gray-500"><i className="fa-solid fa-seedling text-[#ff581b] text-[10px]"></i> {item.diet}</span>}
-                        {item.shelfLife && <span className="flex items-center gap-1 text-xs font-semibold text-gray-500"><i className="fa-solid fa-clock text-[#ff581b] text-[10px]"></i> {item.shelfLife}</span>}
-                      </div>
-                      <div className="flex gap-1.5 flex-wrap">
-                        {item.tags.map((tag, i) => (
-                          <span key={i} className="text-[10px] font-semibold text-gray-500 bg-gray-100 border border-gray-100 px-2.5 py-0.5 rounded-full">{tag}</span>
-                        ))}
+
+                    <div className="flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          <div className="text-[8px] font-bold tracking-[1.5px] uppercase text-[#ff581b]">
+                            {item.category || "Main Course"}
+                          </div>
+                          <VegBadge isVeg={item.isVeg} />
+                          {item.recommended && (
+                            <span className="text-[8px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-full">
+                              ⭐ Recommended
+                            </span>
+                          )}
+                          {item.trending && (
+                            <span className="text-[8px] font-bold text-[#ff581b] bg-[#fff3ed] px-1.5 py-0.5 rounded-full">
+                              🔥 Trending
+                            </span>
+                          )}
+                        </div>
+                        <div className="font-['Raleway',sans-serif] text-sm font-extrabold text-gray-900 leading-tight mb-1.5 line-clamp-1">
+                          {item.name}
+                        </div>
+
+                        <div className="flex gap-2 flex-wrap mb-1.5">
+                          {item.serves && (
+                            <span className="flex items-center gap-1 text-[9px] font-medium text-gray-600">
+                              <FaUsers className="text-[#ff581b] text-[8px]" /> {item.serves}
+                            </span>
+                          )}
+                          {item.kcal && (
+                            <span className="flex items-center gap-1 text-[9px] font-medium text-gray-600">
+                              <FaFire className="text-[#ff581b] text-[8px]" /> {item.kcal}
+                            </span>
+                          )}
+                          {item.shipTime && (
+                            <span className="flex items-center gap-1 text-[9px] font-medium text-gray-600">
+                              <FaClock className="text-[#ff581b] text-[8px]" /> {item.shipTime}
+                            </span>
+                          )}
+                          {item.estimateTimePrepareMenuItem && (
+                            <span className="flex items-center gap-1 text-[9px] font-medium text-gray-600">
+                              <FaClock className="text-[#ff581b] text-[8px]" /> Ready in {item.estimateTimePrepareMenuItem} min
+                            </span>
+                          )}
+                        </div>
+
+                        {item.tags && item.tags.length > 0 && (
+                          <div className="flex gap-1.5 flex-wrap">
+                            {item.tags.map((tag, i) => (
+                              <span
+                                key={i}
+                                className="text-[8px] font-semibold text-gray-500 bg-gray-100 border border-gray-200 px-1.5 py-0.5 rounded-full"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
-                    
-                    {/* Right side */}
-                    <div className="flex flex-col items-end justify-between gap-4 min-w-[120px]">
+
+                    <div className="flex flex-col items-end justify-between gap-2 min-w-[100px]">
                       <div className="text-right">
-                        <div className="font-['Raleway',sans-serif] text-2xl font-black text-gray-900 leading-none tracking-tight"><sup className="text-sm text-[#ff581b]">$</sup>{item.price}</div>
-                        {item.originalPrice && <div className="text-xs text-gray-400 line-through font-medium mt-0.5">Was ${item.originalPrice}</div>}
-                        {item.originalPrice && <div className="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full mt-1">Save ${item.originalPrice - item.price}</div>}
+                        <div className="font-['Raleway',sans-serif] text-lg font-black text-gray-900 leading-none tracking-tight">
+                          <sup className="text-[10px] text-[#ff581b]">₹</sup>
+                          {item.discount_price || item.price}
+                        </div>
+                        {item.discount_price && item.discount_price < item.price && (
+                          <div className="flex flex-col items-end gap-0.5 mt-1">
+                            <div className="text-[9px] text-gray-400 line-through font-medium">
+                              Was ₹{item.price}
+                            </div>
+                            <div className="text-[9px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">
+                              Save ₹{item.price - item.discount_price}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <div className="flex items-center bg-gray-100 border border-gray-200 rounded-full overflow-hidden">
-                        <button onClick={() => updateQuantity(item.id, -1)} className="w-9 h-9 grid place-items-center text-gray-800 hover:text-[#ff581b] transition-colors"><i className="fa-solid fa-minus"></i></button>
-                        <span className="font-['Raleway',sans-serif] text-base font-black text-gray-900 min-w-[32px] text-center">{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.id, 1)} className="w-9 h-9 grid place-items-center text-gray-800 hover:text-[#ff581b] transition-colors"><i className="fa-solid fa-plus"></i></button>
+
+                      <div className="flex items-center bg-white rounded-full p-1 gap-2">
+                        <button
+                          onClick={() => updateQuantity(item.id, -1)}
+                          className="w-7 h-7 rounded-full bg-white text-gray-700 grid place-items-center shadow-sm hover:bg-gray-50 transition-all"
+                        >
+                          <PiMinus className="text-[10px]" />
+                        </button>
+
+                        <span className="font-['Raleway',sans-serif] text-sm font-black text-gray-900 min-w-[20px] text-center">
+                          {item.quantity}
+                        </span>
+
+                        <button
+                          onClick={() => updateQuantity(item.id, 1)}
+                          className="w-7 h-7 rounded-full bg-[#ff581b] text-white grid place-items-center shadow-sm hover:bg-[#e84d15] transition-all"
+                          disabled={item.quantity >= item.stock}
+                        >
+                          <PiPlus className="text-[10px]" />
+                        </button>
                       </div>
-                      <button onClick={() => removeItem(item.id)} className="flex items-center gap-1 text-xs font-bold text-gray-500 hover:text-red-600 transition-colors"><i className="fa-solid fa-trash-can"></i> Remove</button>
+
+                      <button
+                        onClick={() => removeItem(item.id)}
+                        className="flex items-center gap-1 text-[10px] font-bold text-gray-400 hover:text-red-600 transition-colors"
+                      >
+                        <FaTrashCan className="text-[10px]" /> Remove
+                      </button>
                     </div>
                   </div>
-                  
-                  {/* Mobile View */}
+
+                  {/* Mobile View - FIXED: Smaller images, single price, icon-only veg/nonveg */}
                   <div className="md:hidden">
-                    <div className="p-4">
-                      <div className="relative w-full h-[180px] rounded-xl overflow-hidden mb-3">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                        <span className={`absolute top-2 left-2 text-white font-bold text-[9px] tracking-[1.5px] uppercase px-2.5 py-1 rounded-full backdrop-blur-sm z-10 ${
-                          item.badgeColor === 'primary' ? 'bg-[#ff581b]' : item.badgeColor === 'dark' ? 'bg-gray-900' : 'bg-emerald-700'
-                        }`}>{item.badge}</span>
-                      </div>
-                      <div className="text-[10px] font-bold tracking-[2.5px] uppercase text-[#ff581b] mb-1">{item.category}</div>
-                      <div className="font-['Raleway',sans-serif] text-lg font-extrabold text-gray-900 mb-2">{item.name}</div>
-                      <div className="flex gap-3 flex-wrap mb-3">
-                        {item.serves && <span className="text-xs text-gray-500"><i className="fa-solid fa-users text-[#ff581b] mr-1"></i> {item.serves}</span>}
-                        {item.kcal && <span className="text-xs text-gray-500"><i className="fa-solid fa-fire text-[#ff581b] mr-1"></i> {item.kcal}</span>}
-                      </div>
-                      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                        <div className="flex items-center gap-2">
-                          <div className="flex items-center bg-gray-100 border border-gray-200 rounded-full overflow-hidden">
-                            <button onClick={() => updateQuantity(item.id, -1)} className="w-8 h-8 grid place-items-center"><i className="fa-solid fa-minus text-sm"></i></button>
-                            <span className="font-['Raleway',sans-serif] font-black min-w-[28px] text-center">{item.quantity}</span>
-                            <button onClick={() => updateQuantity(item.id, 1)} className="w-8 h-8 grid place-items-center"><i className="fa-solid fa-plus text-sm"></i></button>
-                          </div>
+                    <div className="p-3">
+                      <div className="flex gap-2">
+                        {/* Smaller Image - 70x70 */}
+                        <div className="relative w-[70px] h-[70px] rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.target.src = "https://via.placeholder.com/70x70?text=No+Image";
+                            }}
+                          />
+                          {item.badge && (
+                            <span
+                              className={`absolute top-1 left-1 text-white font-bold text-[6px] tracking-[1px] uppercase px-1 py-0.5 rounded-full backdrop-blur-sm z-10 ${item.badgeColor === "primary"
+                                ? "bg-[#ff581b]"
+                                : item.badgeColor === "dark"
+                                  ? "bg-gray-900"
+                                  : "bg-emerald-700"
+                                }`}
+                            >
+                              {item.badge}
+                            </span>
+                          )}
                         </div>
-                        <div className="flex items-center gap-3">
-                          <div className="font-['Raleway',sans-serif] text-xl font-black text-gray-900"><sup className="text-sm text-[#ff581b]">$</sup>{item.price * item.quantity}</div>
-                          <button onClick={() => removeItem(item.id)} className="text-gray-500 hover:text-red-600"><i className="fa-solid fa-trash-can"></i></button>
+
+                        {/* Content */}
+                        <div className="flex-1 flex flex-col gap-1">
+                          {/* Category and Veg/NonVeg Icon Only - No Text */}
+                          <div className="flex items-center justify-between">
+                            <div className="text-[8px] font-bold tracking-[1.5px] uppercase text-[#ff581b]">
+                              {item.category || "Main Course"}
+                            </div>
+                            {/* Icon only - green leaf for veg, red drumstick for nonveg */}
+                            {/*  */}
+                          </div>
+
+                          {/* Product Name */}
+                          <div className="font-['Raleway',sans-serif] text-sm font-extrabold text-gray-900 leading-tight">
+                            {item.name}
+                          </div>
+
+                          {/* Price Section - Only one price (no duplicate near remove) */}
+                          <div className="flex items-baseline gap-2 flex-wrap">
+                            <div className="font-['Raleway',sans-serif] text-base font-black text-gray-900">
+                              <sup className="text-[9px] text-[#ff581b]">₹</sup>
+                              {item.discount_price || item.price}
+                            </div>
+                            {item.discount_price && item.discount_price < item.price && (
+                              <>
+                                <div className="text-[8px] text-gray-400 line-through">
+                                  ₹{item.price}
+                                </div>
+                                <div className="text-[7px] font-bold text-emerald-600 bg-emerald-50 px-1 py-0.5 rounded-full">
+                                  Save ₹{item.price - item.discount_price}
+                                </div>
+                              </>
+                            )}
+                          </div>
+
+                          {/* Quantity and Total Row - Removed duplicate price */}
+                          <div className="flex items-center justify-between mt-1">
+                            {/* Quantity Controls */}
+                            <div className="flex items-center bg-white rounded-full p-1 gap-2">
+                              <button
+                                onClick={() => updateQuantity(item.id, -1)}
+                                className="w-5 h-5 rounded-full bg-white text-gray-700 grid place-items-center shadow-sm"
+                              >
+                                <PiMinus className="text-[10px]" />
+                              </button>
+
+                              <span className="font-['Raleway',sans-serif] font-black min-w-[20px] text-center text-sm">
+                                {item.quantity}
+                              </span>
+
+                              <button
+                                onClick={() => updateQuantity(item.id, 1)}
+                                className="w-5 h-5 rounded-full bg-[#ff581b] text-white grid place-items-center shadow-sm"
+                                disabled={item.quantity >= item.stock}
+                              >
+                                <PiPlus className="text-[10px]" />
+                              </button>
+                            </div>
+
+                            {/* Only Remove Button - No duplicate price */}
+                            <button
+                              onClick={() => removeItem(item.id)}
+                              className="text-gray-400 hover:text-red-600"
+                            >
+                              <FaTrashCan className="text-xs" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -239,164 +750,343 @@ const Cart = () => {
               ))}
 
               {/* Promo Code */}
-              <div className="mt-6">
-                <div className="flex gap-3 items-stretch">
+              <div className="mt-4">
+                <div className="flex gap-2 items-stretch">
                   <div className="flex-1 relative">
-                    <i className="fa-solid fa-tag absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                    <input 
-                      type="text" 
+                    <FaTag className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[11px]" />
+                    <input
+                      type="text"
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value)}
-                      placeholder="Enter promo code…" 
-                      className="w-full py-3.5 pl-11 pr-4 border border-gray-200 rounded-xl bg-white text-gray-900 text-sm outline-none focus:border-[#ff581b] focus:shadow-[0_0_0_4px_rgba(255,88,27,0.1)] transition-all"
+                      placeholder="Enter promo code…"
+                      className="w-full py-2.5 pl-9 pr-3 border border-gray-200 rounded-xl bg-white text-gray-900 text-xs outline-none focus:border-[#ff581b] focus:shadow-[0_0_0_2px_rgba(255,88,27,0.1)] transition-all"
                     />
                   </div>
-                  <button onClick={applyPromo} className="px-6 py-3.5 bg-gray-900 text-white rounded-xl font-['Raleway',sans-serif] font-bold text-sm hover:bg-[#ff581b] transition-colors whitespace-nowrap">Apply</button>
+                  <button
+                    onClick={applyPromo}
+                    className="px-5 py-2.5 bg-gray-900 text-white rounded-xl font-['Raleway',sans-serif] font-bold text-xs hover:bg-[#ff581b] transition-colors whitespace-nowrap shadow-sm"
+                  >
+                    Apply
+                  </button>
                 </div>
                 {appliedPromo && (
-                  <div className="flex items-center gap-2.5 mt-3 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2.5">
-                    <i className="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
-                    <div>
-                      <div className="font-['Raleway',sans-serif] text-sm font-extrabold text-emerald-800 tracking-wide">{appliedPromo}</div>
-                      <div className="text-xs font-semibold text-emerald-600">20% off applied — saving you ${promoDiscount.toFixed(2)}</div>
+                  <div className="flex items-center gap-2 mt-2 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2">
+                    <FaCircleCheck className="text-emerald-600 text-[11px] flex-shrink-0" />
+                    <div className="flex-1">
+                      <div className="font-['Raleway',sans-serif] text-[11px] font-extrabold text-emerald-800 tracking-wide">
+                        {appliedPromo}
+                      </div>
+                      <div className="text-[9px] font-semibold text-emerald-600">
+                        {appliedPromo === "RESTROVA20"
+                          ? "20% off applied"
+                          : "10% off applied"}{" "}
+                        — saving you ₹{promoDiscount.toFixed(2)}
+                      </div>
                     </div>
-                    <button onClick={removePromo} className="ml-auto text-xs font-bold text-emerald-600 hover:text-red-600">Remove</button>
+                    <button
+                      onClick={removePromo}
+                      className="text-[10px] font-bold text-emerald-600 hover:text-red-600"
+                    >
+                      Remove
+                    </button>
                   </div>
                 )}
               </div>
 
               {/* Continue Shopping */}
-              <Link href="/shop" className="flex items-center gap-2 mt-7 font-['Raleway',sans-serif] font-bold text-gray-900 hover:text-[#ff581b] transition-colors w-fit">
-                <i className="fa-solid fa-arrow-left text-xs group-hover:-translate-x-1 transition-transform"></i>
-                Continue Shopping
-              </Link>
+              <div className="mt-5 mb-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="w-8 h-[2px] bg-[#ff581b] rounded-full"></span>
+                  <span className="text-[10px] font-bold uppercase tracking-[2px] text-[#ff581b]">
+                    Customer Confidence
+                  </span>
+                </div>
+                <h3 className="font-['Raleway',sans-serif] text-sm md:text-xl font-black text-gray-900 tracking-tight">
+                  Why Customers Trust Us
+                </h3>
+                <p className="text-xs text-gray-500 mt-1 max-w-md">
+                  Secure payments, fresh delivery, and hassle-free service with every order.
+                </p>
+              </div>
 
               {/* Trust Badges */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-7">
-                {[
-                  { icon: "fa-solid fa-lock", title: "Secure<br>Checkout", desc: "256-bit SSL encryption on every transaction" },
-                  { icon: "fa-solid fa-snowflake", title: "Cold Chain<br>Guaranteed", desc: "Insulated packaging — fresh on arrival" },
-                  { icon: "fa-solid fa-rotate-left", title: "Easy<br>Returns", desc: "7-day hassle-free return policy" }
-                ].map((trust, idx) => (
-                  <div key={idx} className="bg-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm hover:shadow-md hover:border-[#ff581b]/20 transition-all hover:-translate-y-1">
-                    <div className="w-11 h-11 rounded-xl bg-[#ff581b]/10 border border-[#ff581b]/20 grid place-items-center mx-auto mb-2.5 text-[#ff581b] text-lg transition-all group-hover:bg-[#ff581b] group-hover:text-white">
-                      <i className={trust.icon}></i>
-                    </div>
-                    <div className="font-['Raleway',sans-serif] text-sm font-extrabold text-gray-900 leading-tight" dangerouslySetInnerHTML={{ __html: trust.title }}></div>
-                    <div className="text-xs text-gray-500 mt-1 leading-relaxed">{trust.desc}</div>
+              {/* Trust Badges */}
+              <div className="grid grid-cols-3 gap-2 mt-6 md:grid-cols-3">
+                {/* Badge 1 */}
+                <div className="bg-white rounded-xl text-center border border-gray-100 shadow-sm hover:shadow-md transition-all md:p-3 p-2">
+                  <div className="rounded-lg bg-[#ff581b]/10 border border-[#ff581b]/20 grid place-items-center mx-auto mb-1 text-[#ff581b] md:w-8 md:h-8 w-6 h-6">
+                    <FaLock className="md:text-sm text-xs" />
                   </div>
-                ))}
+                  <div className="font-['Raleway',sans-serif] font-extrabold text-gray-900 leading-tight md:text-[11px] text-[9px]">
+                    Secure<br />Checkout
+                  </div>
+                  <div className="text-gray-500 mt-0.5 md:text-[9px] text-[7px]">256-bit SSL</div>
+                </div>
+
+                {/* Badge 2 */}
+                <div className="bg-white rounded-xl text-center border border-gray-100 shadow-sm hover:shadow-md transition-all md:p-3 p-2">
+                  <div className="rounded-lg bg-[#ff581b]/10 border border-[#ff581b]/20 grid place-items-center mx-auto mb-1 text-[#ff581b] md:w-8 md:h-8 w-6 h-6">
+                    <FaSnowflake className="md:text-sm text-xs" />
+                  </div>
+                  <div className="font-['Raleway',sans-serif] font-extrabold text-gray-900 leading-tight md:text-[11px] text-[9px]">
+                    Cold Chain<br />Guaranteed
+                  </div>
+                  <div className="text-gray-500 mt-0.5 md:text-[9px] text-[7px]">Fresh arrival</div>
+                </div>
+
+                {/* Badge 3 */}
+                <div className="bg-white rounded-xl text-center border border-gray-100 shadow-sm hover:shadow-md transition-all md:p-3 p-2">
+                  <div className="rounded-lg bg-[#ff581b]/10 border border-[#ff581b]/20 grid place-items-center mx-auto mb-1 text-[#ff581b] md:w-8 md:h-8 w-6 h-6">
+                    <FaRotateLeft className="md:text-sm text-xs" />
+                  </div>
+                  <div className="font-['Raleway',sans-serif] font-extrabold text-gray-900 leading-tight md:text-[11px] text-[9px]">
+                    Easy<br />Returns
+                  </div>
+                  <div className="text-gray-500 mt-0.5 md:text-[9px] text-[7px]">7-day hassle</div>
+                </div>
               </div>
             </div>
 
             {/* RIGHT: ORDER SUMMARY */}
             <div className="lg:sticky lg:top-24">
-              <div className="bg-gray-900 rounded-xl rounded-t-xl overflow-hidden shadow-lg">
-                <div className="flex items-center gap-3.5 p-6 bg-gray-900 relative overflow-hidden">
-                  <div className="w-11 h-11 rounded-xl bg-[#ff581b]/20 border border-[#ff581b]/30 grid place-items-center text-[#ff581b] text-lg relative z-10"><i className="fa-solid fa-receipt"></i></div>
-                  <div className="relative z-10">
-                    <div className="font-['Raleway',sans-serif] text-base font-black text-white tracking-tight">Order Summary</div>
-                    <div className="text-xs text-white/35 font-medium mt-0.5">{cartItems.length} items · Dispatched 24h</div>
+              <div className="bg-gray-900 rounded-xl overflow-hidden shadow-none md:shadow-md flex flex-col">
+                {/* Desktop Header - COMPLETELY UNCHANGED */}
+                <div className="hidden md:flex items-center gap-2 p-4 bg-gray-900">
+                  <div className="w-8 h-8 rounded-lg bg-[#ff581b]/20 border border-[#ff581b]/30 grid place-items-center text-[#ff581b] text-base">
+                    <FaReceipt className="text-base" />
+                  </div>
+                  <div>
+                    <div className="font-['Raleway',sans-serif] text-sm font-black text-white tracking-tight">
+                      Order Summary
+                    </div>
+                    <div className="text-[10px] text-white/35 font-medium">
+                      {cartItems.length} items
+                    </div>
                   </div>
                 </div>
-                
-                <div className="bg-white border border-gray-100 border-t-0 rounded-b-xl overflow-hidden shadow-md">
-                  {/* Product rows */}
-                  <div className="py-2">
-                    {cartItems.map(item => (
-                      <div key={item.id} className="flex items-start justify-between gap-3 px-7 py-3 border-b border-gray-100 bg-[#ff581b]/5">
-                        <div>
-                          <div className="font-['Raleway',sans-serif] text-sm font-bold text-gray-900 leading-tight">{item.name}</div>
-                          <div className="text-[11.5px] text-gray-500 font-medium mt-0.5">Qty: {item.quantity}</div>
+
+                <div className="bg-white border border-gray-100 border-t-0 rounded-b-xl overflow-hidden flex flex-col">
+                  {/* Desktop View - COMPLETELY UNCHANGED */}
+                  <div className="hidden md:block">
+                    <div className="max-h-[200px] overflow-y-auto custom-scrollbar">
+                      {cartItems.map((item) => (
+                        <div
+                          key={item.id}
+                          className="flex items-start justify-between gap-2 px-4 py-2 border-b border-gray-100 bg-[#ff581b]/5"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <div className="font-['Raleway',sans-serif] text-xs font-bold text-gray-900 leading-tight truncate">
+                              {item.name}
+                            </div>
+                            <div className="text-[10px] text-gray-500 font-medium mt-0.5">
+                              Qty: {item.quantity}
+                            </div>
+                          </div>
+                          <div className="font-['Raleway',sans-serif] text-sm font-extrabold text-gray-900 whitespace-nowrap">
+                            ₹{((item.discount_price || item.price) * item.quantity).toFixed(2)}
+                          </div>
                         </div>
-                        <div className="font-['Raleway',sans-serif] text-sm font-extrabold text-gray-900 whitespace-nowrap">${(item.price * item.quantity).toFixed(2)}</div>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <div className="h-px bg-gradient-to-r from-transparent via-[#ff581b]/30 to-transparent my-1 mx-7"></div>
-                  
-                  {/* Calculations */}
-                  <div className="pt-2">
-                    <div className="flex items-center justify-between px-7 py-3 border-b border-gray-100">
-                      <div className="text-sm font-semibold text-gray-500 flex items-center gap-1.5"><i className="fa-solid fa-receipt text-[#ff581b] text-[11px]"></i> Subtotal</div>
-                      <div className="font-['Raleway',sans-serif] text-sm font-bold text-gray-900">${subtotal.toFixed(2)}</div>
+                      ))}
                     </div>
-                    {promoDiscount > 0 && (
-                      <div className="flex items-center justify-between px-7 py-3 border-b border-gray-100">
-                        <div className="text-sm font-semibold text-gray-500 flex items-center gap-1.5"><i className="fa-solid fa-tag text-[#ff581b] text-[11px]"></i> Promo (RESTROVA20)</div>
-                        <div className="font-['Raleway',sans-serif] text-sm font-bold text-emerald-600">−${promoDiscount.toFixed(2)}</div>
+
+                    {cartItems.length === 0 && (
+                      <div className="px-4 py-6 text-center text-gray-400 text-sm">
+                        <FaBagShopping className="text-2xl mx-auto mb-2 opacity-50" />
+                        Your cart is empty
                       </div>
                     )}
-                    <div className="flex items-center justify-between px-7 py-3 border-b border-gray-100">
-                      <div className="text-sm font-semibold text-gray-500 flex items-center gap-1.5"><i className="fa-solid fa-truck-fast text-[#ff581b] text-[11px]"></i> Delivery</div>
-                      <div className="font-['Raleway',sans-serif] text-sm font-bold text-emerald-600">Free ✓</div>
-                    </div>
-                    <div className="flex items-center justify-between px-7 py-3 border-b border-gray-100">
-                      <div className="text-sm font-semibold text-gray-500 flex items-center gap-1.5"><i className="fa-solid fa-box text-[#ff581b] text-[11px]"></i> Insulated Packaging</div>
-                      <div className="font-['Raleway',sans-serif] text-sm font-bold text-emerald-600">Included</div>
-                    </div>
-                    <div className="flex items-center justify-between px-7 py-3">
-                      <div className="text-sm font-semibold text-gray-500 flex items-center gap-1.5"><i className="fa-solid fa-percent text-[#ff581b] text-[11px]"></i> VAT (Incl.)</div>
-                      <div className="font-['Raleway',sans-serif] text-sm font-bold text-[#ff581b]">${vat.toFixed(2)}</div>
-                    </div>
-                  </div>
-                  
-                  {/* Total */}
-                  <div className="bg-gray-900 px-7 py-5 flex items-center justify-between gap-3 relative overflow-hidden">
-                    <div>
-                      <div className="text-xs font-bold tracking-[2px] uppercase text-white/40">Order Total</div>
-                      {promoDiscount > 0 && <div className="text-[11px] text-white/35 mt-1">You save <strong>${promoDiscount.toFixed(2)}</strong> with your promo code</div>}
-                    </div>
-                    <div className="font-['Raleway',sans-serif] text-4xl font-black text-white leading-none tracking-[-2px]"><sup className="text-xl text-[#ff581b] font-bold">$</sup>{total.toFixed(2)}</div>
-                  </div>
-                  
-                  {/* Delivery note */}
-                  <div className="px-7 py-3.5 bg-emerald-50 border-t border-emerald-200 flex items-center gap-2.5">
-                    <i className="fa-solid fa-circle-check text-emerald-600 text-base"></i>
-                    <div className="text-xs font-semibold text-emerald-600"><span className="font-extrabold">Free next-day delivery</span> applied — your order qualifies (over $60)</div>
-                  </div>
-                  
-                  {/* Buttons */}
-                  <div className="px-7 py-5 flex flex-col gap-2.5">
-                    <Link href="/checkout" className="relative inline-block font-bold text-base uppercase bg-[#ff581b] text-white rounded-full py-[18px] pl-6 pr-[60px] overflow-hidden transition-all duration-300 hover:bg-gray-900 text-center w-full">
-                      Proceed to Checkout
-                      <span className="absolute top-1/2 right-1.5 w-10 h-10 bg-white rounded-full -translate-y-1/2 transition-all duration-300 group-hover:rotate-45"></span>
-                    </Link>
-                    <Link href="/checkout" className="flex items-center justify-center gap-2 text-base font-bold bg-transparent text-gray-900 border-2 border-gray-200 rounded-full py-[15px] px-6 hover:bg-gray-900 hover:border-gray-900 hover:text-white transition-all duration-300 w-full">
-                      <i className="fa-brands fa-apple"></i> Pay with Apple Pay
-                    </Link>
-                  </div>
-                  
-                  {/* Payment icons */}
-                  <div className="px-7 py-3.5 border-t border-gray-100 flex items-center justify-center gap-2.5 flex-wrap">
-                    <span className="text-[10px] font-bold tracking-[1.5px] uppercase text-gray-500">We accept</span>
-                    <div className="flex gap-1.5 flex-wrap items-center">
-                      {["fa-brands fa-cc-visa", "fa-brands fa-cc-mastercard", "fa-brands fa-cc-amex", "fa-brands fa-apple-pay", "fa-brands fa-google-pay"].map((icon, idx) => (
-                        <div key={idx} className="bg-gray-100 border border-gray-200 rounded-lg px-2.5 py-1 text-xl text-gray-800 flex items-center"><i className={icon}></i></div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {/* Recently viewed */}
-                  <div className="px-7 pt-4 pb-6 border-t border-gray-100">
-                    <div className="font-['Raleway',sans-serif] text-base font-extrabold text-gray-900 tracking-tight mb-3.5">Recently Viewed</div>
-                    <div className="flex flex-col gap-2.5">
-                      {[
-                        { name: "Carbonara Kit", cat: "Meal Kit", price: "$42", img: "/assets/images/shop/product-10.jpg" },
-                        { name: "The Restrova Collection", cat: "Gift Set", price: "$98", img: "/assets/images/shop/product-4.jpg" }
-                      ].map((item, idx) => (
-                        <Link key={idx} href="/shop-details" className="grid grid-cols-[64px_1fr] gap-3 items-center p-3 bg-white rounded-xl border border-gray-100 hover:border-[#ff581b]/20 hover:translate-x-1 hover:shadow-md transition-all">
-                          <div className="w-16 h-14 rounded-lg overflow-hidden flex-shrink-0">
-                            <img src={item.img} alt={item.name} className="w-full h-full object-cover" />
+
+                    <div className="h-px bg-gradient-to-r from-transparent via-[#ff581b]/30 to-transparent my-0.5 mx-4"></div>
+
+                    <div className="pt-0.5">
+                      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
+                        <div className="text-xs font-semibold text-gray-500 flex items-center gap-1">
+                          <FaReceipt className="text-[#ff581b] text-[10px]" /> Subtotal
+                        </div>
+                        <div className="font-['Raleway',sans-serif] text-sm font-bold text-gray-900">
+                          ₹{subtotal.toFixed(2)}
+                        </div>
+                      </div>
+                      {promoDiscount > 0 && (
+                        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
+                          <div className="text-xs font-semibold text-gray-500 flex items-center gap-1">
+                            <FaTag className="text-[#ff581b] text-[10px]" /> Promo
                           </div>
-                          <div>
-                            <div className="text-[9px] font-bold tracking-[2px] uppercase text-[#ff581b] mb-0.5">{item.cat}</div>
-                            <div className="font-['Raleway',sans-serif] text-xs font-bold text-gray-900 leading-tight">{item.name}</div>
-                            <div className="font-['Raleway',sans-serif] text-xs font-extrabold text-[#ff581b] mt-0.5">{item.price}</div>
+                          <div className="font-['Raleway',sans-serif] text-sm font-bold text-emerald-600">
+                            −₹{promoDiscount.toFixed(2)}
                           </div>
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
+                        <div className="text-xs font-semibold text-gray-500 flex items-center gap-1">
+                          <FaTruckFast className="text-[#ff581b] text-[10px]" /> Delivery
+                        </div>
+                        <div className={`font-['Raleway',sans-serif] text-sm font-bold ${deliveryCharge === 0 ? "text-emerald-600" : "text-gray-900"}`}>
+                          {deliveryCharge === 0 ? "Free ✓" : `₹${deliveryCharge.toFixed(2)}`}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="px-4 py-4 flex items-center justify-between gap-3 border-t border-gray-100 bg-white rounded-b-xl">
+                      <div>
+                        <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+                          Total
+                        </div>
+                        {promoDiscount > 0 && (
+                          <div className="flex items-center gap-1 mt-1">
+                            <div className="w-1 h-1 rounded-full bg-emerald-500"></div>
+                            <div className="text-[9px] font-medium text-emerald-600">
+                              Saved ₹{promoDiscount.toFixed(2)}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-right">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-[#ff581b] font-bold text-sm">₹</span>
+                          <span className="font-['Raleway',sans-serif] text-3xl font-black text-gray-900 leading-none tracking-tight">
+                            {grandTotal.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="text-[8px] text-gray-400">inc. all taxes</div>
+                      </div>
+                    </div>
+
+                    <div className="px-4 py-2 bg-emerald-50 border-t border-emerald-200 flex items-center gap-2">
+                      <FaCircleCheck className="text-emerald-600 text-xs" />
+                      <div className="text-[11px] font-semibold text-emerald-600">
+                        {deliveryCharge === 0
+                          ? "✨ Free delivery applied"
+                          : `Add ₹${(500 - subtotal).toFixed(2)} more for free delivery`}
+                      </div>
+                    </div>
+
+                    <div className="px-4 py-3">
+                      <Link
+                        href="/checkout"
+                        className="group relative inline-flex w-full items-center justify-center overflow-hidden rounded-full bg-[#ff581b] py-3 px-5 font-['Raleway',sans-serif] text-xs font-bold uppercase text-white shadow-md transition-all duration-300 hover:bg-[#e84d15] hover:shadow-lg"
+                      >
+                        <span className="absolute top-0 left-[-180%] h-full w-[35%] rotate-12 bg-white/30 blur-lg transition-all duration-[1500ms] ease-out group-hover:left-[180%]"></span>
+                        <span className="relative z-10 flex items-center gap-2">
+                          Proceed to Checkout
+                          <FaChevronRight className="text-[10px] transition-transform duration-300 group-hover:translate-x-0.5" />
+                        </span>
+                      </Link>
+                    </div>
+
+                    <div className="px-4 py-2 border-t border-gray-100 flex items-center justify-center gap-2 flex-wrap">
+                      <span className="text-[9px] font-bold tracking-[1px] uppercase text-gray-500">
+                        We accept
+                      </span>
+                      <div className="flex gap-1 flex-wrap items-center">
+                        <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-800">
+                          <FaCcVisa />
+                        </div>
+                        <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-800">
+                          <FaCcMastercard />
+                        </div>
+                        <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-800">
+                          <FaCcAmex />
+                        </div>
+                        <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-800">
+                          <FaApplePay />
+                        </div>
+                        <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-800">
+                          <FaGooglePay />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Mobile View - CLEAN DESIGN */}
+                  <div className="md:hidden">
+                    <div className="p-4">
+                      {/* Order Summary Heading - Orange Color */}
+                      <div className="font-['Raleway',sans-serif] text-lg font-black text-[#ff581b] mb-4">
+                        Order Summary
+                      </div>
+
+                      {/* Bill Details */}
+                      <div className="font-['Raleway',sans-serif] text-sm font-bold text-gray-700 mb-2">
+                        Bill Details
+                      </div>
+
+                      {/* Items Total */}
+                      <div className="flex justify-between items-center py-1.5">
+                        <span className="text-gray-600 text-sm">Items Total</span>
+                        <span className="font-semibold text-gray-900">₹{subtotal.toFixed(2)}</span>
+                      </div>
+
+                      {/* Item Savings */}
+                      {totalSavings > 0 && (
+                        <div className="flex justify-between items-center py-1.5">
+                          <span className="text-gray-600 text-sm">Item Savings</span>
+                          <span className="font-semibold text-emerald-600">- ₹{totalSavings.toFixed(2)}</span>
+                        </div>
+                      )}
+
+                      {/* Promo Discount */}
+                      {promoDiscount > 0 && (
+                        <div className="flex justify-between items-center py-1.5">
+                          <span className="text-gray-600 text-sm">Promo Discount</span>
+                          <span className="font-semibold text-emerald-600">- ₹{promoDiscount.toFixed(2)}</span>
+                        </div>
+                      )}
+
+                      {/* Delivery Fee */}
+                      <div className="flex justify-between items-center py-1.5">
+                        <span className="text-gray-600 text-sm">Delivery Fee</span>
+                        <span className={`font-semibold ${deliveryCharge === 0 ? "text-emerald-600" : "text-gray-900"}`}>
+                          {deliveryCharge === 0 ? "FREE" : `₹${deliveryCharge.toFixed(2)}`}
+                        </span>
+                      </div>
+
+                      {/* Divider */}
+                      <div className="border-t border-gray-100 my-3"></div>
+
+                      {/* Grand Total */}
+                      <div className="flex justify-between items-center py-1.5 mb-2">
+                        <span className="font-['Raleway',sans-serif] text-base font-black text-gray-900">Grand Total</span>
+                        <span className="font-['Raleway',sans-serif] text-xl font-black text-orange-500">₹{grandTotal.toFixed(2)}</span>
+                      </div>
+
+                      {/* Savings Message */}
+                      {(totalSavings > 0 || promoDiscount > 0) && (
+                        <div className="bg-emerald-50 rounded-lg px-3 py-2 mb-3">
+                          <span className="text-emerald-700 text-xs font-semibold">
+                            You saved ₹{(totalSavings + promoDiscount).toFixed(2)} on this order
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-2 mb-4">
+                        <button className="flex-1 bg-gray-100 rounded-full py-2 text-xs font-semibold text-gray-700">
+                          No Contact
+                        </button>
+                        <button className="flex-1 bg-gray-100 rounded-full py-2 text-xs font-semibold text-gray-700">
+                          Priority
+                        </button>
+                        <button className="flex-1 bg-gray-100 rounded-full py-2 text-xs font-semibold text-gray-700">
+                          Eco Friendly
+                        </button>
+                      </div>
+
+                      {/* Total Amount and Proceed Button - Side by Side */}
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <div className="text-gray-500 text-xs mb-0.5">Total Amount</div>
+                          <div className="font-['Raleway',sans-serif] text-2xl font-black text-gray-900">
+                            ₹{grandTotal.toFixed(2)}
+                          </div>
+                        </div>
+                        <Link
+                          href="/checkout"
+                          className="bg-[#ff581b] rounded-full py-3 px-5 font-['Raleway',sans-serif] text-sm font-bold uppercase text-white whitespace-nowrap inline-flex items-center justify-center"
+                        >
+                          Proceed to Pay
                         </Link>
-                      ))}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -405,6 +1095,23 @@ const Cart = () => {
           </div>
         </div>
       </section>
+
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #ff581b;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #e04e16;
+        }
+      `}</style>
     </div>
   );
 };
