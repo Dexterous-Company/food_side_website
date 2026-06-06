@@ -9,8 +9,8 @@ export default function ClientLayout({ children }) {
   const pathname = usePathname();
 
   // Routes where Header/Footer should be hidden
-  const hideHeaderRoutes = ["/login", "/resgister_new", "/register"];
-  const hideFooterRoutes = ["/login", "/resgister_new", "/register"];
+  const hideHeaderRoutes = ["/login", "/sign-up", "/register"];
+  const hideFooterRoutes = ["/login", "/sign-up", "/register"];
 
   const hideHeader = hideHeaderRoutes.includes(pathname);
   const hideFooter = hideFooterRoutes.includes(pathname);

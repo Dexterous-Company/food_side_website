@@ -1,10 +1,11 @@
 import RestaurantDetails from '@/pages/restaurant_pages/RestaurantDetails';
 import React from 'react';
-
+import Restaurants from "@/pages/restaurant_pages/Restaurants";
 const page = () => {
   return (
     <div>
-     <RestaurantDetails />
+     {/* <RestaurantDetails /> */}
+     <Restaurants  />
     </div>
   );
 }

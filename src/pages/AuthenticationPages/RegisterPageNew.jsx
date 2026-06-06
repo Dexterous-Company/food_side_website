@@ -20,6 +20,18 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import {
+  create_user,
+  send_otp,
+  verify_otp,
+  setMobileNumber as setAuthMobileNumber,
+  checkEmailExists,
+  checkMobileExists,
+} from "../../redux/Authentication/AuthenticationSlice";
+
+const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 // --- Helper Components for Responsive Design ---
 const MobileHeader = () => (
@@ -37,7 +49,6 @@ const MobileHeader = () => (
 
 const DesktopLeftPanel = () => (
   <div className="relative hidden w-3xl flex-col justify-between overflow-hidden lg:flex">
-    {/* Background Image and Overlays */}
     <div className="absolute inset-0">
       <img
         src="/assets/images/loginimages/login_Desktop.png"
@@ -51,7 +62,6 @@ const DesktopLeftPanel = () => (
     <div className="absolute bottom-20 left-20 h-80 w-80 rounded-full bg-orange-500/10 blur-3xl animate-pulse delay-1000" />
 
     <div className="relative z-10 flex h-full flex-col justify-between p-8">
-      {/* Logo */}
       <div className="group flex cursor-pointer items-center gap-3 transition-all hover:scale-105">
         <div className="relative">
           <div className="absolute inset-0 animate-ping rounded-2xl bg-amber-400/30" />
@@ -69,7 +79,6 @@ const DesktopLeftPanel = () => (
         </div>
       </div>
 
-      {/* Content */}
       <div className="space-y-6">
         <div className="space-y-3">
           <div className="inline-flex items-center gap-2 rounded-full bg-amber-400/20 px-3 py-1 backdrop-blur-sm">
@@ -136,57 +145,128 @@ const MobileFloatingImages = () => (
   </div>
 );
 
-// Registration Form Component with Name, Email, Phone and OTP
+// Toast component for web
+const Toast = ({ message, type, onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div
+      className={`fixed top-4 right-4 z-50 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg animate-in slide-in-from-top-2 ${
+        type === "error" ? "bg-red-500" : "bg-green-500"
+      } text-white`}
+    >
+      {type === "error" ? (
+        <AlertCircle className="h-4 w-4" />
+      ) : (
+        <CheckCircle className="h-4 w-4" />
+      )}
+      <span className="text-sm">{message}</span>
+    </div>
+  );
+};
+
+const RESEND_OTP_SECONDS = 30;
+
+// Check email exists function
+
+// Registration Form Component with OTP
 const RegisterForm = ({ onRegisterSuccess }) => {
-  // --- State Management ---
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  // Redux state
+  const { login_token, isUserAuth, mobileNumber: savedMobileNumber } = useSelector(
+    (state) => state.Authentication || {}
+  );
+
+  // Step management
   const [step, setStep] = useState("details"); // "details" or "otp"
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [timeLeft, setTimeLeft] = useState(0);
+  const [resendTimer, setResendTimer] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
+  const [toast, setToast] = useState(null);
 
   // Form fields
-  const [name, setName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
 
   // Field specific errors
   const [fieldErrors, setFieldErrors] = useState({
-    name: "",
+    fullName: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     otp: "",
   });
 
+  // Get route params (if coming from login with mobile number)
+  const routeParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const routeMobileNumber = routeParams?.get("mobileNumber") || "";
+  const lockPhoneNumber = routeParams?.get("lockPhoneNumber") === "true";
+  const isPhoneEditable = !lockPhoneNumber && !isLoading && step === "details";
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isUserAuth && login_token) {
+      router.replace("/SelectRouteDelivery");
+    }
+  }, [isUserAuth, login_token, router]);
+
+  // Set phone number from route params or saved mobile number
+  useEffect(() => {
+    const nextPhoneNumber = lockPhoneNumber
+      ? routeMobileNumber || savedMobileNumber || ""
+      : routeMobileNumber || "";
+
+    if (nextPhoneNumber) {
+      setPhoneNumber(
+        String(nextPhoneNumber)
+          .replace(/[^0-9]/g, "")
+          .slice(0, 10)
+      );
+    }
+  }, [lockPhoneNumber, routeMobileNumber, savedMobileNumber]);
+
   // Timer logic for OTP resend
   useEffect(() => {
-    let timer;
-    if (timeLeft > 0) {
-      timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-    }
-    return () => clearTimeout(timer);
-  }, [timeLeft]);
+    if (resendTimer <= 0) return;
+    
+    const timerId = setInterval(() => {
+      setResendTimer(prevTimer => (prevTimer > 1 ? prevTimer - 1 : 0));
+    }, 1000);
+    
+    return () => clearInterval(timerId);
+  }, [resendTimer]);
 
-  // Helper to show temporary toast messages
-  const showToast = (message, isError = false) => {
-    const toast = document.createElement("div");
-    toast.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg animate-in slide-in-from-top-2 ${
-      isError ? "bg-red-500 text-white" : "bg-green-500 text-white"
-    }`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+  const showToastMessage = (message, isError = false) => {
+    setToast({ message, isError });
+  };
+
+  const formatCountdown = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(
+      remainingSeconds
+    ).padStart(2, '0')}`;
+  };
+
+  const startResendTimer = () => {
+    setResendTimer(RESEND_OTP_SECONDS);
   };
 
   // Validation functions
-  const validateName = (value) => {
+  const validateFullName = (value) => {
     if (!value.trim()) {
-      return "Please enter your name";
+      return "Full name is required";
     }
-    if (value.trim().length < 2) {
-      return "Name must be at least 2 characters";
+    if (value.trim().length < 3) {
+      return "Name must be at least 3 characters";
     }
     if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
       return "Name should only contain letters and spaces";
@@ -194,16 +274,19 @@ const RegisterForm = ({ onRegisterSuccess }) => {
     return "";
   };
 
-  const validateEmail = (value) => {
-    if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+  const validateEmailField = (value) => {
+    if (!value.trim()) {
+      return "Email is required";
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       return "Please enter a valid email address";
     }
     return "";
   };
 
-  const validatePhone = (value) => {
+  const validatePhoneField = (value) => {
     if (!value) {
-      return "Please enter phone number";
+      return "Phone number is required";
     }
     if (!/^\d{10}$/.test(value)) {
       return "Phone number must be exactly 10 digits";
@@ -211,7 +294,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
     return "";
   };
 
-  const validateOtp = (value) => {
+  const validateOtpField = (value) => {
     if (!value) {
       return "Please enter OTP";
     }
@@ -221,65 +304,147 @@ const RegisterForm = ({ onRegisterSuccess }) => {
     return "";
   };
 
-  const validateForm = () => {
-    const nameError = validateName(name);
-    const emailError = validateEmail(email);
-    const phoneError = validatePhone(phone);
-
-    setFieldErrors({
-      name: nameError,
-      email: emailError,
-      phone: phoneError,
-      otp: "",
-    });
-
-    return !nameError && !emailError && !phoneError;
+  // Handle input changes
+  const handleFullNameChange = (text) => {
+    const cleaned = text.replace(/[^a-zA-Z\s]/g, "");
+    setFullName(cleaned);
+    if (fieldErrors.fullName) {
+      setFieldErrors({ ...fieldErrors, fullName: validateFullName(cleaned) });
+    }
   };
 
-  const sendOtp = async () => {
-    if (!validateForm()) {
+  const handleEmailChange = (text) => {
+    setEmail(text.trim().toLowerCase());
+    if (fieldErrors.email) {
+      setFieldErrors({ ...fieldErrors, email: validateEmailField(text) });
+    }
+  };
+
+  const handlePhoneChange = (text) => {
+    const cleaned = text.replace(/[^0-9]/g, "");
+    if (cleaned.length <= 10) {
+      setPhoneNumber(cleaned);
+      if (fieldErrors.phoneNumber) {
+        setFieldErrors({ ...fieldErrors, phoneNumber: validatePhoneField(cleaned) });
+      }
+    }
+  };
+
+  const handleOtpChange = (text) => {
+    const cleaned = text.replace(/[^0-9]/g, "");
+    if (cleaned.length <= 6) {
+      setOtp(cleaned);
+      if (fieldErrors.otp) {
+        setFieldErrors({ ...fieldErrors, otp: validateOtpField(cleaned) });
+      }
+    }
+  };
+
+  const getErrorMessage = (error) => {
+    if (typeof error === 'string') {
+      return error;
+    }
+    return error?.message || 'Something went wrong. Please try again.';
+  };
+
+  // Send OTP - using Redux action
+  const handleSendOtp = async () => {
+    // Validate form first
+    const nameError = validateFullName(fullName);
+    const emailError = validateEmailField(email);
+    const phoneError = validatePhoneField(phoneNumber);
+
+    if (nameError || emailError || phoneError) {
+      setFieldErrors({
+        fullName: nameError,
+        email: emailError,
+        phoneNumber: phoneError,
+        otp: "",
+      });
+      return;
+    }
+
+    // Check if mobile already exists
+    const mobileExists = await checkMobileExists(phoneNumber);
+    if (mobileExists) {
+      setFieldErrors({
+        ...fieldErrors,
+        phoneNumber: "This mobile number is already registered. Please login instead.",
+      });
+      return;
+    }
+
+    // Check if email already exists
+    const emailExists = await checkEmailExists(email);
+    if (emailExists) {
+      setFieldErrors({
+        ...fieldErrors,
+        email: "This email is already registered. Please use a different email or login.",
+      });
       return;
     }
 
     setIsLoading(true);
     setError("");
 
-    // Simulate API call to send OTP
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const result = await dispatch(
+        send_otp({
+          mobKey: phoneNumber,
+          userType: "user",
+        })
+      ).unwrap();
 
-      // Check if phone already exists (simulated)
-      const existingUsers = JSON.parse(
-        localStorage.getItem("registeredUsers") || "[]"
-      );
-      const phoneExists = existingUsers.some((user) => user.phone === phone);
-
-      if (phoneExists) {
-        setError("This phone number is already registered. Please login instead.");
-        showToast("Phone number already registered", true);
-        setIsLoading(false);
-        return;
+      if (result.success) {
+        setStep("otp");
+        setOtp("");
+        startResendTimer();
+        dispatch(setAuthMobileNumber(phoneNumber));
+        showToastMessage("OTP sent successfully to your mobile number");
+      } else {
+        showToastMessage(result.message || "Failed to send OTP", true);
       }
-
-      console.log(`Sending OTP to ${phone} for registration`);
-      setStep("otp");
-      setTimeLeft(30);
-      showToast("OTP sent successfully to your mobile number");
-
-      // For demo, auto-fill a test OTP (123456) for convenience
-      // setOtp("123456");
-    } catch (err) {
-      setError("Failed to send OTP. Please try again.");
-      showToast("Failed to send OTP", true);
+    } catch (error) {
+      showToastMessage(getErrorMessage(error), true);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const register = async () => {
-    const otpError = validateOtp(otp);
+  // Resend OTP
+  const handleResendOtp = async () => {
+    if (resendTimer > 0) return;
+
+    setOtp("");
+    setFieldErrors({ ...fieldErrors, otp: "" });
+    setIsLoading(true);
+
+    try {
+      const result = await dispatch(
+        send_otp({
+          mobKey: phoneNumber,
+          userType: "user",
+        })
+      ).unwrap();
+
+      if (result.success) {
+        startResendTimer();
+        showToastMessage("OTP resent successfully");
+      } else {
+        showToastMessage(result.message || "Failed to resend OTP", true);
+      }
+    } catch (error) {
+      showToastMessage(getErrorMessage(error), true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Verify OTP and create user
+  const handleVerifyOtp = async () => {
+    const otpError = validateOtpField(otp);
     if (otpError) {
-      setFieldErrors((prev) => ({ ...prev, otp: otpError }));
+      setFieldErrors({ ...fieldErrors, otp: otpError });
       return;
     }
 
@@ -287,114 +452,89 @@ const RegisterForm = ({ onRegisterSuccess }) => {
     setError("");
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // First verify OTP
+      const verifyResult = await dispatch(
+        verify_otp({
+          mobKey: phoneNumber,
+          userType: "user",
+          otp: otp,
+        })
+      ).unwrap();
 
-      // For demo, OTP "123456" is valid
-      if (otp === "123456") {
-        // Save user data
-        const newUser = {
-          name: name.trim(),
-          email: email.trim() || null,
-          phone: phone,
-          registeredAt: new Date().toISOString(),
+      if (verifyResult.success) {
+        // OTP verified, now create user
+        const userData = {
+          name: fullName.trim(),
+          phone: phoneNumber,
+          email: email.toLowerCase().trim(),
+          isVerified: true,
         };
 
-        const existingUsers = JSON.parse(
-          localStorage.getItem("registeredUsers") || "[]"
-        );
-        existingUsers.push(newUser);
-        localStorage.setItem("registeredUsers", JSON.stringify(existingUsers));
+        const createResult = await dispatch(create_user(userData)).unwrap();
 
-        // Store current user session
-        localStorage.setItem("currentUser", JSON.stringify(newUser));
-
-        showToast("Registration successful! Welcome to Food Side!");
-        onRegisterSuccess?.();
+        if (createResult.success) {
+          showToastMessage(`Welcome ${fullName}! Registration successful!`);
+          setTimeout(() => {
+            router.replace("/SelectRouteDelivery");
+          }, 500);
+        } else {
+          showToastMessage(
+            createResult.message || "Unable to create account. Please try again.",
+            true
+          );
+        }
       } else {
-        setError("Invalid OTP. Please try again.");
-        setFieldErrors((prev) => ({ ...prev, otp: "Invalid OTP" }));
-        showToast("Invalid OTP", true);
+        setFieldErrors({ ...fieldErrors, otp: verifyResult.message || "Invalid OTP. Please try again." });
       }
-    } catch (err) {
-      setError("Registration failed. Please try again.");
-      showToast("Registration failed", true);
+    } catch (error) {
+      const message = getErrorMessage(error);
+      if (message.toLowerCase().includes("email already exists")) {
+        setFieldErrors((prev) => ({
+          ...prev,
+          email: "This email is already registered. Please use a different email or login.",
+        }));
+        setStep("details");
+      } else if (message.toLowerCase().includes("mobile number already exists")) {
+        setFieldErrors((prev) => ({
+          ...prev,
+          phoneNumber: "This mobile number is already registered. Please login instead.",
+        }));
+        setStep("details");
+      } else {
+        setFieldErrors({ ...fieldErrors, otp: message });
+      }
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const resendOtp = async () => {
-    if (timeLeft > 0) return;
-
-    setIsLoading(true);
-    setError("");
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setTimeLeft(30);
-      setOtp("");
-      showToast("OTP resent successfully");
-    } catch (err) {
-      setError("Failed to resend OTP. Please try again.");
-      showToast("Failed to resend OTP", true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePhoneChange = (value) => {
-    const cleaned = value.replace(/\D/g, "").slice(0, 10);
-    setPhone(cleaned);
-    if (fieldErrors.phone) {
-      setFieldErrors((prev) => ({ ...prev, phone: validatePhone(cleaned) }));
-    }
-    if (error) setError("");
-  };
-
-  const handleNameChange = (value) => {
-    setName(value);
-    if (fieldErrors.name) {
-      setFieldErrors((prev) => ({ ...prev, name: validateName(value) }));
-    }
-  };
-
-  const handleEmailChange = (value) => {
-    setEmail(value);
-    if (fieldErrors.email) {
-      setFieldErrors((prev) => ({ ...prev, email: validateEmail(value) }));
-    }
-  };
-
-  const handleOtpChange = (value) => {
-    const cleaned = value.replace(/\D/g, "").slice(0, 6);
-    setOtp(cleaned);
-    if (fieldErrors.otp) {
-      setFieldErrors((prev) => ({ ...prev, otp: validateOtp(cleaned) }));
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      step === "details" ? sendOtp() : register();
     }
   };
 
   const handleBackToDetails = () => {
     setStep("details");
     setOtp("");
-    setTimeLeft(0);
+    setResendTimer(0);
     setError("");
-    setFieldErrors((prev) => ({ ...prev, otp: "" }));
+    setFieldErrors({ ...fieldErrors, otp: "" });
   };
 
-  const formatCountdown = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      step === "details" ? handleSendOtp() : handleVerifyOtp();
+    }
   };
+
+  const isDetailsDisabled = !fullName.trim() || !email.trim() || phoneNumber.length !== 10 || isLoading;
+  const isOtpDisabled = otp.length !== 6 || isLoading;
 
   return (
     <div className="relative z-10 w-full max-w-md">
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.isError ? "error" : "success"}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <MobileHeader />
 
       <div className="relative rounded-3xl bg-white p-8 shadow-2xl lg:p-10">
@@ -413,7 +553,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
           <p className="mt-2 text-stone-500">
             {step === "details"
               ? "Enter your details to get started with Food Side"
-              : `We've sent a 6-digit code to ${phone}`}
+              : `We've sent a 6-digit code to ${phoneNumber}`}
           </p>
         </div>
 
@@ -428,7 +568,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
         {/* Step 1: User Details Form */}
         {step === "details" && (
           <div className="space-y-5">
-            {/* Name Field */}
+            {/* Full Name Field */}
             <div className="group">
               <label className="mb-2 block text-sm font-semibold text-stone-700">
                 Full Name <span className="text-red-500">*</span>
@@ -442,7 +582,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                   className={`flex items-center gap-3 rounded-xl border-2 bg-stone-50 px-5 py-3 transition-all duration-300 ${
                     focusedField === "name"
                       ? "border-amber-400 shadow-lg bg-white"
-                      : fieldErrors.name
+                      : fieldErrors.fullName
                       ? "border-red-300"
                       : "border-stone-200 hover:border-stone-300"
                   }`}
@@ -452,36 +592,37 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                     className={`transition-colors ${
                       focusedField === "name"
                         ? "text-amber-500"
-                        : fieldErrors.name
+                        : fieldErrors.fullName
                         ? "text-red-400"
                         : "text-stone-400"
                     }`}
                   />
                   <input
                     type="text"
-                    value={name}
-                    onChange={(e) => handleNameChange(e.target.value)}
+                    value={fullName}
+                    onChange={(e) => handleFullNameChange(e.target.value)}
                     onFocus={() => setFocusedField("name")}
                     onBlur={() => {
                       setFocusedField(null);
                       setFieldErrors((prev) => ({
                         ...prev,
-                        name: validateName(name),
+                        fullName: validateFullName(fullName),
                       }));
                     }}
                     onKeyPress={handleKeyPress}
                     className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
                     placeholder="Enter your full name"
                     autoFocus
+                    disabled={isLoading}
                   />
-                  {name && !fieldErrors.name && (
+                  {fullName && !fieldErrors.fullName && (
                     <CheckCircle className="h-5 w-5 text-green-500 animate-in zoom-in" />
                   )}
                 </div>
               </div>
-              {fieldErrors.name && (
+              {fieldErrors.fullName && (
                 <p className="mt-1 text-xs text-red-500 animate-in slide-in-from-top-1">
-                  {fieldErrors.name}
+                  {fieldErrors.fullName}
                 </p>
               )}
             </div>
@@ -489,7 +630,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
             {/* Email Field */}
             <div className="group">
               <label className="mb-2 block text-sm font-semibold text-stone-700">
-                Email Address 
+                Email Address <span className="text-red-500">*</span>
               </label>
               <div
                 className={`relative transition-all duration-300 ${
@@ -524,12 +665,13 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                       setFocusedField(null);
                       setFieldErrors((prev) => ({
                         ...prev,
-                        email: validateEmail(email),
+                        email: validateEmailField(email),
                       }));
                     }}
                     onKeyPress={handleKeyPress}
                     className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
                     placeholder="your@email.com"
+                    disabled={isLoading}
                   />
                   {email && !fieldErrors.email && (
                     <CheckCircle className="h-5 w-5 text-green-500 animate-in zoom-in" />
@@ -557,7 +699,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                   className={`flex items-center gap-3 rounded-xl border-2 bg-stone-50 px-5 py-3 transition-all duration-300 ${
                     focusedField === "phone"
                       ? "border-amber-400 shadow-lg bg-white"
-                      : fieldErrors.phone
+                      : fieldErrors.phoneNumber
                       ? "border-red-300"
                       : "border-stone-200 hover:border-stone-300"
                   }`}
@@ -567,14 +709,14 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                     className={`transition-colors ${
                       focusedField === "phone"
                         ? "text-amber-500"
-                        : fieldErrors.phone
+                        : fieldErrors.phoneNumber
                         ? "text-red-400"
                         : "text-stone-400"
                     }`}
                   />
                   <input
                     type="tel"
-                    value={phone}
+                    value={phoneNumber}
                     maxLength={10}
                     onChange={(e) => handlePhoneChange(e.target.value)}
                     onFocus={() => setFocusedField("phone")}
@@ -582,21 +724,22 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                       setFocusedField(null);
                       setFieldErrors((prev) => ({
                         ...prev,
-                        phone: validatePhone(phone),
+                        phoneNumber: validatePhoneField(phoneNumber),
                       }));
                     }}
                     onKeyPress={handleKeyPress}
                     className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
                     placeholder="Enter 10-digit mobile number"
+                    disabled={!isPhoneEditable}
                   />
-                  {phone.length === 10 && !fieldErrors.phone && (
+                  {phoneNumber.length === 10 && !fieldErrors.phoneNumber && (
                     <CheckCircle className="h-5 w-5 text-green-500 animate-in zoom-in" />
                   )}
                 </div>
               </div>
-              {fieldErrors.phone && (
+              {fieldErrors.phoneNumber && (
                 <p className="mt-1 text-xs text-red-500 animate-in slide-in-from-top-1">
-                  {fieldErrors.phone}
+                  {fieldErrors.phoneNumber}
                 </p>
               )}
             </div>
@@ -610,7 +753,13 @@ const RegisterForm = ({ onRegisterSuccess }) => {
               Enter OTP Code
             </label>
             <div className="relative">
-              <div className="flex items-center gap-3 rounded-xl border-2 border-stone-200 bg-stone-50 px-5 py-3 transition-all duration-300 focus-within:border-amber-400 focus-within:shadow-lg focus-within:bg-white">
+              <div
+                className={`flex items-center gap-3 rounded-xl border-2 bg-stone-50 px-5 py-3 transition-all duration-300 ${
+                  fieldErrors.otp
+                    ? "border-red-500 focus-within:border-red-500"
+                    : "border-stone-200 focus-within:border-amber-400 focus-within:shadow-lg focus-within:bg-white"
+                }`}
+              >
                 <LockKeyhole size={20} className="text-amber-500" />
                 <input
                   type={showPassword ? "text" : "tel"}
@@ -618,9 +767,10 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                   maxLength={6}
                   onChange={(e) => handleOtpChange(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
-                  placeholder="123456"
+                  className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400 tracking-widest text-center text-lg"
+                  placeholder="******"
                   autoFocus
+                  disabled={isLoading}
                 />
                 <button
                   type="button"
@@ -637,21 +787,29 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                 </p>
               )}
 
-              <div className="mt-2 flex justify-between text-xs">
+              <div className="mt-3 flex justify-between items-center">
                 <button
                   onClick={handleBackToDetails}
-                  className="text-stone-500 transition-colors hover:text-amber-600"
+                  className="text-sm text-amber-600 transition-colors hover:text-amber-700 flex items-center gap-1"
+                  disabled={isLoading}
                 >
-                  ← Edit number
+                  <ArrowRight size={14} className="rotate-180" />
+                  Edit number
                 </button>
-                {timeLeft > 0 ? (
-                  <span className="font-semibold text-amber-600">
-                    Resend code in {formatCountdown(timeLeft)}
+
+                {resendTimer > 0 ? (
+                  <span className="text-sm font-semibold text-amber-600">
+                    Resend code in {formatCountdown(resendTimer)}
                   </span>
                 ) : (
                   <button
-                    onClick={resendOtp}
-                    className="font-semibold text-amber-600 transition-colors hover:text-amber-700"
+                    onClick={handleResendOtp}
+                    disabled={resendTimer > 0 || isLoading}
+                    className={`text-sm font-semibold transition-colors ${
+                      resendTimer === 0 && !isLoading
+                        ? "text-amber-600 hover:text-amber-700"
+                        : "text-stone-400 cursor-not-allowed"
+                    }`}
                   >
                     Resend OTP
                   </button>
@@ -664,13 +822,8 @@ const RegisterForm = ({ onRegisterSuccess }) => {
         {/* Action Button */}
         <button
           type="button"
-          onClick={step === "details" ? sendOtp : register}
-          disabled={
-            isLoading ||
-            (step === "details"
-              ? !name || !phone || !!fieldErrors.name || !!fieldErrors.phone
-              : !otp)
-          }
+          onClick={step === "details" ? handleSendOtp : handleVerifyOtp}
+          disabled={step === "details" ? isDetailsDisabled : isOtpDisabled}
           className="group relative mt-6 w-full overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-4 text-sm font-semibold text-white transition-all duration-300 hover:from-amber-600 hover:to-orange-600 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
         >
           <span className="relative z-10 flex items-center justify-center gap-2">

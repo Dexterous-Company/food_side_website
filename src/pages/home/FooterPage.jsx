@@ -289,7 +289,7 @@ const [email, setEmail] = useState("");
 
  <li>
                           <Link
-                            href="/accounts/login"
+                            href="/accounts"
                             className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                           >
                           Account
@@ -306,7 +306,7 @@ const [email, setEmail] = useState("");
                         </li>
                         <li>
                           <Link
-                            href="/menu"
+                            href="/accounts/orders"
                             className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                           >
                            Orders
@@ -314,7 +314,7 @@ const [email, setEmail] = useState("");
                         </li>
                         <li>
                           <Link
-                            href="/shop"
+                            href="/cart"
                             className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                           >
                             View Cart
@@ -323,7 +323,7 @@ const [email, setEmail] = useState("");
                        
                         <li>
                           <Link
-                            href="/resgister_new"
+                            href="/sign-up"
                             className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                           >
                            SignUp
