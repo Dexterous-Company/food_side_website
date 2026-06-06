@@ -232,7 +232,7 @@ function MobileDishCard({ item, onOpen }) {
 
 // ── Mobile collapsible section ────────────────────────────────────────────────
 function MobileSection({ title, items, onOpen }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(true)
   if (!items.length) return null;
   return (
     <div className={`border-b border-gray-100 ${open ? 'pb-5' : 'pb-0'} mb-5`}>

@@ -6,6 +6,7 @@ import { IoStar } from "react-icons/io5";
 import { FaTag } from "react-icons/fa";
 import { motion } from "framer-motion";
 import ProductCard from "../components/product/ProductCard";
+import Link from "next/link";
 
 const restaurants = [
   {
@@ -366,13 +367,15 @@ export default function RestaurantRecommendations({ layout = "scroll" }) {
               </div>
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.05, rotate: 90 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 transition-colors flex-shrink-0"
-            >
-              <FiArrowRight size={18} />
-            </motion.button>
+            <Link href={`/restaurant-page/${restaurant.id}`}>
+              <motion.button
+                whileHover={{ scale: 1.05, rotate: 90 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 transition-colors flex-shrink-0"
+              >
+                <FiArrowRight size={18} />
+              </motion.button>
+            </Link>
           </div>
 
           <div className={containerClasses}>

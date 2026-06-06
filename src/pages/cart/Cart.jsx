@@ -272,7 +272,7 @@ const Cart = () => {
     </button>
 
     {/* Title */}
-    <h1 className="font-['Raleway',sans-serif] text-lg font-black text-gray-900">
+    <h1 className=" text-lg font-black text-gray-900">
       My Cart
     </h1>
 
@@ -292,7 +292,7 @@ const Cart = () => {
               <span className="w-7 h-0.5 bg-[#ff581b] rounded-full"></span>
               Cart
             </div>
-            <h2 className="font-['Raleway',sans-serif] text-4xl md:text-5xl font-extrabold text-white mb-0.5">
+            <h2 className=" text-4xl md:text-5xl font-extrabold text-white mb-0.5">
               Your <span className="text-[#ff581b] font-['Yesteryear',cursive]">Cart</span>
             </h2>
             <p className="text-white/70 text-xs">
@@ -488,7 +488,7 @@ const Cart = () => {
             <div>
               <div className="flex items-center justify-between gap-4 flex-wrap mb-3">
                 <div>
-                  <div className="font-['Raleway',sans-serif] text-lg font-black text-gray-900 tracking-tight">
+                  <div className=" text-lg font-black text-gray-900 tracking-tight">
                     Order Items
                   </div>
                   <div className="text-[10px] text-gray-500 font-medium">
@@ -558,7 +558,7 @@ const Cart = () => {
                             </span>
                           )}
                         </div>
-                        <div className="font-['Raleway',sans-serif] text-sm font-extrabold text-gray-900 leading-tight mb-1.5 line-clamp-1">
+                        <div className=" text-sm font-extrabold text-gray-900 leading-tight mb-1.5 line-clamp-1">
                           {item.name}
                         </div>
 
@@ -602,7 +602,7 @@ const Cart = () => {
 
                     <div className="flex flex-col items-end justify-between gap-2 min-w-[100px]">
                       <div className="text-right">
-                        <div className="font-['Raleway',sans-serif] text-lg font-black text-gray-900 leading-none tracking-tight">
+                        <div className=" text-lg font-black text-gray-900 leading-none tracking-tight">
                           <sup className="text-[10px] text-[#ff581b]">₹</sup>
                           {item.discount_price || item.price}
                         </div>
@@ -626,7 +626,7 @@ const Cart = () => {
                           <PiMinus className="text-[10px]" />
                         </button>
 
-                        <span className="font-['Raleway',sans-serif] text-sm font-black text-gray-900 min-w-[20px] text-center">
+                        <span className=" text-sm font-black text-gray-900 min-w-[20px] text-center">
                           {item.quantity}
                         </span>
 
@@ -688,13 +688,13 @@ const Cart = () => {
                           </div>
 
                           {/* Product Name */}
-                          <div className="font-['Raleway',sans-serif] text-sm font-extrabold text-gray-900 leading-tight">
+                          <div className=" text-sm font-extrabold text-gray-900 leading-tight">
                             {item.name}
                           </div>
 
                           {/* Price Section - Only one price (no duplicate near remove) */}
                           <div className="flex items-baseline gap-2 flex-wrap">
-                            <div className="font-['Raleway',sans-serif] text-base font-black text-gray-900">
+                            <div className=" text-base font-black text-gray-900">
                               <sup className="text-[9px] text-[#ff581b]">₹</sup>
                               {item.discount_price || item.price}
                             </div>
@@ -721,7 +721,7 @@ const Cart = () => {
                                 <PiMinus className="text-[10px]" />
                               </button>
 
-                              <span className="font-['Raleway',sans-serif] font-black min-w-[20px] text-center text-sm">
+                              <span className=" font-black min-w-[20px] text-center text-sm">
                                 {item.quantity}
                               </span>
 
@@ -764,7 +764,7 @@ const Cart = () => {
                   </div>
                   <button
                     onClick={applyPromo}
-                    className="px-5 py-2.5 bg-gray-900 text-white rounded-xl font-['Raleway',sans-serif] font-bold text-xs hover:bg-[#ff581b] transition-colors whitespace-nowrap shadow-sm"
+                    className="px-5 py-2.5 bg-gray-900 text-white rounded-xl  font-bold text-xs hover:bg-[#ff581b] transition-colors whitespace-nowrap shadow-sm"
                   >
                     Apply
                   </button>
@@ -773,7 +773,7 @@ const Cart = () => {
                   <div className="flex items-center gap-2 mt-2 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2">
                     <FaCircleCheck className="text-emerald-600 text-[11px] flex-shrink-0" />
                     <div className="flex-1">
-                      <div className="font-['Raleway',sans-serif] text-[11px] font-extrabold text-emerald-800 tracking-wide">
+                      <div className=" text-[11px] font-extrabold text-emerald-800 tracking-wide">
                         {appliedPromo}
                       </div>
                       <div className="text-[9px] font-semibold text-emerald-600">
@@ -801,7 +801,7 @@ const Cart = () => {
                     Customer Confidence
                   </span>
                 </div>
-                <h3 className="font-['Raleway',sans-serif] text-sm md:text-xl font-black text-gray-900 tracking-tight">
+                <h3 className=" text-sm md:text-xl font-black text-gray-900 tracking-tight">
                   Why Customers Trust Us
                 </h3>
                 <p className="text-xs text-gray-500 mt-1 max-w-md">
@@ -817,7 +817,7 @@ const Cart = () => {
                   <div className="rounded-lg bg-[#ff581b]/10 border border-[#ff581b]/20 grid place-items-center mx-auto mb-1 text-[#ff581b] md:w-8 md:h-8 w-6 h-6">
                     <FaLock className="md:text-sm text-xs" />
                   </div>
-                  <div className="font-['Raleway',sans-serif] font-extrabold text-gray-900 leading-tight md:text-[11px] text-[9px]">
+                  <div className=" font-extrabold text-gray-900 leading-tight md:text-[11px] text-[9px]">
                     Secure<br />Checkout
                   </div>
                   <div className="text-gray-500 mt-0.5 md:text-[9px] text-[7px]">256-bit SSL</div>
@@ -828,7 +828,7 @@ const Cart = () => {
                   <div className="rounded-lg bg-[#ff581b]/10 border border-[#ff581b]/20 grid place-items-center mx-auto mb-1 text-[#ff581b] md:w-8 md:h-8 w-6 h-6">
                     <FaSnowflake className="md:text-sm text-xs" />
                   </div>
-                  <div className="font-['Raleway',sans-serif] font-extrabold text-gray-900 leading-tight md:text-[11px] text-[9px]">
+                  <div className=" font-extrabold text-gray-900 leading-tight md:text-[11px] text-[9px]">
                     Cold Chain<br />Guaranteed
                   </div>
                   <div className="text-gray-500 mt-0.5 md:text-[9px] text-[7px]">Fresh arrival</div>
@@ -839,7 +839,7 @@ const Cart = () => {
                   <div className="rounded-lg bg-[#ff581b]/10 border border-[#ff581b]/20 grid place-items-center mx-auto mb-1 text-[#ff581b] md:w-8 md:h-8 w-6 h-6">
                     <FaRotateLeft className="md:text-sm text-xs" />
                   </div>
-                  <div className="font-['Raleway',sans-serif] font-extrabold text-gray-900 leading-tight md:text-[11px] text-[9px]">
+                  <div className=" font-extrabold text-gray-900 leading-tight md:text-[11px] text-[9px]">
                     Easy<br />Returns
                   </div>
                   <div className="text-gray-500 mt-0.5 md:text-[9px] text-[7px]">7-day hassle</div>
@@ -856,7 +856,7 @@ const Cart = () => {
                     <FaReceipt className="text-base" />
                   </div>
                   <div>
-                    <div className="font-['Raleway',sans-serif] text-sm font-black text-white tracking-tight">
+                    <div className=" text-sm font-black text-white tracking-tight">
                       Order Summary
                     </div>
                     <div className="text-[10px] text-white/35 font-medium">
@@ -875,14 +875,14 @@ const Cart = () => {
                           className="flex items-start justify-between gap-2 px-4 py-2 border-b border-gray-100 bg-[#ff581b]/5"
                         >
                           <div className="flex-1 min-w-0">
-                            <div className="font-['Raleway',sans-serif] text-xs font-bold text-gray-900 leading-tight truncate">
+                            <div className=" text-xs font-bold text-gray-900 leading-tight truncate">
                               {item.name}
                             </div>
                             <div className="text-[10px] text-gray-500 font-medium mt-0.5">
                               Qty: {item.quantity}
                             </div>
                           </div>
-                          <div className="font-['Raleway',sans-serif] text-sm font-extrabold text-gray-900 whitespace-nowrap">
+                          <div className=" text-sm font-extrabold text-gray-900 whitespace-nowrap">
                             ₹{((item.discount_price || item.price) * item.quantity).toFixed(2)}
                           </div>
                         </div>
@@ -903,7 +903,7 @@ const Cart = () => {
                         <div className="text-xs font-semibold text-gray-500 flex items-center gap-1">
                           <FaReceipt className="text-[#ff581b] text-[10px]" /> Subtotal
                         </div>
-                        <div className="font-['Raleway',sans-serif] text-sm font-bold text-gray-900">
+                        <div className=" text-sm font-bold text-gray-900">
                           ₹{subtotal.toFixed(2)}
                         </div>
                       </div>
@@ -912,7 +912,7 @@ const Cart = () => {
                           <div className="text-xs font-semibold text-gray-500 flex items-center gap-1">
                             <FaTag className="text-[#ff581b] text-[10px]" /> Promo
                           </div>
-                          <div className="font-['Raleway',sans-serif] text-sm font-bold text-emerald-600">
+                          <div className=" text-sm font-bold text-emerald-600">
                             −₹{promoDiscount.toFixed(2)}
                           </div>
                         </div>
@@ -921,7 +921,7 @@ const Cart = () => {
                         <div className="text-xs font-semibold text-gray-500 flex items-center gap-1">
                           <FaTruckFast className="text-[#ff581b] text-[10px]" /> Delivery
                         </div>
-                        <div className={`font-['Raleway',sans-serif] text-sm font-bold ${deliveryCharge === 0 ? "text-emerald-600" : "text-gray-900"}`}>
+                        <div className={` text-sm font-bold ${deliveryCharge === 0 ? "text-emerald-600" : "text-gray-900"}`}>
                           {deliveryCharge === 0 ? "Free ✓" : `₹${deliveryCharge.toFixed(2)}`}
                         </div>
                       </div>
@@ -944,7 +944,7 @@ const Cart = () => {
                       <div className="text-right">
                         <div className="flex items-baseline gap-1">
                           <span className="text-[#ff581b] font-bold text-sm">₹</span>
-                          <span className="font-['Raleway',sans-serif] text-3xl font-black text-gray-900 leading-none tracking-tight">
+                          <span className=" text-3xl font-black text-gray-900 leading-none tracking-tight">
                             {grandTotal.toFixed(2)}
                           </span>
                         </div>
@@ -964,7 +964,7 @@ const Cart = () => {
                     <div className="px-4 py-3">
                       <Link
                         href="/checkout"
-                        className="group relative inline-flex w-full items-center justify-center overflow-hidden rounded-full bg-[#ff581b] py-3 px-5 font-['Raleway',sans-serif] text-xs font-bold uppercase text-white shadow-md transition-all duration-300 hover:bg-[#e84d15] hover:shadow-lg"
+                        className="group relative inline-flex w-full items-center justify-center overflow-hidden rounded-full bg-[#ff581b] py-3 px-5  text-xs font-bold uppercase text-white shadow-md transition-all duration-300 hover:bg-[#e84d15] hover:shadow-lg"
                       >
                         <span className="absolute top-0 left-[-180%] h-full w-[35%] rotate-12 bg-white/30 blur-lg transition-all duration-[1500ms] ease-out group-hover:left-[180%]"></span>
                         <span className="relative z-10 flex items-center gap-2">
@@ -1002,12 +1002,12 @@ const Cart = () => {
                   <div className="md:hidden">
                     <div className="p-4">
                       {/* Order Summary Heading - Orange Color */}
-                      <div className="font-['Raleway',sans-serif] text-lg font-black text-[#ff581b] mb-4">
+                      <div className=" text-lg font-black text-[#ff581b] mb-4">
                         Order Summary
                       </div>
 
                       {/* Bill Details */}
-                      <div className="font-['Raleway',sans-serif] text-sm font-bold text-gray-700 mb-2">
+                      <div className=" text-sm font-bold text-gray-700 mb-2">
                         Bill Details
                       </div>
 
@@ -1046,8 +1046,8 @@ const Cart = () => {
 
                       {/* Grand Total */}
                       <div className="flex justify-between items-center py-1.5 mb-2">
-                        <span className="font-['Raleway',sans-serif] text-base font-black text-gray-900">Grand Total</span>
-                        <span className="font-['Raleway',sans-serif] text-xl font-black text-orange-500">₹{grandTotal.toFixed(2)}</span>
+                        <span className=" text-base font-black text-gray-900">Grand Total</span>
+                        <span className=" text-xl font-black text-orange-500">₹{grandTotal.toFixed(2)}</span>
                       </div>
 
                       {/* Savings Message */}
@@ -1076,13 +1076,13 @@ const Cart = () => {
                       <div className="flex items-center justify-between gap-3">
                         <div>
                           <div className="text-gray-500 text-xs mb-0.5">Total Amount</div>
-                          <div className="font-['Raleway',sans-serif] text-2xl font-black text-gray-900">
+                          <div className=" text-2xl font-black text-gray-900">
                             ₹{grandTotal.toFixed(2)}
                           </div>
                         </div>
                         <Link
                           href="/checkout"
-                          className="bg-[#ff581b] rounded-full py-3 px-5 font-['Raleway',sans-serif] text-sm font-bold uppercase text-white whitespace-nowrap inline-flex items-center justify-center"
+                          className="bg-[#ff581b] rounded-full py-3 px-5  text-sm font-bold uppercase text-white whitespace-nowrap inline-flex items-center justify-center"
                         >
                           Proceed to Pay
                         </Link>

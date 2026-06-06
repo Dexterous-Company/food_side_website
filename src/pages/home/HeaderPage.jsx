@@ -225,7 +225,7 @@ const HeaderPage = () => {
               </span>
               <span className="flex items-center gap-2">
                 <FaClock className="opacity-90" size={12} /> Opening Hour: Mon
-                to Sat - 9am to 5pm
+                to Sat - 9am to 10pm
               </span>
             </div>
             <div className="flex gap-4">

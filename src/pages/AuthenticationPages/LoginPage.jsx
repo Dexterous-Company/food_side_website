@@ -18,6 +18,14 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import {
+  setMobileNumber as setAuthMobileNumber,
+  send_otp,
+  verify_otp,
+} from "../../redux/Authentication/AuthenticationSlice"; // Adjust the import path as needed
+
 // --- Helper Components for Responsive Design ---
 const MobileHeader = () => (
   <div className="mb-8 text-center lg:hidden">
@@ -31,12 +39,12 @@ const MobileHeader = () => (
     <p className="mt-3 text-sm text-stone-600">Trusted by Food Businesses</p>
   </div>
 );
+
 const DesktopLeftPanel = () => (
   <div className="relative hidden w-3xl flex-col justify-between overflow-hidden lg:flex">
     {/* Background Image and Overlays */}
     <div className="absolute inset-0">
       <img
-        // src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop"
         src="/assets/images/loginimages/login_Desktop.png"
         alt="Restaurant Interior"
         className="h-full w-full object-cover"
@@ -66,52 +74,6 @@ const DesktopLeftPanel = () => (
         </div>
       </div>
 
-      {/* Content */}
-      {/* <div className="space-y-6">
-        <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 rounded-full bg-amber-400/20 px-3 py-1 backdrop-blur-sm">
-            <Star className="h-3 w-3 text-amber-400" />
-            <p className="text-xs uppercase tracking-[0.2em] text-amber-300">
-              Trusted by Growing Food Businesses
-            </p>
-          </div>
-
-          <h2 className="text-5xl font-bold leading-tight text-white">
-            Take Your
-            <br />
-            <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
-              Restaurant Online
-            </span>
-            <br />& Boost Sales
-          </h2>
-        </div>
-
-        <p className="text-sm leading-relaxed text-gray-200/90">
-          Join Food Side and reach more customers in your city. Manage orders,
-          increase visibility, and grow your revenue with our all-in-one
-          platform, smart marketing tools, and reliable delivery support.
-        </p>
-
-        <p className="text-xs text-amber-300/80">
-          No setup fees • Easy onboarding • 24/7 support
-        </p>
-                <div className="grid grid-cols-3 gap-3">
-          {[
-            { icon: Store, value: "3000+", label: "Partnered Restaurants" },
-            { icon: Users, value: "150K+", label: "Orders Per Day" },
-            { icon: TrendingUp, value: "50%", label: "Avg Growth" },
-          ].map((stat, idx) => (
-            <div
-              key={idx}
-              className="rounded-lg bg-white/10 p-3 text-center backdrop-blur-sm"
-            >
-              <stat.icon className="mx-auto h-5 w-5 text-amber-400" />
-              <p className="mt-1 text-lg font-bold text-white">{stat.value}</p>
-              <p className="text-xs text-gray-300">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-      </div> */}
       <div className="space-y-6">
         <div className="space-y-3">
           {/* Badge */}
@@ -167,16 +129,14 @@ const DesktopLeftPanel = () => (
     </div>
   </div>
 );
+
 const MobileFloatingImages = () => (
   <div className="pointer-events-none absolute inset-0 lg:hidden overflow-hidden z-0">
-    {/* TOP - Pizza */}
     <img
       src="/assets/images/shape/pizza.png"
       alt="pizza"
       className="absolute top-6 right-4 w-35 opacity-80 animate-floatSlow"
     />
-
-    {/* BOTTOM - Tacos */}
     <img
       src="/assets/images/shape/tacos.png"
       alt="tacos"
@@ -185,186 +145,295 @@ const MobileFloatingImages = () => (
   </div>
 );
 
+// Toast component for web
+const Toast = ({ message, type, onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div
+      className={`fixed top-4 right-4 z-50 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg animate-in slide-in-from-top-2 ${
+        type === "error" ? "bg-red-500" : "bg-green-500"
+      } text-white`}
+    >
+      {type === "error" ? (
+        <AlertCircle className="h-4 w-4" />
+      ) : (
+        <CheckCircle className="h-4 w-4" />
+      )}
+      <span className="text-sm">{message}</span>
+    </div>
+  );
+};
+
+const RESEND_OTP_SECONDS = 30;
+
 const LoginForm = ({ onLoginSuccess }) => {
-  // --- State Management (Copied from provided code, without Redux) ---
-  const [mobile, setMobile] = useState("");
+  const dispatch = useDispatch();
+  const router = useRouter();
+  
+  // Redux state - exactly like your app
+  const { login_token, isUserAuth } = useSelector(state => state.Authentication || {});
+  
+  const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
-  const [step, setStep] = useState("mobile"); // "mobile" or "otp"
+  const [otpError, setOtpError] = useState("");
+  const [showOtpInput, setShowOtpInput] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [timeLeft, setTimeLeft] = useState(0);
+  const [resendTimer, setResendTimer] = useState(0);
+  const [toast, setToast] = useState(null);
+  const [focusedField, setFocusedField] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [focusedField, setFocusedField] = useState(null);
 
   // Load saved mobile number if "remember me" was checked
   useEffect(() => {
     const savedMobile = localStorage.getItem("restaurant_mobile");
     if (savedMobile) {
-      setMobile(savedMobile);
+      setMobileNumber(savedMobile);
       setRememberMe(true);
     }
   }, []);
 
-  // Timer logic for OTP resend
+  // Redirect if already authenticated - exactly like your app
   useEffect(() => {
-    let timer;
-    if (timeLeft > 0) {
-      timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    if (isUserAuth && login_token) {
+      router.replace("/");
     }
-    return () => clearTimeout(timer);
-  }, [timeLeft]);
+  }, [isUserAuth, login_token, router]);
 
-  // Helper to show temporary toast messages
-  const showToast = (message, isError = false) => {
-    const toast = document.createElement("div");
-    toast.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg animate-in slide-in-from-top-2 ${
-      isError ? "bg-red-500 text-white" : "bg-green-500 text-white"
-    }`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+  // Timer logic for OTP resend - exactly like your app
+  useEffect(() => {
+    if (resendTimer <= 0) return;
+    
+    const timerId = setInterval(() => {
+      setResendTimer(prevTimer => (prevTimer > 1 ? prevTimer - 1 : 0));
+    }, 1000);
+    
+    return () => clearInterval(timerId);
+  }, [resendTimer]);
+
+  const showToastMessage = (message, isSuccess = true) => {
+    setToast({ message, isError: !isSuccess });
   };
 
-  const sendOtp = async () => {
-    if (!mobile || mobile.length !== 10) {
-      setError("Please enter a valid 10-digit mobile number");
-      return;
+  const formatCountdown = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(
+      remainingSeconds
+    ).padStart(2, '0')}`;
+  };
+
+  const startResendTimer = () => {
+    setResendTimer(RESEND_OTP_SECONDS);
+  };
+
+  const handleMobileChange = (text) => {
+    const cleaned = text.replace(/[^0-9]/g, "");
+    if (cleaned.length <= 10) {
+      setMobileNumber(cleaned);
     }
 
-    setIsLoading(true);
-    setError("");
+    if (showOtpInput) {
+      setShowOtpInput(false);
+      setOtp("");
+      setResendTimer(0);
+    }
 
-    // Simulate API call to send OTP
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // For demo, any 10-digit number is accepted
-      // In a real app, you'd call your actual API endpoint
-      console.log(`Sending OTP to ${mobile} for restaurant login`);
-
-      setStep("otp");
-      setTimeLeft(30);
-      showToast("OTP sent successfully to your mobile number");
-
-      // Optional: For demo, auto-fill a test OTP (123456) for convenience
-      // setOtp("123456");
-    } catch (err) {
-      setError("Failed to send OTP. Please try again.");
-      showToast("Failed to send OTP", true);
-    } finally {
-      setIsLoading(false);
+    if (otpError) {
+      setOtpError("");
     }
   };
 
-  const login = async () => {
-    if (otp.length !== 6) {
-      setError("Please enter a valid 6-digit OTP");
-      return;
+  const handleOtpChange = (text) => {
+    const cleaned = text.replace(/[^0-9]/g, "");
+    if (cleaned.length <= 6) {
+      setOtp(cleaned);
     }
 
-    setIsLoading(true);
-    setError("");
+    if (otpError) {
+      setOtpError("");
+    }
+  };
 
-    // Simulate API call to verify OTP
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+  const getErrorMessage = (error) => {
+    if (typeof error === 'string') {
+      return error;
+    }
+    return error?.message || 'OTP verification failed. Please try again.';
+  };
 
-      // For demo, OTP "123456" is valid (matches the optional auto-fill from above)
-      if (otp === "123456") {
-        if (rememberMe && mobile) {
-          localStorage.setItem("restaurant_mobile", mobile);
+  const handleChangeMobileNumber = () => {
+    setShowOtpInput(false);
+    setOtp("");
+    setOtpError("");
+    setResendTimer(0);
+  };
+
+  // Handle Send OTP - using Redux action exactly like your app
+  const handleSendOtp = async () => {
+    if (mobileNumber.length === 10) {
+      setIsLoading(true);
+      setOtpError("");
+
+      try {
+        const result = await dispatch(
+          send_otp({
+            mobKey: mobileNumber,
+            userType: "user",
+          })
+        ).unwrap();
+
+        if (result.success) {
+          setShowOtpInput(true);
+          setOtp("");
+          startResendTimer();
+          dispatch(setAuthMobileNumber(mobileNumber));
+          
+          // Save mobile number in localStorage if remember me is checked
+          if (rememberMe) {
+            localStorage.setItem("restaurant_mobile", mobileNumber);
+          }
+          
+          showToastMessage("OTP sent successfully to your mobile number");
         } else {
-          localStorage.removeItem("restaurant_mobile");
+          showToastMessage(result.message || "Failed to send OTP", false);
         }
-
-        showToast("Login successful! Welcome back!");
-        onLoginSuccess?.();
-      } else {
-        setError("Invalid OTP. Please try again.");
-        showToast("Invalid OTP", true);
+      } catch (error) {
+        showToastMessage(
+          error.message || "Something went wrong. Please try again.",
+          false
+        );
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      setError("OTP verification failed. Please try again.");
-      showToast("Login failed", true);
-    } finally {
-      setIsLoading(false);
+    } else {
+      showToastMessage("Please enter a valid 10-digit mobile number", false);
     }
   };
 
-  const resendOtp = async () => {
-    if (timeLeft > 0) return;
+  // Handle Resend OTP - using Redux action exactly like your app
+  const handleResendOtp = async () => {
+    if (resendTimer > 0) return;
 
+    setOtp("");
+    setOtpError("");
     setIsLoading(true);
-    setError("");
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setTimeLeft(30);
-      setOtp("");
-      showToast("OTP resent successfully");
-    } catch (err) {
-      setError("Failed to resend OTP. Please try again.");
-      showToast("Failed to resend OTP", true);
+      const result = await dispatch(
+        send_otp({
+          mobKey: mobileNumber,
+          userType: "user",
+        })
+      ).unwrap();
+
+      if (result.success) {
+        startResendTimer();
+        showToastMessage("OTP resent successfully");
+      } else {
+        showToastMessage(result.message || "Failed to resend OTP", false);
+      }
+    } catch (error) {
+      showToastMessage(
+        error.message || "Something went wrong. Please try again.",
+        false
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleMobileChange = (value) => {
-    const cleaned = value.replace(/\D/g, "").slice(0, 10);
-    setMobile(cleaned);
-    // Reset to mobile step if user changes number while in OTP step
-    if (step === "otp") {
-      setStep("mobile");
-      setOtp("");
-      setTimeLeft(0);
+  // Handle Submit/Verify OTP - using Redux action exactly like your app
+  const handleSubmit = async () => {
+    if (otp.length === 6) {
+      setIsLoading(true);
+      setOtpError("");
+
+      try {
+        const result = await dispatch(
+          verify_otp({
+            mobKey: mobileNumber,
+            userType: "user",
+            otp: otp,
+          })
+        ).unwrap();
+
+        if (result.success) {
+          const userData = result?.data;
+
+          if (userData) {
+            showToastMessage("Login successful! Welcome back!");
+            router.replace("/");
+          } else {
+            showToastMessage("Please complete your registration");
+            dispatch(setAuthMobileNumber(mobileNumber));
+            router.push(`/register?mobileNumber=${mobileNumber}&lockPhoneNumber=true`);
+          }
+        } else {
+          setOtpError(result.message || "Invalid OTP. Please try again.");
+        }
+      } catch (error) {
+        console.log("Submit error:", error);
+        setOtpError(getErrorMessage(error));
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setOtpError("Please enter a valid 6-digit OTP");
     }
-    if (error) setError("");
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      step === "mobile" ? sendOtp() : login();
+      showOtpInput ? handleSubmit() : handleSendOtp();
     }
   };
 
-  const formatCountdown = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-  };
+  const isSubmitDisabled = otp.length !== 6;
+  const isSendOtpEnabled = mobileNumber.length === 10;
+  const canResendOtp = resendTimer === 0 && !isLoading;
 
   return (
     <div className="relative w-full max-w-md z-10">
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.isError ? "error" : "success"}
+          onClose={() => setToast(null)}
+        />
+      )}
+      
       <MobileHeader />
 
       <div className="relative rounded-3xl bg-white p-8 shadow-2xl lg:p-10">
         <Image
           src="/main_log_fd.png"
           alt="Food Side"
-          // className="
           className="mx-auto h-13 w-auto object-contain mb-4"
-          // border-b
           width={150}
           height={100}
         />
+        
         <div className="mb-6">
           <h1 className="font-['Playfair_Display'] text-4xl font-bold text-stone-900">
             Welcome Back
           </h1>
           <p className="mt-2 text-stone-500">
-            {step === "mobile"
+            {!showOtpInput
               ? "Enter your mobile number to access your dashboard"
               : "Enter the 6-digit code sent to your phone"}
           </p>
         </div>
 
         {/* Error Message */}
-        {error && (
+        {otpError && (
           <div className="mb-4 flex items-center gap-2 rounded-xl bg-red-50 p-3 text-sm text-red-600 animate-in slide-in-from-top-2">
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
-            <span>{error}</span>
+            <span>{otpError}</span>
           </div>
         )}
 
@@ -396,40 +465,43 @@ const LoginForm = ({ onLoginSuccess }) => {
                 />
                 <input
                   type="tel"
-                  value={mobile}
+                  value={mobileNumber}
                   maxLength={10}
-                  disabled={step === "otp"}
                   onChange={(e) => handleMobileChange(e.target.value)}
                   onFocus={() => setFocusedField("mobile")}
                   onBlur={() => setFocusedField(null)}
                   onKeyPress={handleKeyPress}
-                  className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
                   placeholder="Enter your Mobile Number"
-                  autoFocus={step === "mobile"}
+                  autoFocus={!showOtpInput}
                 />
-                {mobile.length === 10 && step === "mobile" && (
+                {mobileNumber.length === 10 && !showOtpInput && (
                   <CheckCircle className="h-5 w-5 text-green-500 animate-in zoom-in" />
                 )}
               </div>
             </div>
           </div>
 
-          {step === "otp" && (
+          {showOtpInput && (
             <div className="animate-in slide-in-from-top-5 fade-in duration-300">
               <label className="mb-2 block text-sm font-semibold text-stone-700">
                 Enter OTP Code
               </label>
               <div className="relative">
-                <div className="flex items-center gap-3 rounded-xl border-2 border-stone-200 bg-stone-50 px-5 py-3 transition-all duration-300 focus-within:border-amber-400 focus-within:shadow-lg focus-within:bg-white">
+                <div className={`flex items-center gap-3 rounded-xl border-2 bg-stone-50 px-5 py-3 transition-all duration-300 ${
+                  otpError 
+                    ? "border-red-500 focus-within:border-red-500" 
+                    : "border-stone-200 focus-within:border-amber-400 focus-within:shadow-lg focus-within:bg-white"
+                }`}>
                   <LockKeyhole size={20} className="text-amber-500" />
                   <input
                     type={showPassword ? "text" : "tel"}
                     value={otp}
                     maxLength={6}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                    onChange={(e) => handleOtpChange(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
-                    placeholder="123456"
+                    className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400 tracking-widest text-center text-lg"
+                    placeholder="******"
                     autoFocus
                   />
                   <button
@@ -441,16 +513,28 @@ const LoginForm = ({ onLoginSuccess }) => {
                   </button>
                 </div>
 
-                <div className="mt-2 flex justify-between text-xs">
-                  <span className="text-stone-500">6-digit code</span>
-                  {timeLeft > 0 ? (
-                    <span className="font-semibold text-amber-600">
-                      Resend code in {timeLeft}s
+                <div className="mt-3 flex justify-between items-center">
+                  <button
+                    onClick={handleChangeMobileNumber}
+                    className="text-sm text-amber-600 transition-colors hover:text-amber-700 flex items-center gap-1"
+                  >
+                    <ArrowRight size={14} className="rotate-180" />
+                    Change mobile number
+                  </button>
+                  
+                  {resendTimer > 0 ? (
+                    <span className="text-sm font-semibold text-amber-600">
+                      Resend code in {formatCountdown(resendTimer)}
                     </span>
                   ) : (
                     <button
-                      onClick={resendOtp}
-                      className="font-semibold text-amber-600 transition-colors hover:text-amber-700"
+                      onClick={handleResendOtp}
+                      disabled={!canResendOtp}
+                      className={`text-sm font-semibold transition-colors ${
+                        canResendOtp
+                          ? "text-amber-600 hover:text-amber-700"
+                          : "text-stone-400 cursor-not-allowed"
+                      }`}
                     >
                       Resend OTP
                     </button>
@@ -461,8 +545,8 @@ const LoginForm = ({ onLoginSuccess }) => {
           )}
         </div>
 
-        {/* Remember Me */}
-        {step === "mobile" && (
+        {/* Remember Me - Only show when not in OTP step */}
+        {!showOtpInput && (
           <div className="mt-4 flex items-center justify-between">
             <label className="flex cursor-pointer items-center gap-2">
               <input
@@ -492,12 +576,12 @@ const LoginForm = ({ onLoginSuccess }) => {
         {/* Action Button */}
         <button
           type="button"
-          onClick={step === "mobile" ? sendOtp : login}
+          onClick={showOtpInput ? handleSubmit : handleSendOtp}
           disabled={
             isLoading ||
-            (step === "mobile"
-              ? !mobile || mobile.length !== 10
-              : otp.length !== 6)
+            (showOtpInput
+              ? isSubmitDisabled
+              : !isSendOtpEnabled)
           }
           className="group relative mt-6 w-full overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-4 text-sm font-semibold text-white transition-all duration-300 hover:from-amber-600 hover:to-orange-600 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
         >
@@ -505,11 +589,11 @@ const LoginForm = ({ onLoginSuccess }) => {
             {isLoading ? (
               <>
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                {step === "mobile" ? "Sending OTP..." : "Verifying..."}
+                {showOtpInput ? "Verifying..." : "Sending OTP..."}
               </>
             ) : (
               <>
-                {step === "mobile" ? "Send OTP" : "Verify & Login"}
+                {showOtpInput ? "Verify & Login" : "Send OTP"}
                 <ArrowRight
                   size={16}
                   className="transition-transform group-hover:translate-x-1"
@@ -541,7 +625,7 @@ const LoginForm = ({ onLoginSuccess }) => {
           <p className="mt-2 text-xs text-stone-400">
             Don't have an account?{" "}
             <Link
-              href="/resgister_new"
+              href="/sign-up"
               className="text-amber-600 transition-colors hover:text-amber-700 hover:underline"
             >
               Sign up
@@ -549,6 +633,7 @@ const LoginForm = ({ onLoginSuccess }) => {
           </p>
         </div>
       </div>
+      
       <div className="hidden lg:grid grid-cols-3 gap-3 mt-6">
         {[
           {
@@ -583,7 +668,6 @@ const LoginForm = ({ onLoginSuccess }) => {
 
 // --- Main LoginPage Component ---
 const LoginPage = ({ onLogin }) => {
-  // Decorative circles for mobile background
   const MobileBackgroundDecorations = () => (
     <div className="absolute inset-0 overflow-hidden lg:hidden">
       <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-amber-100/50" />
@@ -591,15 +675,16 @@ const LoginPage = ({ onLogin }) => {
       <div className="absolute top-1/2 left-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-50/30" />
     </div>
   );
+  
   return (
     <div className="flex min-h-screen overflow-hidden bg-white">
-      {/* Left Panel - Desktop Only (Restaurant Image) */}
+      {/* Left Panel - Desktop Only */}
       <DesktopLeftPanel />
 
       {/* Right Panel - Login Form (Responsive) */}
       <div className="relative flex flex-1 items-center justify-center bg-white p-6 sm:p-10">
         <MobileBackgroundDecorations />
-        <MobileFloatingImages /> {/* 👈 ADD HERE */}
+        <MobileFloatingImages />
         <LoginForm onLoginSuccess={() => onLogin?.(true)} />
       </div>
     </div>
