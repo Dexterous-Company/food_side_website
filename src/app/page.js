@@ -14,9 +14,9 @@ const page = () => {
     <div>
       <HeroSection />
       <SelectionProcess />
+      <Menu />
       <About />
       {/* <History /> */}
-      <Menu />
       {/* <Stats /> */}
       {/* <Chefs /> */}
       {/* <Testimonials /> */}
