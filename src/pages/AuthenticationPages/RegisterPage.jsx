@@ -20,6 +20,16 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import {
+  checkEmailExists,
+  checkMobileExists,
+  create_user,
+  setMobileNumber as setAuthMobileNumber,
+} from "../../redux/Authentication/AuthenticationSlice";
+const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
 
 // --- Helper Components for Responsive Design ---
 const MobileHeader = () => (
@@ -37,7 +47,6 @@ const MobileHeader = () => (
 
 const DesktopLeftPanel = () => (
   <div className="relative hidden w-3xl flex-col justify-between overflow-hidden lg:flex">
-    {/* Background Image and Overlays */}
     <div className="absolute inset-0">
       <img
         src="/assets/images/loginimages/login_Desktop.png"
@@ -51,7 +60,6 @@ const DesktopLeftPanel = () => (
     <div className="absolute bottom-20 left-20 h-80 w-80 rounded-full bg-orange-500/10 blur-3xl animate-pulse delay-1000" />
 
     <div className="relative z-10 flex h-full flex-col justify-between p-8">
-      {/* Logo */}
       <div className="group flex cursor-pointer items-center gap-3 transition-all hover:scale-105">
         <div className="relative">
           <div className="absolute inset-0 animate-ping rounded-2xl bg-amber-400/30" />
@@ -69,10 +77,8 @@ const DesktopLeftPanel = () => (
         </div>
       </div>
 
-      {/* Content */}
       <div className="space-y-6">
         <div className="space-y-3">
-          {/* Badge */}
           <div className="inline-flex items-center gap-2 rounded-full bg-amber-400/20 px-3 py-1 backdrop-blur-sm">
             <Star className="h-3 w-3 text-amber-400" />
             <p className="text-xs uppercase tracking-[0.2em] text-amber-300">
@@ -80,7 +86,6 @@ const DesktopLeftPanel = () => (
             </p>
           </div>
 
-          {/* Heading */}
           <h2 className="text-5xl font-bold leading-tight text-white">
             Take Your
             <br />
@@ -91,7 +96,6 @@ const DesktopLeftPanel = () => (
           </h2>
         </div>
 
-        {/* Description */}
         <p className="text-sm leading-relaxed text-gray-200/90">
           Join Food Side, operated by Bollineni Ventures, and reach more
           customers with a complete food ordering and logistics ecosystem.
@@ -99,12 +103,10 @@ const DesktopLeftPanel = () => (
           all-in-one platform.
         </p>
 
-        {/* Extra Line */}
         <p className="text-xs text-amber-300/80">
           No setup fees • Easy onboarding • Full ecosystem • 24/7 support
         </p>
 
-        {/* Stats */}
         <div className="grid grid-cols-3 gap-3">
           {[
             { icon: Store, value: "3000+", label: "Partner Restaurants" },
@@ -141,278 +143,241 @@ const MobileFloatingImages = () => (
   </div>
 );
 
-// Registration Form Component with Name, Email (Mandatory), Phone and OTP
+// Toast component for web
+const Toast = ({ message, type, onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div
+      className={`fixed top-4 right-4 z-50 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg animate-in slide-in-from-top-2 ${
+        type === "error" ? "bg-red-500" : "bg-green-500"
+      } text-white`}
+    >
+      {type === "error" ? (
+        <AlertCircle className="h-4 w-4" />
+      ) : (
+        <CheckCircle className="h-4 w-4" />
+      )}
+      <span className="text-sm">{message}</span>
+    </div>
+  );
+};
+
+// Check email exists function
+
+
+// Check mobile exists function
+
+
+// Registration Form Component with Redux
 const RegisterForm = ({ onRegisterSuccess }) => {
-  // --- State Management ---
-  const [step, setStep] = useState("details"); // "details" or "otp"
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  // Redux state
+  const { login_token, isUserAuth, mobileNumber: savedMobileNumber } = useSelector(
+    (state) => state.Authentication || {}
+  );
+
+  const [fullName, setFullName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [timeLeft, setTimeLeft] = useState(0);
-  const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [toast, setToast] = useState(null);
   const [focusedField, setFocusedField] = useState(null);
 
-  // Form fields
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
+  // Get route params (if coming from login with mobile number)
+  const routeParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const routeMobileNumber = routeParams?.get("mobileNumber") || "";
+  const lockPhoneNumber = routeParams?.get("lockPhoneNumber") === "true";
+  const isPhoneEditable = !lockPhoneNumber && !isLoading;
 
-  // Field specific errors
-  const [fieldErrors, setFieldErrors] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    otp: "",
-  });
-
-  // Timer logic for OTP resend
+  // Redirect if already authenticated
   useEffect(() => {
-    let timer;
-    if (timeLeft > 0) {
-      timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    if (isUserAuth && login_token) {
+      router.replace("/SelectRouteDelivery");
     }
-    return () => clearTimeout(timer);
-  }, [timeLeft]);
+  }, [isUserAuth, login_token, router]);
 
-  // Helper to show temporary toast messages
-  const showToast = (message, isError = false) => {
-    const toast = document.createElement("div");
-    toast.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg animate-in slide-in-from-top-2 ${
-      isError ? "bg-red-500 text-white" : "bg-green-500 text-white"
-    }`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
-  };
+  // Set phone number from route params or saved mobile number
+  useEffect(() => {
+    const nextPhoneNumber = lockPhoneNumber
+      ? routeMobileNumber || savedMobileNumber || ""
+      : routeMobileNumber || "";
 
-  // Validation functions
-  const validateName = (value) => {
-    if (!value.trim()) {
-      return "Please enter your name";
-    }
-    if (value.trim().length < 2) {
-      return "Name must be at least 2 characters";
-    }
-    if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
-      return "Name should only contain letters and spaces";
-    }
-    return "";
-  };
-
-  const validateEmail = (value) => {
-    if (!value.trim()) {
-      return "Email is required";
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      return "Please enter a valid email address";
-    }
-    return "";
-  };
-
-  const validatePhone = (value) => {
-    if (!value) {
-      return "Phone number is required";
-    }
-    if (!/^\d{10}$/.test(value)) {
-      return "Phone number must be exactly 10 digits";
-    }
-    return "";
-  };
-
-  const validateOtp = (value) => {
-    if (!value) {
-      return "Please enter OTP";
-    }
-    if (!/^\d{6}$/.test(value)) {
-      return "OTP must be exactly 6 digits";
-    }
-    return "";
-  };
-
-  const validateForm = () => {
-    const nameError = validateName(name);
-    const emailError = validateEmail(email);
-    const phoneError = validatePhone(phone);
-
-    setFieldErrors({
-      name: nameError,
-      email: emailError,
-      phone: phoneError,
-      otp: "",
-    });
-
-    return !nameError && !emailError && !phoneError;
-  };
-
-  const sendOtp = async () => {
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsLoading(true);
-    setError("");
-
-    // Simulate API call to send OTP
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Check if phone already exists (simulated)
-      const existingUsers = JSON.parse(
-        localStorage.getItem("registeredUsers") || "[]",
+    if (nextPhoneNumber) {
+      setPhoneNumber(
+        String(nextPhoneNumber)
+          .replace(/[^0-9]/g, "")
+          .slice(0, 10)
       );
-      const phoneExists = existingUsers.some((user) => user.phone === phone);
-      const emailExists = existingUsers.some((user) => user.email === email);
+    } else {
+      setPhoneNumber("");
+    }
+  }, [lockPhoneNumber, routeMobileNumber, savedMobileNumber]);
 
-      if (phoneExists) {
-        setError(
-          "This phone number is already registered. Please login instead.",
-        );
-        showToast("Phone number already registered", true);
-        setIsLoading(false);
-        return;
-      }
+  const showToastMessage = (message, isError = false) => {
+    setToast({ message, isError });
+  };
 
-      if (emailExists) {
-        setError("This email is already registered. Please login instead.");
-        showToast("Email already registered", true);
-        setIsLoading(false);
-        return;
-      }
-
-      console.log(`Sending OTP to ${phone} for registration`);
-      setStep("otp");
-      setTimeLeft(30);
-      showToast("OTP sent successfully to your mobile number");
-
-      // For demo, auto-fill a test OTP (123456) for convenience
-      // setOtp("123456");
-    } catch (err) {
-      setError("Failed to send OTP. Please try again.");
-      showToast("Failed to send OTP", true);
-    } finally {
-      setIsLoading(false);
+  // Handle full name input
+  const handleFullNameChange = (text) => {
+    const cleaned = text.replace(/[^a-zA-Z\s]/g, "");
+    setFullName(cleaned);
+    if (errors.fullName) {
+      setErrors({ ...errors, fullName: "" });
     }
   };
 
-  const register = async () => {
-    const otpError = validateOtp(otp);
-    if (otpError) {
-      setFieldErrors((prev) => ({ ...prev, otp: otpError }));
-      return;
+  // Handle phone number input
+  const handlePhoneChange = (text) => {
+    const cleaned = text.replace(/[^0-9]/g, "");
+    if (cleaned.length <= 10) {
+      setPhoneNumber(cleaned);
+      if (errors.phoneNumber) {
+        setErrors({ ...errors, phoneNumber: "" });
+      }
+    }
+  };
+
+  // Handle email input
+  const handleEmailChange = (text) => {
+    setEmail(text.trim().toLowerCase());
+    if (errors.email) {
+      setErrors({ ...errors, email: "" });
+    }
+  };
+
+  // Validate email format
+  const isValidEmail = (emailStr) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(emailStr.trim());
+  };
+
+  // Validate form - exactly like your React Native app
+  const validateForm = async () => {
+    const newErrors = {};
+
+    if (!fullName.trim()) {
+      newErrors.fullName = "Full name is required";
+    } else if (fullName.trim().length < 3) {
+      newErrors.fullName = "Name must be at least 3 characters";
     }
 
-    setIsLoading(true);
-    setError("");
+    if (!phoneNumber.trim()) {
+      newErrors.phoneNumber = "Phone number is required";
+    } else if (phoneNumber.length !== 10) {
+      newErrors.phoneNumber = "Phone number must be exactly 10 digits";
+    } else {
+      // Check if mobile already exists
+      const mobileExists = await checkMobileExists(phoneNumber);
+      if (mobileExists) {
+        newErrors.phoneNumber =
+          "This mobile number is already registered. Please login instead.";
+      }
+    }
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!isValidEmail(email)) {
+      newErrors.email = "Please enter a valid email address";
+    } else {
+      // Check if email already exists
+      const emailExists = await checkEmailExists(email);
+      if (emailExists) {
+        newErrors.email =
+          "This email is already registered. Please use a different email or login.";
+      }
+    }
 
-      // For demo, OTP "123456" is valid
-      if (otp === "123456") {
-        // Save user data
-        const newUser = {
-          name: name.trim(),
-          email: email.trim(),
-          phone: phone,
-          registeredAt: new Date().toISOString(),
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Handle Register button press - using Redux action exactly like your app
+  const handleRegister = async () => {
+    const isValid = await validateForm();
+    if (isValid) {
+      setIsLoading(true);
+
+      try {
+        const userData = {
+          name: fullName.trim(),
+          phone: phoneNumber,
+          email: email.toLowerCase().trim(),
+          isVerified: true,
         };
 
-        const existingUsers = JSON.parse(
-          localStorage.getItem("registeredUsers") || "[]",
-        );
-        existingUsers.push(newUser);
-        localStorage.setItem("registeredUsers", JSON.stringify(existingUsers));
+        const result = await dispatch(create_user(userData)).unwrap();
 
-        // Store current user session
-        localStorage.setItem("currentUser", JSON.stringify(newUser));
+        if (result.success) {
+          showToastMessage(`Welcome ${fullName}! Registration successful!`);
+          setTimeout(() => {
+            router.replace("/SelectRouteDelivery");
+          }, 500);
+        } else {
+          showToastMessage(
+            result.message || "Unable to create account. Please try again.",
+            true
+          );
+        }
+      } catch (error) {
+        const message =
+          typeof error === "string"
+            ? error
+            : error?.message || "Something went wrong. Please try again.";
 
-        showToast("Registration successful! Welcome to Food Side!");
-        onRegisterSuccess?.();
-      } else {
-        setError("Invalid OTP. Please try again.");
-        setFieldErrors((prev) => ({ ...prev, otp: "Invalid OTP" }));
-        showToast("Invalid OTP", true);
+        if (message.toLowerCase().includes("email already exists")) {
+          setErrors((prev) => ({
+            ...prev,
+            email:
+              "This email is already registered. Please use a different email or login.",
+          }));
+        } else if (
+          message.toLowerCase().includes("mobile number already exists")
+        ) {
+          setErrors((prev) => ({
+            ...prev,
+            phoneNumber:
+              "This mobile number is already registered. Please login instead.",
+          }));
+        } else {
+          showToastMessage(message, true);
+        }
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      setError("Registration failed. Please try again.");
-      showToast("Registration failed", true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const resendOtp = async () => {
-    if (timeLeft > 0) return;
-
-    setIsLoading(true);
-    setError("");
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setTimeLeft(30);
-      setOtp("");
-      showToast("OTP resent successfully");
-    } catch (err) {
-      setError("Failed to resend OTP. Please try again.");
-      showToast("Failed to resend OTP", true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePhoneChange = (value) => {
-    const cleaned = value.replace(/\D/g, "").slice(0, 10);
-    setPhone(cleaned);
-    if (fieldErrors.phone) {
-      setFieldErrors((prev) => ({ ...prev, phone: validatePhone(cleaned) }));
-    }
-    if (error) setError("");
-  };
-
-  const handleNameChange = (value) => {
-    setName(value);
-    if (fieldErrors.name) {
-      setFieldErrors((prev) => ({ ...prev, name: validateName(value) }));
-    }
-  };
-
-  const handleEmailChange = (value) => {
-    setEmail(value);
-    if (fieldErrors.email) {
-      setFieldErrors((prev) => ({ ...prev, email: validateEmail(value) }));
-    }
-  };
-
-  const handleOtpChange = (value) => {
-    const cleaned = value.replace(/\D/g, "").slice(0, 6);
-    setOtp(cleaned);
-    if (fieldErrors.otp) {
-      setFieldErrors((prev) => ({ ...prev, otp: validateOtp(cleaned) }));
     }
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      step === "details" ? sendOtp() : register();
+      handleRegister();
     }
   };
 
-  const handleBackToDetails = () => {
-    setStep("details");
-    setOtp("");
-    setTimeLeft(0);
-    setError("");
-    setFieldErrors((prev) => ({ ...prev, otp: "" }));
-  };
-
-  const formatCountdown = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-  };
+  // Check if register button should be disabled
+  const isRegisterDisabled =
+    !fullName.trim() ||
+    phoneNumber.length !== 10 ||
+    !email.trim() ||
+    !isValidEmail(email) ||
+    isLoading;
 
   return (
     <div className="relative z-10 w-full max-w-md">
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.isError ? "error" : "success"}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <MobileHeader />
 
       <div className="relative rounded-3xl bg-white p-8 shadow-2xl lg:p-10">
@@ -426,226 +391,197 @@ const RegisterForm = ({ onRegisterSuccess }) => {
 
         <div className="mb-6">
           <h1 className="font-['Playfair_Display'] text-4xl font-bold text-stone-900">
-            {step === "details" ? "Create Account" : "Verify Your Number"}
+            Create Account
           </h1>
           <p className="mt-2 text-stone-500">
-            {step === "details"
-              ? "Enter your details to get started with Food Side"
-              : `We've sent a 6-digit code to ${phone}`}
+            Join FoodSide and start ordering your favorite meals
           </p>
         </div>
 
         {/* Error Message */}
-        {error && (
+        {errors.formError && (
           <div className="mb-4 flex items-center gap-2 rounded-xl bg-red-50 p-3 text-sm text-red-600 animate-in slide-in-from-top-2">
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
-            <span>{error}</span>
+            <span>{errors.formError}</span>
           </div>
         )}
 
-        {/* Step 1: User Details Form */}
-        {step === "details" && (
-          <div className="space-y-2">
-            {/* Name Field */}
-            <div className="group">
-              <label className="mb-2 block text-sm font-semibold text-stone-700">
-                Full Name <span className="text-red-500">*</span>
-              </label>
+        <div className="space-y-2">
+          {/* Full Name Field */}
+          <div className="group">
+            <label className="mb-2 block text-sm font-semibold text-stone-700">
+              Full Name <span className="text-red-500">*</span>
+            </label>
+            <div
+              className={`relative transition-all duration-300 ${
+                focusedField === "name" ? "scale-[1.02]" : ""
+              }`}
+            >
               <div
-                className={`relative transition-all duration-300 ${
-                  focusedField === "name" ? "scale-[1.02]" : ""
+                className={`flex items-center gap-3 rounded-xl border-2 bg-stone-50 px-5 py-3 transition-all duration-300 ${
+                  focusedField === "name"
+                    ? "border-amber-400 shadow-lg bg-white"
+                    : errors.fullName
+                      ? "border-red-300"
+                      : "border-stone-200 hover:border-stone-300"
                 }`}
               >
-                <div
-                  className={`flex items-center gap-3 rounded-xl border-2 bg-stone-50 px-5 py-3 transition-all duration-300 ${
+                <User
+                  size={20}
+                  className={`transition-colors ${
                     focusedField === "name"
-                      ? "border-amber-400 shadow-lg bg-white"
-                      : fieldErrors.name
-                        ? "border-red-300"
-                        : "border-stone-200 hover:border-stone-300"
+                      ? "text-amber-500"
+                      : errors.fullName
+                        ? "text-red-400"
+                        : "text-stone-400"
                   }`}
-                >
-                  <User
-                    size={20}
-                    className={`transition-colors ${
-                      focusedField === "name"
-                        ? "text-amber-500"
-                        : fieldErrors.name
-                          ? "text-red-400"
-                          : "text-stone-400"
-                    }`}
-                  />
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => handleNameChange(e.target.value)}
-                    onFocus={() => setFocusedField("name")}
-                    onBlur={() => {
-                      setFocusedField(null);
-                      setFieldErrors((prev) => ({
-                        ...prev,
-                        name: validateName(name),
-                      }));
-                    }}
-                    onKeyPress={handleKeyPress}
-                    className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
-                    placeholder="Enter your full name"
-                    autoFocus
-                  />
-                  {name && !fieldErrors.name && (
-                    <CheckCircle className="h-5 w-5 text-green-500 animate-in zoom-in" />
-                  )}
-                </div>
+                />
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => handleFullNameChange(e.target.value)}
+                  onFocus={() => setFocusedField("name")}
+                  onBlur={() => setFocusedField(null)}
+                  onKeyPress={handleKeyPress}
+                  className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
+                  placeholder="Enter your full name"
+                  autoFocus
+                  disabled={isLoading}
+                />
+                {fullName && !errors.fullName && (
+                  <CheckCircle className="h-5 w-5 text-green-500 animate-in zoom-in" />
+                )}
               </div>
-              {fieldErrors.name && (
-                <p className="mt-1 text-xs text-red-500 animate-in slide-in-from-top-1">
-                  {fieldErrors.name}
-                </p>
-              )}
             </div>
-
-            {/* Email Field - MANDATORY */}
-            <div className="group">
-              <label className="mb-2 block text-sm font-semibold text-stone-700">
-                Email Address <span className="text-red-500">*</span>
-              </label>
-              <div
-                className={`relative transition-all duration-300 ${
-                  focusedField === "email" ? "scale-[1.02]" : ""
-                }`}
-              >
-                <div
-                  className={`flex items-center gap-3 rounded-xl border-2 bg-stone-50 px-5 py-3 transition-all duration-300 ${
-                    focusedField === "email"
-                      ? "border-amber-400 shadow-lg bg-white"
-                      : fieldErrors.email
-                        ? "border-red-300"
-                        : "border-stone-200 hover:border-stone-300"
-                  }`}
-                >
-                  <Mail
-                    size={20}
-                    className={`transition-colors ${
-                      focusedField === "email"
-                        ? "text-amber-500"
-                        : fieldErrors.email
-                          ? "text-red-400"
-                          : "text-stone-400"
-                    }`}
-                  />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => handleEmailChange(e.target.value)}
-                    onFocus={() => setFocusedField("email")}
-                    onBlur={() => {
-                      setFocusedField(null);
-                      setFieldErrors((prev) => ({
-                        ...prev,
-                        email: validateEmail(email),
-                      }));
-                    }}
-                    onKeyPress={handleKeyPress}
-                    className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
-                    placeholder="your@email.com"
-                  />
-                  {email && !fieldErrors.email && (
-                    <CheckCircle className="h-5 w-5 text-green-500 animate-in zoom-in" />
-                  )}
-                </div>
-              </div>
-              {fieldErrors.email && (
-                <p className="mt-1 text-xs text-red-500 animate-in slide-in-from-top-1">
-                  {fieldErrors.email}
-                </p>
-              )}
-            </div>
-
-            {/* Phone Field */}
-            <div className="group">
-              <label className="mb-2 block text-sm font-semibold text-stone-700">
-                Mobile Number <span className="text-red-500">*</span>
-              </label>
-              <div
-                className={`relative transition-all duration-300 ${
-                  focusedField === "phone" ? "scale-[1.02]" : ""
-                }`}
-              >
-                <div
-                  className={`flex items-center gap-3 rounded-xl border-2 bg-stone-50 px-5 py-3 transition-all duration-300 ${
-                    focusedField === "phone"
-                      ? "border-amber-400 shadow-lg bg-white"
-                      : fieldErrors.phone
-                        ? "border-red-300"
-                        : "border-stone-200 hover:border-stone-300"
-                  }`}
-                >
-                  <Phone
-                    size={20}
-                    className={`transition-colors ${
-                      focusedField === "phone"
-                        ? "text-amber-500"
-                        : fieldErrors.phone
-                          ? "text-red-400"
-                          : "text-stone-400"
-                    }`}
-                  />
-                  <input
-                    type="tel"
-                    value={phone}
-                    maxLength={10}
-                    onChange={(e) => handlePhoneChange(e.target.value)}
-                    onFocus={() => setFocusedField("phone")}
-                    onBlur={() => {
-                      setFocusedField(null);
-                      setFieldErrors((prev) => ({
-                        ...prev,
-                        phone: validatePhone(phone),
-                      }));
-                    }}
-                    onKeyPress={handleKeyPress}
-                    className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
-                    placeholder="Enter 10-digit mobile number"
-                  />
-                  {phone.length === 10 && !fieldErrors.phone && (
-                    <CheckCircle className="h-5 w-5 text-green-500 animate-in zoom-in" />
-                  )}
-                </div>
-              </div>
-              {fieldErrors.phone && (
-                <p className="mt-1 text-xs text-red-500 animate-in slide-in-from-top-1">
-                  {fieldErrors.phone}
-                </p>
-              )}
-            </div>
+            {errors.fullName && (
+              <p className="mt-1 text-xs text-red-500 animate-in slide-in-from-top-1">
+                {errors.fullName}
+              </p>
+            )}
           </div>
-        )}
-        {/* Action Button */}
+
+          {/* Phone Number Field */}
+          <div className="group">
+            <label className="mb-2 block text-sm font-semibold text-stone-700">
+              Mobile Number <span className="text-red-500">*</span>
+            </label>
+            <div
+              className={`relative transition-all duration-300 ${
+                focusedField === "phone" ? "scale-[1.02]" : ""
+              }`}
+            >
+              <div
+                className={`flex items-center gap-3 rounded-xl border-2 bg-stone-50 px-5 py-3 transition-all duration-300 ${
+                  focusedField === "phone"
+                    ? "border-amber-400 shadow-lg bg-white"
+                    : errors.phoneNumber
+                      ? "border-red-300"
+                      : "border-stone-200 hover:border-stone-300"
+                }`}
+              >
+                <Phone
+                  size={20}
+                  className={`transition-colors ${
+                    focusedField === "phone"
+                      ? "text-amber-500"
+                      : errors.phoneNumber
+                        ? "text-red-400"
+                        : "text-stone-400"
+                  }`}
+                />
+                <input
+                  type="tel"
+                  value={phoneNumber}
+                  maxLength={10}
+                  onChange={(e) => handlePhoneChange(e.target.value)}
+                  onFocus={() => setFocusedField("phone")}
+                  onBlur={() => setFocusedField(null)}
+                  onKeyPress={handleKeyPress}
+                  className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
+                  placeholder="Enter 10-digit mobile number"
+                  disabled={!isPhoneEditable}
+                />
+                {phoneNumber.length === 10 && !errors.phoneNumber && (
+                  <CheckCircle className="h-5 w-5 text-green-500 animate-in zoom-in" />
+                )}
+              </div>
+            </div>
+            {errors.phoneNumber && (
+              <p className="mt-1 text-xs text-red-500 animate-in slide-in-from-top-1">
+                {errors.phoneNumber}
+              </p>
+            )}
+          </div>
+
+          {/* Email Field */}
+          <div className="group">
+            <label className="mb-2 block text-sm font-semibold text-stone-700">
+              Email Address <span className="text-red-500">*</span>
+            </label>
+            <div
+              className={`relative transition-all duration-300 ${
+                focusedField === "email" ? "scale-[1.02]" : ""
+              }`}
+            >
+              <div
+                className={`flex items-center gap-3 rounded-xl border-2 bg-stone-50 px-5 py-3 transition-all duration-300 ${
+                  focusedField === "email"
+                    ? "border-amber-400 shadow-lg bg-white"
+                    : errors.email
+                      ? "border-red-300"
+                      : "border-stone-200 hover:border-stone-300"
+                }`}
+              >
+                <Mail
+                  size={20}
+                  className={`transition-colors ${
+                    focusedField === "email"
+                      ? "text-amber-500"
+                      : errors.email
+                        ? "text-red-400"
+                        : "text-stone-400"
+                  }`}
+                />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => handleEmailChange(e.target.value)}
+                  onFocus={() => setFocusedField("email")}
+                  onBlur={() => setFocusedField(null)}
+                  onKeyPress={handleKeyPress}
+                  className="w-full bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
+                  placeholder="your@email.com"
+                  disabled={isLoading}
+                />
+                {email && !errors.email && isValidEmail(email) && (
+                  <CheckCircle className="h-5 w-5 text-green-500 animate-in zoom-in" />
+                )}
+              </div>
+            </div>
+            {errors.email && (
+              <p className="mt-1 text-xs text-red-500 animate-in slide-in-from-top-1">
+                {errors.email}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Register Button */}
         <button
           type="button"
-          onClick={step === "details" ? sendOtp : register}
-          disabled={
-            isLoading ||
-            (step === "details"
-              ? !name ||
-                !email ||
-                !phone ||
-                !!fieldErrors.name ||
-                !!fieldErrors.email ||
-                !!fieldErrors.phone
-              : !otp)
-          }
+          onClick={handleRegister}
+          disabled={isRegisterDisabled}
           className="group relative mt-6 w-full overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-4 text-sm font-semibold text-white transition-all duration-300 hover:from-amber-600 hover:to-orange-600 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
         >
           <span className="relative z-10 flex items-center justify-center gap-2">
             {isLoading ? (
               <>
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                {step === "details" && "Verifying..."}
+                Creating Account...
               </>
             ) : (
               <>
-                {step === "details" && "Verify & Register"}
+                Create Account
                 <ArrowRight
                   size={16}
                   className="transition-transform group-hover:translate-x-1"
@@ -656,31 +592,42 @@ const RegisterForm = ({ onRegisterSuccess }) => {
           <div className="absolute inset-0 -translate-x-full transform bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
         </button>
 
-        {/* Terms and Login Link */}
+        {/* Divider */}
+        <div className="mt-6 flex items-center gap-4">
+          <div className="h-px flex-1 bg-stone-200" />
+          <span className="text-sm text-stone-400">Or</span>
+          <div className="h-px flex-1 bg-stone-200" />
+        </div>
+
+        {/* Sign In Link */}
+        <div className="mt-6 text-center">
+          <p className="text-sm text-stone-500">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-semibold text-amber-600 transition-colors hover:text-amber-700"
+            >
+              Sign In
+            </Link>
+          </p>
+        </div>
+
+        {/* Terms and Privacy */}
         <div className="mt-6 text-center">
           <p className="text-xs text-stone-400">
-            By registering, you agree to our{" "}
+            By creating an account, you agree to our{" "}
             <Link
               href="/terms_conditions"
               className="text-amber-600 transition-colors hover:text-amber-700 hover:underline"
             >
-              Terms
+              Terms of Service
             </Link>{" "}
-            &{" "}
+            and{" "}
             <Link
               href="/privacypolicy"
               className="text-amber-600 transition-colors hover:text-amber-700 hover:underline"
             >
-              Privacy
-            </Link>
-          </p>
-          <p className="mt-2 text-xs text-stone-400">
-            Already have an account?{" "}
-            <Link
-              href="/login"
-              className="text-amber-600 transition-colors hover:text-amber-700 hover:underline"
-            >
-              Sign in
+              Privacy Policy
             </Link>
           </p>
         </div>
@@ -720,7 +667,6 @@ const RegisterForm = ({ onRegisterSuccess }) => {
 
 // --- Main RegisterPage Component ---
 const RegisterPage = ({ onRegister }) => {
-  // Decorative circles for mobile background
   const MobileBackgroundDecorations = () => (
     <div className="absolute inset-0 overflow-hidden lg:hidden">
       <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-amber-100/50" />

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
 import {
   FiArrowLeft,
   FiUser,
@@ -14,237 +15,106 @@ import {
   FiCheckCircle,
   FiXCircle,
   FiRefreshCw,
+  FiLoader,
 } from "react-icons/fi";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { BsCashStack } from "react-icons/bs";
 import { BiWallet } from "react-icons/bi";
 import { HiOutlineShoppingCart } from "react-icons/hi";
+import { get_order_data } from "@/redux/Order/OrderSlice";
 
 export default function Orders() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("placed");
+  const dispatch = useDispatch();
+  const [activeTab, setActiveTab] = useState("all");
+  const [isLoading, setIsLoading] = useState(true);
+  
+  const { orders, isLoading: reduxLoading, error } = useSelector((state) => state.order);
+  const { isUserAuth, userData } = useSelector((state) => state.Authentication);
 
-  const orders = [
-    {
-      _id: "6a23c582b8af4ff5129024df",
-      orderNumber: "ORD-1780729217071-9443",
-      userName: "Musku Nishitha Reddy",
-      paymentMethod: "cod",
-      paymentStatus: "pending",
-      status: "placed",
-      totalAmount: 848,
+  useEffect(() => {
+    if (isUserAuth && userData?._id) {
+      loadOrders();
+    } else if (!isUserAuth) {
+      setIsLoading(false);
+    }
+  }, [isUserAuth, userData]);
+
+  const loadOrders = async () => {
+    setIsLoading(true);
+    await dispatch(get_order_data(userData._id));
+    setIsLoading(false);
+  };
+
+  // Transform orders to match your UI format
+  const transformOrder = (order) => {
+    const journeyDate = order.createdAt ? new Date(order.createdAt) : new Date();
+    
+    return {
+      _id: order._id,
+      orderNumber: order.orderNumber || `ORD-${order._id?.slice(-12) || Date.now()}`,
+      userName: order.user?.name || userData?.name || "Customer",
+      paymentMethod: order.paymentMethod || "cod",
+      paymentStatus: order.paymentStatus || "pending",
+      status: order.status || "placed",
+      totalAmount: order.totalAmount || 0,
       journey: {
-        formattedDate: "06/06/2026",
-        formattedTime: "01:29 PM",
+        formattedDate: journeyDate.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        }),
+        formattedTime: journeyDate.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        }),
       },
-      items: [
-        {
-          name: "Chicken Bucket Combo",
-          quantity: 1,
-          price: 499,
-          image:
-            "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Zinger Burger Meal",
-          quantity: 1,
-          price: 349,
-          image:
-            "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=100&h=100&fit=crop",
-        },
-      ],
-      estimatedDelivery: "07/06/2026",
-      mainImage:
-        "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=200&h=200&fit=crop",
-    },
-    {
-      _id: "2",
-      orderNumber: "ORD-1780720589967-7224",
-      userName: "Musku Nishitha Reddy",
-      paymentMethod: "cod",
-      paymentStatus: "pending",
-      status: "preparing",
-      totalAmount: 319,
-      journey: {
-        formattedDate: "06/06/2026",
-        formattedTime: "10:54 AM",
-      },
-      items: [
-        {
-          name: "Chicken Keema Biryani",
-          quantity: 1,
-          price: 319,
-          image:
-            "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=100&h=100&fit=crop",
-        },
-      ],
-      estimatedDelivery: "07/06/2026",
-      mainImage:
-        "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=200&h=200&fit=crop",
-    },
-    {
-      _id: "3",
-      orderNumber: "ORD-1780720589967-8225",
-      userName: "Musku Nishitha Reddy",
-      paymentMethod: "online",
-      paymentStatus: "paid",
-      status: "delivered",
-      totalAmount: 1250,
-      journey: {
-        formattedDate: "05/06/2026",
-        formattedTime: "07:30 PM",
-      },
-      items: [
-        {
-          name: "Family Bucket",
-          quantity: 1,
-          price: 899,
-          image:
-            "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=100&h=100&fit=crop",
-        },
-        {
-          name: "French Fries",
-          quantity: 2,
-          price: 99,
-          image:
-            "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Coke",
-          quantity: 2,
-          price: 49,
-          image:
-            "https://images.unsplash.com/photo-1554866585-cd94860790d7?w=100&h=100&fit=crop",
-        },
-      ],
-      estimatedDelivery: "05/06/2026",
-      mainImage:
-        "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=200&h=200&fit=crop",
-    },
-    {
-      _id: "6a23c582b8af4ff5129022df",
-      orderNumber: "ORD-1780729213071-9443",
-      userName: "Musku Nishitha Reddy",
-      paymentMethod: "cod",
-      paymentStatus: "pending",
-      status: "placed",
-      totalAmount: 848,
-      journey: {
-        formattedDate: "06/06/2026",
-        formattedTime: "01:29 PM",
-      },
-      items: [
-        {
-          name: "Chicken Bucket Combo",
-          quantity: 1,
-          price: 499,
-          image:
-            "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Zinger Burger Meal",
-          quantity: 1,
-          price: 349,
-          image:
-            "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=100&h=100&fit=crop",
-        },
-      ],
-      estimatedDelivery: "07/06/2026",
-      mainImage:
-        "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=200&h=200&fit=crop",
-    },
-    {
-      _id: "6",
-      orderNumber: "ORD-1780420589967-7224",
-      userName: "Musku Nishitha Reddy",
-      paymentMethod: "cod",
-      paymentStatus: "pending",
-      status: "preparing",
-      totalAmount: 319,
-      journey: {
-        formattedDate: "06/06/2026",
-        formattedTime: "10:54 AM",
-      },
-      items: [
-        {
-          name: "Chicken Keema Biryani",
-          quantity: 1,
-          price: 319,
-          image:
-            "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=100&h=100&fit=crop",
-        },
-      ],
-      estimatedDelivery: "07/06/2026",
-      mainImage:
-        "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=200&h=200&fit=crop",
-    },
-    {
-      _id: "7",
-      orderNumber: "ORD-1780720589967-8225",
-      userName: "Musku Nishitha Reddy",
-      paymentMethod: "online",
-      paymentStatus: "paid",
-      status: "delivered",
-      totalAmount: 1250,
-      journey: {
-        formattedDate: "05/06/2026",
-        formattedTime: "07:30 PM",
-      },
-      items: [
-        {
-          name: "Family Bucket",
-          quantity: 1,
-          price: 899,
-          image:
-            "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=100&h=100&fit=crop",
-        },
-        {
-          name: "French Fries",
-          quantity: 2,
-          price: 99,
-          image:
-            "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Coke",
-          quantity: 2,
-          price: 49,
-          image:
-            "https://images.unsplash.com/photo-1554866585-cd94860790d7?w=100&h=100&fit=crop",
-        },
-      ],
-      estimatedDelivery: "05/06/2026",
-      mainImage:
-        "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=200&h=200&fit=crop",
-    },
-  ];
+      items: order.items?.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        image: item.image || item.productImage || "/placeholder.jpg",
+      })) || [],
+      estimatedDelivery: order.estimatedDelivery 
+        ? new Date(order.estimatedDelivery).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })
+        : "Not available",
+      mainImage: order.items?.[0]?.image || order.items?.[0]?.productImage || "/placeholder.jpg",
+    };
+  };
+
+  const ordersList = Array.isArray(orders) ? orders.map(transformOrder) : [];
 
   const tabs = [
-    { id: "all", label: "All", count: orders.length },
+    { id: "all", label: "All", count: ordersList.length },
     {
       id: "placed",
       label: "Placed",
-      count: orders.filter((o) => o.status === "placed").length,
+      count: ordersList.filter((o) => o.status === "placed").length,
     },
     {
       id: "preparing",
       label: "Preparing",
-      count: orders.filter((o) => o.status === "preparing").length,
+      count: ordersList.filter((o) => o.status === "preparing").length,
     },
     {
       id: "ready",
       label: "Ready",
-      count: orders.filter((o) => o.status === "ready").length,
+      count: ordersList.filter((o) => o.status === "ready").length,
     },
     {
       id: "delivered",
       label: "Delivered",
-      count: orders.filter((o) => o.status === "delivered").length,
+      count: ordersList.filter((o) => o.status === "delivered").length,
     },
     {
       id: "cancelled",
       label: "Cancelled",
-      count: orders.filter((o) => o.status === "cancelled").length,
+      count: ordersList.filter((o) => o.status === "cancelled").length,
     },
   ];
 
@@ -301,13 +171,59 @@ export default function Orders() {
     }
   };
 
-  const filteredOrders = orders.filter((order) => {
+  const filteredOrders = ordersList.filter((order) => {
     return activeTab === "all" || order.status === activeTab;
   });
 
   const handleViewDetails = (orderId) => {
     router.push(`/accounts/orders/${orderId}`);
   };
+
+  // Loading state
+  if (isLoading || reduxLoading) {
+    return (
+      <div className="min-h-screen bg-[#FFF8F2] flex items-center justify-center">
+        <div className="text-center">
+          <FiLoader size={40} className="animate-spin text-[#FF581B] mx-auto mb-4" />
+          <p className="text-gray-600">Loading your orders...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Not logged in
+  if (!isUserAuth) {
+    return (
+      <div className="min-h-screen bg-[#FFF8F2] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">Please login to view your orders</p>
+          <button
+            onClick={() => router.push("/login")}
+            className="px-6 py-2 bg-[#FF581B] text-white rounded-lg"
+          >
+            Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#FFF8F2] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Failed to load orders</p>
+          <button
+            onClick={loadOrders}
+            className="px-6 py-2 bg-[#FF581B] text-white rounded-lg"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-fit bg-[#FFF8F2]">
@@ -408,7 +324,7 @@ export default function Orders() {
                     {/* Main Product Image and Info Row */}
                     <div className="flex gap-3 mb-3">
                       <div className="w-16 h-16 rounded-xl overflow-hidden bg-orange-50 flex-shrink-0">
-                        {order.mainImage ? (
+                        {order.mainImage && order.mainImage !== "/placeholder.jpg" ? (
                           <Image
                             src={order.mainImage}
                             alt={order.items[0]?.name || "Product"}
@@ -450,43 +366,45 @@ export default function Orders() {
                     </div>
 
                     {/* All Items with Images */}
-                    <div className="mt-3 pt-3 border-t border-orange-50">
-                      <p className="text-xs text-gray-500 mb-2">All Items:</p>
-                      <div className="flex flex-wrap gap-2">
-                        {order.items.map((item, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center gap-2 bg-orange-50 px-2 py-1.5 rounded-lg"
-                          >
-                            <div className="w-6 h-6 rounded overflow-hidden bg-white">
-                              {item.image ? (
-                                <Image
-                                  src={item.image}
-                                  alt={item.name}
-                                  width={24}
-                                  height={24}
-                                  className="w-full h-full object-cover"
-                                />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center">
-                                  <FiPackage
-                                    size={12}
-                                    className="text-orange-400"
+                    {order.items.length > 0 && (
+                      <div className="mt-3 pt-3 border-t border-orange-50">
+                        <p className="text-xs text-gray-500 mb-2">All Items:</p>
+                        <div className="flex flex-wrap gap-2">
+                          {order.items.map((item, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center gap-2 bg-orange-50 px-2 py-1.5 rounded-lg"
+                            >
+                              <div className="w-6 h-6 rounded overflow-hidden bg-white">
+                                {item.image && item.image !== "/placeholder.jpg" ? (
+                                  <Image
+                                    src={item.image}
+                                    alt={item.name}
+                                    width={24}
+                                    height={24}
+                                    className="w-full h-full object-cover"
                                   />
-                                </div>
-                              )}
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center">
+                                    <FiPackage
+                                      size={12}
+                                      className="text-orange-400"
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                              <span className="text-xs text-gray-700">
+                                {item.quantity}x {item.name}
+                              </span>
                             </div>
-                            <span className="text-xs text-gray-700">
-                              {item.quantity}x {item.name}
-                            </span>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
 
                   {/* Order Footer */}
-                  <div className="px-2  flex flex-wrap items-center justify-between gap-3">
+                  <div className="px-2 flex flex-wrap items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-1 text-gray-500">
                         <FiCalendar size={12} className="text-[#F4B400]" />
@@ -530,7 +448,8 @@ export default function Orders() {
 
                   {/* ETA Notice */}
                   {order.status !== "delivered" &&
-                    order.status !== "cancelled" && (
+                    order.status !== "cancelled" &&
+                    order.estimatedDelivery !== "Not available" && (
                       <div className="px-4 py-2 bg-orange-50 border-t border-orange-100">
                         <div className="flex items-center gap-2">
                           <FiTruck size={12} className="text-[#FF581B]" />

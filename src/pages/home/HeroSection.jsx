@@ -1,5 +1,8 @@
 "use client";
+import Link from "next/link";
 import React, { useEffect, useRef } from "react";
+import { FaRoute } from "react-icons/fa";
+import { FiArrowRight } from "react-icons/fi";
 
 const HeroSection = () => {
   const heroRef = useRef(null);
@@ -127,22 +130,26 @@ const HeroSection = () => {
               delivery on your journey.
             </p>
             <div className="hero-actions flex gap-4 flex-wrap mb-10 lg:mb-12">
-              <a
-                href="/shop"
-                className="btn-default relative inline-block text-base font-bold uppercase bg-[#ff581b] text-white rounded-full py-[17px] px-[56px] pl-[25px] overflow-hidden transition-all duration-300 z-10 group"
+              <Link
+                href="/restaurant-page"
+                className="group inline-flex items-center gap-3 bg-[#ff581b] text-white font-bold uppercase rounded-full py-4 pl-6 pr-2 transition-all duration-300 hover:bg-black hover:shadow-xl hover:scale-105"
               >
-                <span className="relative z-10">Order Now</span>
-                {/* <span className="absolute inset-0 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span> */}
-              </a>
-              <a
-                href="/assets/images/our-story.mp4"
-                data-fancybox="video-story"
-                data-width="1280"
-                data-height="720"
-                className="btn-outline-white inline-flex items-center gap-2 bg-white/6 border border-white/35 text-white backdrop-blur-md text-base font-bold uppercase rounded-full py-[17px] px-[56px] pl-[25px] overflow-hidden transition-all duration-300 hover:bg-white/16 hover:border-white/60 hover:-translate-y-0.5 z-10"
+                <span>Order Now</span>
+
+                <span className="flex items-center justify-center w-10 h-10 bg-white text-[#ff581b] rounded-full overflow-hidden">
+                  <FiArrowRight
+                    size={18}
+                    className="transition-all duration-300 group-hover:translate-x-1"
+                  />
+                </span>
+              </Link>
+              <Link
+                href="/about"
+                className="btn-outline-white inline-flex items-center gap-2 bg-white/6 border border-white/35 text-white backdrop-blur-md text-base font-bold uppercase rounded-full py-[17px] px-[56px] pl-[25px]"
               >
-                <i className="fa-solid fa-play"></i> Watch Story
-              </a>
+               <FaRoute />
+                Select or Change Route
+              </Link>
             </div>
             <div className="hero-stats flex items-center gap-6 lg:gap-7 flex-wrap">
               <div
