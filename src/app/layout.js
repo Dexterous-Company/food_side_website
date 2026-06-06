@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/pages/components/Footer";
 import Header from "@/pages/components/Header";
+import ReduxLayoutProviders from "@/pages/Mainlayout/ReduxLayoutProviders";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,7 +49,6 @@ export const metadata = {
     ],
     type: "website",
   },
-
   twitter: {
     card: "summary_large_image",
     title: "FoodSide | Highway Food Delivery Platform",
@@ -58,7 +58,7 @@ export const metadata = {
   },
 
   icons: {
-    icon: "https://foodside.co.in/main_log_fd.png",
+    icon: [{ url: "/logo_foodeside.png", type: "image/png" }],
   },
 };
 
@@ -66,11 +66,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-screen flex flex-col">
-        <Header />
-
-        <main className="flex-1">{children}</main>
-
-        <Footer />
+        <ReduxLayoutProviders>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </ReduxLayoutProviders>
       </body>
     </html>
   );
