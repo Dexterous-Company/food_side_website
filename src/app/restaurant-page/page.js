@@ -1,9 +1,10 @@
+import Restaurants from '@/pages/restaurant_pages/Restaurants';
 import React from 'react';
 
 const page = () => {
   return (
     <div>
-      <h1>Restaurant Page main page</h1>
+ <Restaurants />
     </div>
   );
 }

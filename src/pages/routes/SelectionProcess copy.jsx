@@ -23,6 +23,7 @@ import { DatePicker, TimePicker, Select } from "antd";
 import dayjs from "dayjs";
 import "antd/dist/reset.css";
 import { CalendarOutlined } from "@ant-design/icons";
+import { formatTime } from "../selectRoutes/constants";
 
 const GOOGLE_API_KEY = "AIzaSyBS8mqUuvOWZ4WQRMEvhBA7jUb0jM1Ge-Q";
 
@@ -130,10 +131,7 @@ const SelectionProcess = () => {
     return date.format("DD MMM YYYY");
   };
 
-  const formatTime = (time) => {
-    if (!time) return "Not selected";
-    return time.format("hh:mm A");
-  };
+
 
   // Get address from coordinates
   const getAddressFromCoords = async (lat, lng) => {
@@ -983,12 +981,12 @@ Ticket details sent to ${passengerEmail || "your phone"}`);
                   >
                     ← Back
                   </button>
-                  <button
+                  <div
                     onClick={handleConfirmBooking}
                     className="px-6 py-2.5 bg-[#ff581b] text-white rounded-lg hover:bg-[#e04e16] transition flex items-center gap-2"
                   >
                     <FaCheckCircle /> Confirm Booking
-                  </button>
+                  </div>
                 </div>
               </div>
             </div>

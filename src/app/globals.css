@@ -104,3 +104,25 @@
 [data-aos="fade-left"].aos-animate {
   transform: translateX(0);
 }
+
+/* login  */
+
+@keyframes floatSlow {
+  0% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(-10px) translateX(5px); }
+  100% { transform: translateY(0px) translateX(0px); }
+}
+
+@keyframes floatFast {
+  0% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(12px) translateX(-6px); }
+  100% { transform: translateY(0px) translateX(0px); }
+}
+
+.animate-floatSlow {
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+.animate-floatFast {
+  animation: floatFast 3s ease-in-out infinite;
+}

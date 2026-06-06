@@ -1,11 +1,12 @@
-import React from 'react';
+import CheckOutPage from "@/pages/checkout/CheckOutPage";
+import React from "react";
 
 const page = () => {
   return (
     <div>
-      <h1>Checkout</h1>
+      <CheckOutPage />
     </div>
   );
-}
+};
 
 export default page;

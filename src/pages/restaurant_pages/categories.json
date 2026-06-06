@@ -1,0 +1,180 @@
+[{
+  "_id": {
+    "$oid": "69fad2bafd9d78bce9f016e9"
+  },
+  "code": "CAT006",
+  "name": "Starters",
+  "slugurl": "starters",
+  "mobileUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778045623/Category/MobileImage/xcqa5rjzqvjjenhrcssn.jpg",
+  "desktopsUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778045624/Category/DesktopImage/csolisb1ijgxnkdh62fv.jpg",
+  "bannerUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778045625/Category/BannerImage/aedyg3zq1cdn5lwgbztd.jpg",
+  "subcategoryCount": 1,
+  "order": 8,
+  "createdAt": {
+    "$date": "2026-05-06T05:33:46.820Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-07T05:26:04.766Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69fad83efd9d78bce9f01707"
+  },
+  "code": "CAT007",
+  "name": "North Indian",
+  "slugurl": "north-indian",
+  "mobileUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778047035/Category/MobileImage/drveajrmhvvhbth7y1sn.jpg",
+  "desktopsUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778047037/Category/DesktopImage/tivcgccjugcoloyaemfm.jpg",
+  "bannerUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778047038/Category/BannerImage/fb7uozvj0braihzogms0.jpg",
+  "subcategoryCount": 10,
+  "order": 7,
+  "createdAt": {
+    "$date": "2026-05-06T05:57:18.841Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-07T05:26:04.766Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69fadbccfd9d78bce9f01794"
+  },
+  "code": "CAT008",
+  "name": "South Indian",
+  "slugurl": "south-indian",
+  "mobileUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778047945/Category/MobileImage/ymyxnjthnxbfuhhe3sou.jpg",
+  "desktopsUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778047946/Category/DesktopImage/d7kq8n6blzj4nwnw7iq1.jpg",
+  "bannerUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778047947/Category/BannerImage/hfog5nrmbt7mfpbclkfp.jpg",
+  "subcategoryCount": 10,
+  "order": 6,
+  "createdAt": {
+    "$date": "2026-05-06T06:12:28.098Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-07T05:26:04.766Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69fae2fcfd9d78bce9f01add"
+  },
+  "code": "CAT009",
+  "name": "Indian Chinese",
+  "slugurl": "indian-chinese",
+  "mobileUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778049785/Category/MobileImage/iihlx3kvx5z060bdydfu.jpg",
+  "desktopsUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778049786/Category/DesktopImage/jhanjv0h3eszujtcevqp.jpg",
+  "bannerUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778049787/Category/BannerImage/ne4xx35nrvrsxrtijmeg.jpg",
+  "subcategoryCount": 10,
+  "order": 5,
+  "createdAt": {
+    "$date": "2026-05-06T06:43:08.048Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-07T05:26:04.766Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69fae82efd9d78bce9f01cab"
+  },
+  "code": "CAT010",
+  "name": "Tandoori",
+  "slugurl": "tandoori",
+  "mobileUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778051115/Category/MobileImage/rxvgdazd3620e5q3xqn3.jpg",
+  "desktopsUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778051116/Category/DesktopImage/c0uqauyzn2hn7orijqll.jpg",
+  "bannerUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778051117/Category/BannerImage/lub4rhwdnmrecl6xvveo.jpg",
+  "subcategoryCount": 10,
+  "order": 3,
+  "createdAt": {
+    "$date": "2026-05-06T07:05:18.256Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-07T05:26:04.766Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69faeb89fd9d78bce9f01dc8"
+  },
+  "code": "CAT011",
+  "name": "Mughlai",
+  "slugurl": "mughlai",
+  "mobileUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778051972/Category/MobileImage/ta6zbojux0ej4ccoxgav.jpg",
+  "desktopsUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778051973/Category/DesktopImage/ngt187y84upsvu4mwnnm.jpg",
+  "bannerUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778051977/Category/BannerImage/psblqtdvgbaydihyyyx4.jpg",
+  "subcategoryCount": 10,
+  "order": 2,
+  "createdAt": {
+    "$date": "2026-05-06T07:19:37.858Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-07T05:26:04.766Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69faee4efd9d78bce9f01e0c"
+  },
+  "code": "CAT012",
+  "name": "Biryani & Rice",
+  "slugurl": "biryani-rice",
+  "mobileUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778052684/Category/MobileImage/rljcq281ncjhmyrjk67b.jpg",
+  "desktopsUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778052685/Category/DesktopImage/yn0f6fljwipnnc6thpog.jpg",
+  "bannerUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778052685/Category/BannerImage/yhampo41d5jszvtey7sr.jpg",
+  "subcategoryCount": 1,
+  "order": 1,
+  "createdAt": {
+    "$date": "2026-05-06T07:31:26.254Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-07T05:26:04.766Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69faf28afd9d78bce9f01e2f"
+  },
+  "code": "CAT013",
+  "name": "Fast Food",
+  "slugurl": "fast-food",
+  "mobileUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778053768/Category/MobileImage/kvoidd2npwxip5ulixw9.jpg",
+  "desktopsUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778053769/Category/DesktopImage/n7nztgjuogwanzcon49v.jpg",
+  "bannerUrl": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778053769/Category/BannerImage/z5nwgg3uqhtgk8tra3tx.jpg",
+  "subcategoryCount": 2,
+  "order": 4,
+  "createdAt": {
+    "$date": "2026-05-06T07:49:30.499Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-29T11:21:51.588Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69fc933af1a96226462cef39"
+  },
+  "__v": 0,
+  "bannerUrl": "",
+  "code": "VANTEST1001",
+  "createdAt": {
+    "$date": "2026-05-19T10:35:33.589Z"
+  },
+  "desktopsUrl": "",
+  "mobileUrl": "",
+  "name": "Van Test Food",
+  "order": 1,
+  "slugurl": "van-test-food",
+  "subcategoryCount": 1,
+  "updatedAt": {
+    "$date": "2026-05-19T10:39:09.448Z"
+  }
+}]
