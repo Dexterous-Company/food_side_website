@@ -1,7 +1,7 @@
 "use client"; 
 
 import React, { useState, useEffect, useRef } from 'react';
-import { FaStar, FaStarHalfAlt, FaRegStar, FaChevronLeft, FaChevronRight, FaUser, FaFire, FaClock, FaFireFlameCurved, FaUsers, FaPepperHot, FaFacebookF, FaTwitter, FaInstagram, FaWhatsapp, FaLink, FaChartPie, FaTriangleExclamation, FaCircleCheck, FaUtensils, FaCalendarCheck, FaBagShopping, FaCamera, FaBookOpen, FaPhone, FaMagnifyingGlass, FaCartShopping, FaArrowRight, FaXmark, FaBowlFood, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaArrowLeft, FaPlus, FaMinus, FaCopy, FaShareAlt } from 'react-icons/fa6';
+import { FaStar, FaStarHalfAlt, FaRegStar, FaChevronLeft, FaChevronRight, FaUser, FaFire, FaClock, FaFireFlameCurved, FaUsers, FaPepperHot, FaFacebookF, FaTwitter, FaInstagram, FaWhatsapp, FaLink, FaChartPie, FaTriangleExclamation, FaCircleCheck, FaUtensils, FaCalendarCheck, FaBagShopping, FaCamera, FaBookOpen, FaPhone, FaMagnifyingGlass, FaCartShopping, FaArrowRight, FaXmark, FaBowlFood, FaPhoneAlt, FaEnvelope, FaLocationDot, FaArrowLeft, FaPlus, FaMinus, FaCopy, FaShareAlt } from 'react-icons/fa6';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { SiMastercard, SiVisa, SiPaypal, SiAmericanexpress } from 'react-icons/si';
 
