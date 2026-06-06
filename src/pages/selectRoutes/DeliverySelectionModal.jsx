@@ -1,18 +1,108 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import StepSidebar from "./StepSidebar";
 import Step1SelectTowards from "./Step1SelectTowards";
 import Step2SelectRoute from "./Step2SelectRoute";
 import Step3SelectDeliveryPoint from "./Step3SelectDeliveryPoint";
 import Step4CompleteDetails from "./Step4CompleteDetails";
-import { STEPS, DUMMY_ROUTES, DUMMY_DELIVERY_POINTS } from "./constants";
+import { STEPS } from "./constants";
+import {
+  generateBookingSummary,
+  selectRouteSearch,
+  setSelectedDeliveryPoint,
+  setSelectedRoute,
+} from "@/redux/delivery/deliverySlice";
+import {
+  getDeliveryPointsByRoute,
+  normalizeErrorMessage,
+} from "../../../utils/deliveryApi";
+
+const normalizeRouteKey = value =>
+  String(value || "")
+    .trim()
+    .toLowerCase();
+
+const isValidRouteValue = value => {
+  if (value === null || value === undefined) return false;
+  const normalizedValue = normalizeRouteKey(value);
+  return normalizedValue !== "" && normalizedValue !== "0";
+};
+
+const getPointRouteIds = point => {
+  if (Array.isArray(point?.routeId)) {
+    return point.routeId
+      .flatMap(item => {
+        if (typeof item === "string") return [item];
+        if (!item || typeof item !== "object") return [];
+        return [item.routeId, item.rootIdName, item.name, item._id].filter(Boolean);
+      })
+      .map(normalizeRouteKey)
+      .filter(isValidRouteValue);
+  }
+
+  if (point?.routeId && typeof point.routeId === "object") {
+    return [
+      point.routeId.routeId,
+      point.routeId.rootIdName,
+      point.routeId.name,
+      point.routeId._id,
+    ]
+      .filter(Boolean)
+      .map(normalizeRouteKey)
+      .filter(isValidRouteValue);
+  }
+
+  if (typeof point?.routeId === "string") {
+    return isValidRouteValue(point.routeId) ? [normalizeRouteKey(point.routeId)] : [];
+  }
+
+  return [];
+};
+
+const getRoutesForDestination = routeSearch =>
+  Array.isArray(routeSearch?.matchedRoutes) ? routeSearch.matchedRoutes : [];
+
+const filterDeliveryPointsForRoute = (points, route) => {
+  if (!route) return [];
+
+  const selectedRouteKeys = [
+    route.routeId,
+    route._id,
+    route.id,
+    route.name,
+    route.rootIdName,
+  ]
+    .filter(isValidRouteValue)
+    .map(normalizeRouteKey)
+    .filter(isValidRouteValue);
+
+  return (Array.isArray(points) ? points : [])
+    .filter(point => {
+      if (point?.status?.isActive === false) return false;
+      if (selectedRouteKeys.length === 0) return true;
+
+      const pointRouteIds = getPointRouteIds(point);
+      return pointRouteIds.some(routeId => selectedRouteKeys.includes(routeId));
+    })
+    .sort(
+      (firstPoint, secondPoint) =>
+        (firstPoint.sequenceOrder ?? firstPoint.estimatedTimeFromStart ?? 0) -
+        (secondPoint.sequenceOrder ?? secondPoint.estimatedTimeFromStart ?? 0),
+    );
+};
 
 export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
+  const dispatch = useDispatch();
+  const routeSearch = useSelector(selectRouteSearch);
   const [step, setStep] = useState(1);
   const [selDest, setSelDest] = useState(null);
   const [selRoute, setSelRoute] = useState(null);
   const [selDP, setSelDP] = useState(null);
+  const [deliveryPoints, setDeliveryPoints] = useState([]);
+  const [deliveryPointLoading, setDeliveryPointLoading] = useState(false);
+  const [deliveryPointError, setDeliveryPointError] = useState("");
   const [details, setDetails] = useState({
     name: "",
     phone: "",
@@ -24,20 +114,70 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
 
   useEffect(() => {
     if (isOpen) {
-      setStep(1);
-      setSelDest(null);
-      setSelRoute(null);
-      setSelDP(null);
-      setDetails({
-        name: "",
-        phone: "",
-        email: "",
-        address: "",
-        city: "",
-        pincode: "",
+      queueMicrotask(() => {
+        setStep(1);
+        setSelDest(null);
+        setSelRoute(null);
+        setSelDP(null);
+        setDeliveryPoints([]);
+        setDeliveryPointError("");
+        setDetails({
+          name: "",
+          phone: "",
+          email: "",
+          address: "",
+          city: "",
+          pincode: "",
+        });
       });
     }
   }, [isOpen]);
+
+  const routes = getRoutesForDestination(routeSearch);
+
+  useEffect(() => {
+    if (!selRoute || step < 3) return;
+
+    const routeObjectId = selRoute._id || selRoute.id;
+    let isMounted = true;
+
+    const loadDeliveryPoints = async () => {
+      setDeliveryPointLoading(true);
+      setDeliveryPointError("");
+
+      try {
+        const apiPoints = routeObjectId
+          ? await getDeliveryPointsByRoute(routeObjectId)
+          : [];
+        const sourcePoints =
+          apiPoints.length > 0 ? apiPoints : routeSearch?.matchedDeliveryPoints || [];
+
+        if (isMounted) {
+          setDeliveryPoints(filterDeliveryPointsForRoute(sourcePoints, selRoute));
+        }
+      } catch (error) {
+        const fallbackPoints = filterDeliveryPointsForRoute(
+          routeSearch?.matchedDeliveryPoints || [],
+          selRoute,
+        );
+
+        if (isMounted) {
+          setDeliveryPoints(fallbackPoints);
+          setDeliveryPointError(
+            fallbackPoints.length > 0 ? "" : normalizeErrorMessage(error),
+          );
+        }
+      } finally {
+        if (isMounted) setDeliveryPointLoading(false);
+      }
+    };
+
+    loadDeliveryPoints();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [routeSearch?.matchedDeliveryPoints, selRoute, step]);
 
   const canNext = useCallback(() => {
     if (step === 1) return !!selDest;
@@ -45,6 +185,26 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     if (step === 3) return !!selDP;
     return true;
   }, [step, selDest, selRoute, selDP]);
+
+  const handleSelectDestination = destination => {
+    setSelDest(destination);
+    setSelRoute(null);
+    setSelDP(null);
+    setDeliveryPoints([]);
+  };
+
+  const handleSelectRoute = route => {
+    setSelRoute(route);
+    setSelDP(null);
+    setDeliveryPoints([]);
+    dispatch(setSelectedRoute(route));
+  };
+
+  const handleSelectDeliveryPoint = point => {
+    setSelDP(point);
+    dispatch(setSelectedDeliveryPoint(point));
+    dispatch(generateBookingSummary());
+  };
 
   const handleNext = () => {
     if (step < 4) {
@@ -107,22 +267,27 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
 
           <div className="flex-1 overflow-hidden">
             {step === 1 && (
-              <Step1SelectTowards selDest={selDest} onSelectDest={setSelDest} />
+              <Step1SelectTowards
+                selDest={selDest}
+                onSelectDest={handleSelectDestination}
+              />
             )}
             {step === 2 && (
               <Step2SelectRoute
                 selDest={selDest}
                 selRoute={selRoute}
-                onSelectRoute={setSelRoute}
-                routes={DUMMY_ROUTES}
+                onSelectRoute={handleSelectRoute}
+                routes={routes}
               />
             )}
             {step === 3 && (
               <Step3SelectDeliveryPoint
                 selRoute={selRoute}
                 selDP={selDP}
-                onSelectDP={setSelDP}
-                deliveryPoints={DUMMY_DELIVERY_POINTS}
+                onSelectDP={handleSelectDeliveryPoint}
+                deliveryPoints={deliveryPoints}
+                loading={deliveryPointLoading}
+                error={deliveryPointError}
               />
             )}
             {step === 4 && (

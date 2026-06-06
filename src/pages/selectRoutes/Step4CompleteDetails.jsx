@@ -17,19 +17,23 @@ import { GiPositionMarker } from "react-icons/gi";
 
 export default function Step4CompleteDetails({ selDest, selRoute, selDP, details, onDetailsChange }) {
   const handleChange = (key, value) => onDetailsChange(key, value);
+  const destinationName =
+    selDest?.primaryText || selDest?.destination || selDest?.name || "";
+  const routeName = selRoute?.name || selRoute?.routeId || "";
+  const deliveryPointName = selDP?.name || "";
 
   // Prepare data for ShipmentCard
   const selectedRouteData = {
-    fromLocation: selDest?.name || "Kompally",
-    towardsLocation: selDest?.name || "Madhapur",
-    deliveryPoint: selDP?.name || "Hitech City Point",
+    fromLocation: selRoute?.origin || "Kompally",
+    towardsLocation: destinationName || selRoute?.destination || "Madhapur",
+    deliveryPoint: deliveryPointName || "Hitech City Point",
     dateTime: new Date().toLocaleString('en-US', { 
       weekday: 'short', 
       hour: 'numeric', 
       minute: '2-digit',
       hour12: true 
     }),
-    routeName: selRoute?.name
+    routeName,
   };
 
   const handleCardPress = () => {
@@ -52,9 +56,9 @@ export default function Step4CompleteDetails({ selDest, selRoute, selDP, details
       {/* Original Details Box - Enhanced */}
       <div className="bg-gradient-to-br from-orange-50/90 to-amber-50/70 border border-orange-100/80 rounded-2xl p-4 flex flex-col gap-3 shadow-sm backdrop-blur-sm">
         {[
-          { icon: <HiOutlineMap className="w-4 h-4 text-amber-500" />, label: "Destination", value: selDest?.name },
-          { icon: <MdOutlineRoute className="w-4 h-4 text-emerald-500" />, label: "Route", value: selRoute?.name },
-          { icon: <HiOutlineCube className="w-4 h-4 text-purple-500" />, label: "Delivery Point", value: selDP?.name },
+          { icon: <HiOutlineMap className="w-4 h-4 text-amber-500" />, label: "Destination", value: destinationName },
+          { icon: <MdOutlineRoute className="w-4 h-4 text-emerald-500" />, label: "Route", value: routeName },
+          { icon: <HiOutlineCube className="w-4 h-4 text-purple-500" />, label: "Delivery Point", value: deliveryPointName },
         ].map((item) => (
           <div key={item.label} className="flex items-center gap-3 group hover:translate-x-0.5 transition-transform duration-200">
             <div className="w-8 h-8 rounded-xl bg-white/80 shadow-sm flex items-center justify-center">

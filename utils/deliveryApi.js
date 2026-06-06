@@ -41,4 +41,21 @@ export const searchRouteDestinations = async ({
   };
 };
 
+export const getDeliveryPointsByRoute = async routeId => {
+  const response = await axios.get(
+    `${BaseUrl}/api/v1/delivery/delivery-points/by-route/${routeId}`,
+    {
+      timeout: REQUEST_TIMEOUT,
+    },
+  );
+
+  const payload = response?.data || {};
+
+  if (!payload.success) {
+    throw new Error(payload.message || 'Unable to fetch delivery points.');
+  }
+
+  return payload.data || [];
+};
+
 export {normalizeErrorMessage};
