@@ -983,12 +983,12 @@ Ticket details sent to ${passengerEmail || "your phone"}`);
                   >
                     ← Back
                   </button>
-                  <button
+                  <div
                     onClick={handleConfirmBooking}
                     className="px-6 py-2.5 bg-[#ff581b] text-white rounded-lg hover:bg-[#e04e16] transition flex items-center gap-2"
                   >
                     <FaCheckCircle /> Confirm Booking
-                  </button>
+                  </div>
                 </div>
               </div>
             </div>
