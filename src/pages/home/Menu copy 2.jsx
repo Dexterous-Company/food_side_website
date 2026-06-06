@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { FiArrowRight } from "react-icons/fi";
+import Image from "next/image";
+import { FiArrowRight, FiPlus, FiMinus } from "react-icons/fi";
 import { IoStar } from "react-icons/io5";
 import { FaTag } from "react-icons/fa";
-import { motion } from "framer-motion";
-import ProductCard from "../components/product/ProductCard";
+import { GiChickenOven, GiCarrot } from "react-icons/gi";
+import { motion, AnimatePresence } from "framer-motion";
 
 const restaurants = [
   {
@@ -307,12 +308,14 @@ const restaurants = [
   },
 ];
 
-export default function RestaurantRecommendations({ layout = "scroll" }) {
+export default function RestaurantRecommendations() {
+  // State to manage quantities for each item
   const [quantities, setQuantities] = useState({});
 
-  const handleQuantityChange = (restaurantId, itemId, newQuantity) => {
+  const updateQuantity = (restaurantId, itemId, delta) => {
     const key = `${restaurantId}-${itemId}`;
     setQuantities((prev) => {
+      const newQuantity = Math.max(0, (prev[key] || 0) + delta);
       if (newQuantity === 0) {
         const { [key]: _, ...rest } = prev;
         return rest;
@@ -325,10 +328,65 @@ export default function RestaurantRecommendations({ layout = "scroll" }) {
     return quantities[`${restaurantId}-${itemId}`] || 0;
   };
 
-  const containerClasses =
-    layout === "scroll"
-      ? "mt-4 sm:mt-6 flex gap-3 sm:gap-4 overflow-x-auto scrollbar-hide pb-2"
-      : "mt-4 sm:mt-6 flex flex-wrap gap-3 sm:gap-4";
+  // Veg/Non-veg icon component
+  const FoodTypeIcon = ({ type }) => {
+    return type === "veg" ? (
+      <div className="relative">
+        <div className="w-4 h-4 border border-green-600 rounded-sm flex items-center justify-center bg-white">
+          <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+        </div>
+      </div>
+    ) : (
+      <div className="relative">
+        <div className="w-4 h-4 border border-red-600 rounded-sm flex items-center justify-center bg-white">
+          <div className="w-2 h-2 bg-red-600 rounded-full"></div>
+        </div>
+      </div>
+    );
+  };
+
+  // Counter button component with animation
+  const CounterButton = ({ quantity, onIncrement, onDecrement }) => {
+    return (
+      <motion.div
+        initial={false}
+        animate={{ scale: quantity > 0 ? 1 : 0.95 }}
+        className="flex items-center gap-2 bg-white rounded-full shadow-lg overflow-hidden"
+      >
+        {quantity > 0 && (
+          <motion.button
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -20, opacity: 0 }}
+            onClick={onDecrement}
+            className="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center text-black transition-colors"
+          >
+            <FiMinus size={16} />
+          </motion.button>
+        )}
+
+        {quantity > 0 && (
+          <motion.span
+            key={quantity}
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="font-semibold text-gray-900 min-w-[20px] text-center text-sm"
+          >
+            {quantity}
+          </motion.span>
+        )}
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onIncrement}
+          className="h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center  text-black transition-colors"
+        >
+          <FiPlus size={16} />
+        </motion.button>
+      </motion.div>
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -375,20 +433,116 @@ export default function RestaurantRecommendations({ layout = "scroll" }) {
             </motion.button>
           </div>
 
-          <div className={containerClasses}>
+          <div className="mt-4 sm:mt-6 flex gap-3 sm:gap-4 overflow-x-auto scrollbar-hide pb-2">
             {restaurant.items.map((item) => {
               const quantity = getQuantity(restaurant.id, item.id);
 
               return (
-                <ProductCard
+                <motion.div
                   key={item.id}
-                  item={item}
-                  quantity={quantity}
-                  onQuantityChange={(newQuantity) =>
-                    handleQuantityChange(restaurant.id, item.id, newQuantity)
-                  }
-                  layout={layout}
-                />
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-[100px] sm:min-w-[200px] md:min-w-[220px] max-w-[180px] sm:max-w-[200px] md:max-w-[220px] flex-shrink-0"
+                >
+                  <div className="relative overflow-hidden rounded-xl group">
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                      className="relative"
+                    >
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        width={300}
+                        height={180}
+                        className="h-[90px] sm:h-[130px] md:h-[200px] w-full object-cover"
+                      />
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ x: -100, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.1 }}
+                      className="absolute left-2 top-2 rounded-md bg-[#FF7A1A] px-1.5 sm:px-2 py-0.5 sm:py-1 text-[9px] sm:text-[10px] font-bold text-white"
+                    >
+                      {item.offer}
+                    </motion.div>
+
+                    <div className="absolute bottom-2 right-2">
+                      <AnimatePresence mode="wait">
+                        {quantity === 0 ? (
+                          <motion.button
+                            key="add"
+                            initial={{ scale: 0, rotate: -180 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            exit={{ scale: 0, rotate: 180 }}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() =>
+                              updateQuantity(restaurant.id, item.id, 1)
+                            }
+                            className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all"
+                          >
+                            <FiPlus
+                              size={18}
+                              strokeWidth={3}
+                              className="text-green-500"
+                            />
+                          </motion.button>
+                        ) : (
+                          <CounterButton
+                            key="counter"
+                            quantity={quantity}
+                            onIncrement={() =>
+                              updateQuantity(restaurant.id, item.id, 1)
+                            }
+                            onDecrement={() =>
+                              updateQuantity(restaurant.id, item.id, -1)
+                            }
+                          />
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+
+                  <div className="mt-2 flex items-start gap-1.5">
+                    <FoodTypeIcon type={item.type} />
+                    <h3 className="line-clamp-2 text-[13px] sm:text-[14px] font-semibold leading-5 text-gray-900">
+                      {item.name}
+                    </h3>
+                  </div>
+
+                  <div className="mt-1 flex flex-wrap items-center gap-1">
+                    <motion.span
+                      key={item.price}
+                      initial={{ scale: 0.8 }}
+                      animate={{ scale: 1 }}
+                      className="text-[16px] sm:text-[18px] font-bold text-gray-900"
+                    >
+                      ₹{item.price}
+                    </motion.span>
+
+                    <span className="text-[11px] sm:text-[12px] text-gray-400 line-through">
+                      ₹{item.oldPrice}
+                    </span>
+
+                    <span className="text-[10px] sm:text-[12px] font-medium text-green-600">
+                      Save ₹{item.save}
+                    </span>
+                  </div>
+
+                  {quantity > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-2 text-xs text-orange-600 font-semibold"
+                    >
+                      Subtotal: ₹{item.price * quantity}
+                    </motion.div>
+                  )}
+                </motion.div>
               );
             })}
           </div>

@@ -28,9 +28,9 @@ const page = () => {
         }}
       />
       <SelectionProcess />
+      <Menu />
       <About />
       {/* <History /> */}
-      <Menu />
       {/* <Stats /> */}
       {/* <Chefs /> */}
       {/* <Testimonials /> */}

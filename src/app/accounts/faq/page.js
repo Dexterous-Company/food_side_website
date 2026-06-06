@@ -1,9 +1,9 @@
-import Orders from '@/pages/components/accounts/Orders'
+import FAQPage from '@/pages/components/accounts/Faq'
 import React from 'react'
 
 const page = () => {
   return (
-   <Orders />
+    <FAQPage />
   )
 }
 

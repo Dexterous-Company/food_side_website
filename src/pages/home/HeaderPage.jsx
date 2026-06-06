@@ -317,7 +317,7 @@ const HeaderPage = () => {
               <Image
                 src="/main_log_fd.png"
                 alt="Food Side"
-                className="h-40 w-0 border-b"
+                className="h-40 w-0"
                 width={120}
                 height={60}
               />

@@ -290,6 +290,71 @@ const FooterPage = () => {
           </button>
         )}
       </footer>
+
+      {/* Custom Animations */}
+      <style>{`
+        @keyframes blob-float-2 {
+          0%,
+          100% {
+            transform: translate(0, 0) scale(1);
+          }
+          33% {
+            transform: translate(30px, -20px) scale(1.02);
+          }
+          66% {
+            transform: translate(-30px, 20px) scale(0.98);
+          }
+        }
+        @keyframes blob-float-3 {
+          0%,
+          100% {
+            transform: rotate(0deg) translate(0, 0);
+          }
+          50% {
+            transform: rotate(180deg) translate(-40px, 10px);
+          }
+        }
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes pulseRight {
+          0% {
+            left: -50px;
+            background: linear-gradient(
+              90deg,
+              transparent 0%,
+              #ff581b 60%,
+              #ff581b 100%
+            );
+          }
+          100% {
+            left: 100%;
+            background: linear-gradient(
+              90deg,
+              transparent 0%,
+              #ff581b 60%,
+              #ff581b 100%
+            );
+          }
+        }
+        @keyframes popIn {
+          from {
+            opacity: 0;
+            transform: scale(0.6) translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+      `}</style>
     </>
   );
 };
