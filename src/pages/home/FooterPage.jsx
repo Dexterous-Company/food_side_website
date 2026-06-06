@@ -417,7 +417,7 @@ const FooterPage = () => {
       </footer>
 
       {/* Custom Animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes blob-float-2 {
           0%,
           100% {

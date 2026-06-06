@@ -364,7 +364,7 @@ const Menu = () => {
         )}
       </div>
 
-      <style jsx>{`
+      <style >{`
         @keyframes slide-in {
           from {
             transform: translateX(100%);
