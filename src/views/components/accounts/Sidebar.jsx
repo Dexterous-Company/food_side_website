@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
 import {
@@ -25,6 +25,7 @@ import {
 import { FaQ } from "react-icons/fa6";
 import { FcAbout, FcContacts, FcPrivacy } from "react-icons/fc";
 import { GrReturn } from "react-icons/gr";
+import { useSelector } from "react-redux";
 
 const sidebarMenus = [
   {
@@ -93,7 +94,16 @@ function MobileMenuItem({ icon: Icon, title, href }) {
 
 export default function ResponsiveProfileSidebar() {
   const pathname = usePathname();
-  const userName = "Natasha Khaleira";
+  const router = useRouter();
+  const { userData } = useSelector((state) => state.Authentication);
+  const {
+    email = "demo@gmail.com",
+    name = "User",
+    phone = "",
+    profileImage,
+  } = userData || {};
+
+  const displayInitial = (name || "User").charAt(0).toUpperCase();
 
   return (
     <>
@@ -101,13 +111,13 @@ export default function ResponsiveProfileSidebar() {
       <aside className="hidden h-fit lg:flex w-[250px] min-w-[250px] bg-white border-r border-gray-200 flex-col p-3 gap-2">
         <div className="bg-gradient-to-r from-[#F4B400] to-[#FF581B] rounded-xl p-2.5 flex items-center gap-2">
           <div className="w-[38px] h-[38px] rounded-full bg-white text-[#FF581B] flex items-center justify-center font-semibold text-sm">
-            {userName.charAt(0).toUpperCase()}
+            {displayInitial}
           </div>
 
           <div>
-            <h4 className="text-white text-xs font-semibold">{userName}</h4>
+            <h4 className="text-white text-xs font-semibold">{name}</h4>
 
-            <p className="text-white/80 text-[10px]">joman@brews.com</p>
+            <p className="text-white/80 text-[10px]">{email}</p>
           </div>
         </div>
 
@@ -201,7 +211,7 @@ export default function ResponsiveProfileSidebar() {
               <div className="flex gap-3">
                 <div className="relative h-20 w-20">
                   <Image
-                    src="https://res.cloudinary.com/dssdvnei1/image/upload/v1779258906/user_profiles/ew3xtccbogfye57wxhj1.jpg"
+                    src={profileImage ? profileImage:`https://res.cloudinary.com/dssdvnei1/image/upload/v1779258906/user_profiles/ew3xtccbogfye57wxhj1.jpg`}
                     alt="Profile"
                     fill
                     className="rounded-full object-cover"
@@ -209,9 +219,9 @@ export default function ResponsiveProfileSidebar() {
                 </div>
 
                 <div>
-                  <h2 className="font-bold text-[18px]">Natasha Khaleira</h2>
-                  <p className="text-gray-500 text-sm">+91 9876543210</p>
-                  <p className="text-gray-500 text-xs">joman@brews.com</p>
+                  <h2 className="font-bold text-[18px]">{name}</h2>
+                  <p className="text-gray-500 text-sm">+91 {phone}</p>
+                  <p className="text-gray-500 text-xs">{email}</p>
                 </div>
               </div>
             </div>
@@ -278,3 +288,4 @@ export default function ResponsiveProfileSidebar() {
     </>
   );
 }
+

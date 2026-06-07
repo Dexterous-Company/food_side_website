@@ -12,19 +12,26 @@ import {
   FiMail,
   FiCamera,
 } from "react-icons/fi";
+import { useSelector } from "react-redux";
 
 export default function Profile() {
   const router = useRouter();
   const fileInputRef = useRef(null);
 
   const [isEditing, setIsEditing] = useState(false);
+  const { userData } = useSelector((state) => state.Authentication);
+  const {
+    email = "demo@gmail.com",
+    name = "User",
+    phone = "8982471422",
+    profileImage,
+  } = userData || {};
 
   const [user, setUser] = useState({
-    name: "Tejbhan Kushwaha",
-    phone: "8982471422",
-    email: "kushwahatejbhan97@gmail.com",
-    profileImage:
-      "https://res.cloudinary.com/dssdvnei1/image/upload/v1779258906/user_profiles/ew3xtccbogfye57wxhj1.jpg",
+    name: name || "User" ,
+    phone: phone || "8982471422",
+    email: email|| "demo@gmail.com",
+    profileImage:   profileImage|| "https://res.cloudinary.com/dssdvnei1/image/upload/v1779258906/user_profiles/ew3xtccbogfye57wxhj1.jpg",
   });
 
   const handleNameChange = (e) => {

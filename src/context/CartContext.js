@@ -1,4 +1,4 @@
-import React, {createContext, useCallback, useContext, useMemo, useState} from 'react';
+import React, {createContext, useCallback, useContext, useMemo, useState, useEffect} from 'react';
 
 const CartContext = createContext(null);
 
@@ -28,15 +28,83 @@ const resolveRestaurantMongoId = restaurant =>
 const resolveRestaurantBusinessId = restaurant =>
   restaurant?.RESTID || restaurant?.restId || null;
 
+// Helper functions for localStorage
+const saveCartToLocalStorage = (cartMap, activeRestaurantId, switchRequest) => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cartData = {
+        cartMap,
+        activeRestaurantId,
+        switchRequest,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('food_cart_data', JSON.stringify(cartData));
+    } catch (error) {
+      console.error('Failed to save cart to localStorage:', error);
+    }
+  }
+};
+
+const loadCartFromLocalStorage = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      const savedData = localStorage.getItem('food_cart_data');
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+        // Optional: Check if data is not too old (e.g., 7 days)
+        const isExpired = Date.now() - (parsed.timestamp || 0) > 7 * 24 * 60 * 60 * 1000;
+        if (!isExpired) {
+          return {
+            cartMap: parsed.cartMap || {},
+            activeRestaurantId: parsed.activeRestaurantId || null,
+            switchRequest: parsed.switchRequest || null,
+          };
+        } else {
+          // Clear expired data
+          localStorage.removeItem('food_cart_data');
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load cart from localStorage:', error);
+    }
+  }
+  return {
+    cartMap: {},
+    activeRestaurantId: null,
+    switchRequest: null,
+  };
+};
+
 export const CartProvider = ({children}) => {
+  const [isMounted, setIsMounted] = useState(false);
   const [cartMap, setCartMap] = useState({});
   const [activeRestaurantId, setActiveRestaurantId] = useState(null);
   const [switchRequest, setSwitchRequest] = useState(null);
+
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    const savedCart = loadCartFromLocalStorage();
+    setCartMap(savedCart.cartMap);
+    setActiveRestaurantId(savedCart.activeRestaurantId);
+    setSwitchRequest(savedCart.switchRequest);
+    setIsMounted(true);
+  }, []);
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    if (isMounted) {
+      saveCartToLocalStorage(cartMap, activeRestaurantId, switchRequest);
+    }
+  }, [cartMap, activeRestaurantId, switchRequest, isMounted]);
 
   const clearCart = useCallback(() => {
     setCartMap({});
     setActiveRestaurantId(null);
     setSwitchRequest(null);
+    // Clear from localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('food_cart_data');
+    }
   }, []);
 
   const addItemDirect = useCallback(({restaurant, product}) => {
@@ -290,15 +358,37 @@ export const CartProvider = ({children}) => {
     ],
   );
 
+  // During SSR, render children without provider value
+  if (!isMounted) {
+    return <>{children}</>;
+  }
+
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
 
 export const useCart = () => {
   const context = useContext(CartContext);
-
+  
   if (!context) {
-    throw new Error('useCart must be used inside CartProvider');
+    // Return safe default values during SSR
+    return {
+      activeRestaurantId: null,
+      cartEntries: [],
+      cartList: [],
+      cartQuantities: {},
+      cartSummary: null,
+      hasItems: false,
+      switchRequest: null,
+      addItem: () => {},
+      replaceCartWithItem: () => {},
+      confirmReplaceCart: () => {},
+      cancelReplaceCart: () => {},
+      decreaseItem: () => {},
+      increaseItem: () => {},
+      removeItem: () => {},
+      clearCart: () => {},
+    };
   }
-
+  
   return context;
 };

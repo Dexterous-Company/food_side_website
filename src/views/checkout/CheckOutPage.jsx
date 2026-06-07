@@ -29,6 +29,8 @@ const formatRouteName = (routeName) => {
 };
 
 const CheckOutPage = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
   const router = useRouter();
   const dispatch = useDispatch();
   const { cartList, clearCart, hasItems, cartSummary } = useCart();
@@ -50,6 +52,10 @@ const CheckOutPage = () => {
 
   const isLoading = orderLoading || paymentLoading || isProcessing;
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // Debug logging
   useEffect(() => {
     console.log("=== Checkout Debug Info ===");
@@ -61,13 +67,17 @@ const CheckOutPage = () => {
     console.log("Delivery Data:", deliveryData);
     console.log(
       "Route Params from storage:",
-      localStorage.getItem("deliverySelection"),
+      typeof window !== "undefined"
+        ? localStorage.getItem("deliverySelection")
+        : null,
     );
   }, [cartList, hasItems, isUserAuth, userData, deliveryData]);
 
   // Get route params from Redux or localStorage
   const routeParams = useMemo(() => {
     if (deliveryData?.deliveryPoint?._id) return deliveryData;
+    if (typeof window === "undefined") return {};
+
     try {
       const saved = localStorage.getItem("deliverySelection");
       if (saved) {
@@ -142,7 +152,7 @@ const CheckOutPage = () => {
   // Prepare order overview
   const orderOverview = useMemo(() => {
     return {
-      pickupLocation:
+      CurrentLocation:
         routeParams?.pickup?.location ||
         routeParams?.pickupLocation ||
         "Pickup location not selected",
@@ -497,6 +507,18 @@ const CheckOutPage = () => {
     }
   };
 
+  // Don't render checkout content until the client cart/storage state is ready.
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading checkout...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Show empty cart message
   if (!cartItems.length && !isLoading) {
     return (
@@ -521,7 +543,10 @@ const CheckOutPage = () => {
   }
 
   return (
-    <div className="min-h-screen pt-5" style={{ backgroundColor: "#f5f5f5" }}>
+    <div
+      className="min-h-screen pt-19 md:pt-5 pb-20 md:pb-0"
+      style={{ backgroundColor: "#f5f5f5" }}
+    >
       {toastMessage && (
         <div
           className={`fixed top-4 right-4 z-50 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg ${

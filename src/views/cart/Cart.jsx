@@ -28,6 +28,7 @@ import {
   FaDrumstickBite,
 } from "react-icons/fa6";
 import { PiPlus, PiMinus } from "react-icons/pi";
+import { useRouter } from "next/navigation";
 
 const RUPEE = "₹";
 const FREE_DELIVERY_THRESHOLD = 500;
@@ -114,7 +115,7 @@ const Cart = () => {
     setAppliedPromo(null);
     setPromoDiscount(0);
   };
-
+  const router = useRouter();
   // Veg/Non-veg badge component
   const VegBadge = ({ isVeg }) => (
     <div
@@ -191,20 +192,22 @@ const Cart = () => {
   }
 
   return (
-    <div className="font-sans text-gray-600 bg-white">
+    <div className="font-sans text-gray-600 bg-white pb-10 md:pb-0">
       {/* Mobile Cart Header - visible only on small screens */}
-      <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2">
-        <div className="h-12 px-3 flex items-center justify-between">
+      <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2 ">
+        <div className="h-12 px-3 flex items-center justify-between ">
           <button
-            onClick={() => window.history.back()}
+            onClick={() => router.back()}
             className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
           >
             <FaArrowLeft className="text-gray-700 text-xs" />
           </button>
           <h1 className="text-lg font-black text-gray-900">My Cart</h1>
-          <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-            <FaBagShopping className="text-gray-700 text-xs" />
-          </button>
+          <Link href="/">
+            <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+              <FaBagShopping className="text-gray-700 text-xs" />
+            </button>
+          </Link>
         </div>
       </div>
 

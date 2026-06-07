@@ -1,4 +1,4 @@
-import AboutUs from '@/pages/footer_pages/AboutUs';
+import AboutUs from '@/views/footer_pages/AboutUs';
 import React from 'react';
 
 const page = () => {

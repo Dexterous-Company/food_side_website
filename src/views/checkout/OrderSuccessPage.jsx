@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   FaArrowLeft,
   FaCalendarAlt,
@@ -16,11 +16,14 @@ import { useRouter } from "next/navigation";
 import Lottie from "lottie-react";
 import successAnimation from "../../animations/success.json";
 import axios from "axios";
+import { selectCompleteDeliveryData } from "@/redux/delivery/deliverySlice";
+import { useSelector } from "react-redux";
 
 const OrderSuccessPage = ({ onContinueShopping }) => {
+  const deliveryData = useSelector(selectCompleteDeliveryData);
   const router = useRouter();
   const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  
+
   const [orderData, setOrderData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -29,7 +32,7 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
     const fetchOrderData = async () => {
       try {
         const storedOrderJson = localStorage.getItem("currentOrder");
-        
+
         if (!storedOrderJson) {
           setError("No order found");
           setLoading(false);
@@ -38,15 +41,17 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
 
         const storedOrder = JSON.parse(storedOrderJson);
         const orderNumber = storedOrder?.orderNumber || storedOrder?._id;
-        
+
         if (!orderNumber) {
           setError("Invalid order number");
           setLoading(false);
           return;
         }
 
-        const response = await axios.get(`${BaseUrl}/api/v1/orders/${orderNumber}/new`);
-        
+        const response = await axios.get(
+          `${BaseUrl}/api/v1/orders/${orderNumber}/new`,
+        );
+
         if (response.data?.success || response.data?.data) {
           const apiOrder = response.data.data;
           setOrderData(apiOrder);
@@ -68,6 +73,22 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
 
     fetchOrderData();
   }, [BaseUrl]);
+  const routeParams = useMemo(() => {
+    if (deliveryData?.deliveryPoint?._id) return deliveryData;
+    if (typeof window === "undefined") return {};
+
+    try {
+      const saved = localStorage.getItem("deliverySelection");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        console.log("Loaded delivery selection from localStorage:", parsed);
+        return parsed;
+      }
+    } catch (error) {
+      console.error("Error parsing delivery selection:", error);
+    }
+    return {};
+  }, [deliveryData]);
 
   const handleBackToHome = () => {
     if (onContinueShopping) {
@@ -79,7 +100,7 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
 
   const handleTrackOrder = () => {
     if (orderData?.orderNumber) {
-      router.push(`/order-tracking?orderId=${orderData.orderNumber}`);
+      router.push(`/accounts/orders/${orderData._id}`);
     } else {
       router.push("/accounts/orders");
     }
@@ -119,37 +140,48 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
   const totalAmount = orderData.totalAmount || orderData.amount || 0;
   const subtotal = orderData.subtotal || 0;
   const deliveryFee = orderData.deliveryFee || 0;
-  
+
   const restaurantName = orderData.restaurant?.name || "Restaurant";
-  const restaurantAddress = orderData.restaurant?.address 
-    ? `${orderData.restaurant.address.area || ""}, ${orderData.restaurant.address.city || ""}` 
+  const restaurantAddress = orderData.restaurant?.address
+    ? `${orderData.restaurant.address.area || ""}, ${orderData.restaurant.address.city || ""}`
     : "Restaurant address not available";
-  
+
   const deliveryPointName = orderData.deliveryPoint?.name || "Delivery Point";
-  const deliveryAddress = orderData.deliveryPoint?.address?.fullAddress || 
-                         orderData.deliveryPointId?.address?.fullAddress ||
-                         "Delivery address not available";
-  
-  const journeyDate = orderData.journey?.formattedDate || 
-                     (orderData.journey?.date ? new Date(orderData.journey.date).toLocaleDateString() : "NA");
-  const journeyTime = orderData.journey?.formattedTime || 
-                     (orderData.journey?.time ? new Date(orderData.journey.time).toLocaleTimeString() : "NA");
-  
-  const cartItems = (orderData.items || []).map(item => ({
+  const deliveryAddress =
+    orderData.deliveryPoint?.address?.fullAddress ||
+    orderData.deliveryPointId?.address?.fullAddress ||
+    "Delivery address not available";
+
+  const journeyDate =
+    orderData.journey?.formattedDate ||
+    (orderData.journey?.date
+      ? new Date(orderData.journey.date).toLocaleDateString()
+      : "NA");
+  const journeyTime =
+    orderData.journey?.formattedTime ||
+    (orderData.journey?.time
+      ? new Date(orderData.journey.time).toLocaleTimeString()
+      : "NA");
+
+  const cartItems = (orderData.items || []).map((item) => ({
     id: item.menuId?._id || item.menuId,
     name: item.name,
     qty: item.quantity,
     price: item.price,
     total: item.total,
     isVeg: item.isVeg,
-    image: item.image
+    image: item.image,
   }));
-  
-  const userName = orderData.user?.name || orderData.userName || "Customer";
-  const eta = orderData.eta ? new Date(orderData.eta).toLocaleTimeString() : null;
 
-  const paymentLabel = paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment";
-  const paymentBadgeLabel = paymentStatus === "pending" ? "PENDING" : paymentStatus.toUpperCase();
+  const userName = orderData.user?.name || orderData.userName || "Customer";
+  const eta = orderData.eta
+    ? new Date(orderData.eta).toLocaleTimeString()
+    : null;
+
+  const paymentLabel =
+    paymentMethod === "cod" ? "Cash on Delivery" : "Online Payment";
+  const paymentBadgeLabel =
+    paymentStatus === "pending" ? "PENDING" : paymentStatus.toUpperCase();
 
   // Common components
   const SuccessHeader = () => (
@@ -187,23 +219,29 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
       <div className="bg-gray-50 rounded-xl py-3 text-center hover:shadow-md transition">
         <FaCalendarAlt className="text-indigo-500 text-lg sm:text-xl mx-auto mb-1" />
         <p className="text-xs text-gray-400 font-semibold">DATE</p>
-        <p className="text-sm sm:text-base font-bold text-gray-800">{journeyDate}</p>
+        <p className="text-sm sm:text-base font-bold text-gray-800">
+          {journeyDate}
+        </p>
       </div>
       <div className="bg-gray-50 rounded-xl py-3 text-center hover:shadow-md transition">
         <FaClock className="text-orange-500 text-lg sm:text-xl mx-auto mb-1" />
         <p className="text-xs text-gray-400 font-semibold">TIME</p>
-        <p className="text-sm sm:text-base font-bold text-gray-800">{journeyTime}</p>
+        <p className="text-sm sm:text-base font-bold text-gray-800">
+          {journeyTime}
+        </p>
       </div>
       <div className="bg-gray-50 rounded-xl py-3 text-center hover:shadow-md transition">
         <FaRupeeSign className="text-emerald-500 text-lg sm:text-xl mx-auto mb-1" />
         <p className="text-xs text-gray-400 font-semibold">AMOUNT</p>
-        <p className="text-sm sm:text-base font-bold text-[#ff581b]">₹{totalAmount}</p>
+        <p className="text-sm sm:text-base font-bold text-[#ff581b]">
+          ₹{totalAmount}
+        </p>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-14 md:pb-0">
       <SuccessHeader />
 
       {/* Main Content - Responsive */}
@@ -255,8 +293,12 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
               {/* Order Header */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 pb-3 border-b border-gray-100 gap-3 sm:gap-0">
                 <div>
-                  <p className="text-xs text-gray-400 font-semibold">ORDER ID</p>
-                  <p className="text-base sm:text-lg font-bold text-gray-900">{orderNumber}</p>
+                  <p className="text-xs text-gray-400 font-semibold">
+                    ORDER ID
+                  </p>
+                  <p className="text-base sm:text-lg font-bold text-gray-900">
+                    {orderNumber}
+                  </p>
                 </div>
                 <div
                   className={`px-3 py-1 rounded-full ${
@@ -265,7 +307,9 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
                 >
                   <span
                     className={`text-xs font-bold ${
-                      paymentMethod === "cod" ? "text-green-600" : "text-orange-600"
+                      paymentMethod === "cod"
+                        ? "text-green-600"
+                        : "text-orange-600"
                     }`}
                   >
                     {paymentBadgeLabel}
@@ -301,7 +345,9 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
                     <div className="flex items-start gap-3">
                       <FaStore className="text-blue-600 text-lg sm:text-xl mt-0.5" />
                       <div className="flex-1">
-                        <p className="text-xs text-blue-600 font-semibold">RESTAURANT</p>
+                        <p className="text-xs text-blue-600 font-semibold">
+                          RESTAURANT
+                        </p>
                         <p className="text-sm sm:text-base font-medium text-gray-800 mt-1">
                           {restaurantName}
                         </p>
@@ -323,10 +369,11 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
                     <div className="flex-1">
                       <div className="mb-5">
                         <p className="text-xs text-green-600 font-semibold">
-                          PICKUP LOCATION
+                          Current LOCATION
                         </p>
                         <p className="text-sm sm:text-base font-medium text-gray-800 mt-1">
-                          {restaurantName}
+                          {routeParams?.pickup?.location ||
+                            "Pickup location not selected"}
                         </p>
                         <p className="text-xs text-gray-500 mt-0.5">
                           {restaurantAddress}
@@ -357,7 +404,9 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
                     <div className="mb-4 p-3 sm:p-4 bg-gray-50 rounded-xl">
                       <div className="flex items-center gap-2 mb-3">
                         <FaReceipt className="text-gray-500 text-sm" />
-                        <p className="text-xs font-semibold text-gray-600">PRICE DETAILS</p>
+                        <p className="text-xs font-semibold text-gray-600">
+                          PRICE DETAILS
+                        </p>
                       </div>
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
@@ -372,7 +421,9 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
                         )}
                         <div className="border-t border-gray-200 mt-2 pt-2 flex justify-between font-semibold">
                           <span>Total</span>
-                          <span className="text-[#ff581b] text-lg">₹{totalAmount}</span>
+                          <span className="text-[#ff581b] text-lg">
+                            ₹{totalAmount}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -412,7 +463,9 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
                               }`}
                             />
                           )}
-                          <p className="text-sm text-gray-700 flex-1">{item.name}</p>
+                          <p className="text-sm text-gray-700 flex-1">
+                            {item.name}
+                          </p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm font-semibold text-gray-800">

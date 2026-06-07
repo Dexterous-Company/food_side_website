@@ -32,13 +32,13 @@ export default function MobileFooter() {
     },
     {
       key: "orders",
-      route: "/orders",
+      route: "/accounts/orders",
       label: "Orders",
       icon: FiBox,
     },
     {
       key: "profile",
-      route: "/profile",
+      route: "/accounts",
       label: "Profile",
       icon: IoPersonOutline,
     },

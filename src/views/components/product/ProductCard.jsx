@@ -6,7 +6,7 @@ import Image from "next/image";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../../context/CartContext";
-import { ProductBottomSheet } from "@/pages/restaurant_pages/ProductBottomSheet";
+import { ProductBottomSheet } from "@/views/restaurant_pages/ProductBottomSheet";
 
 const FoodTypeIcon = ({ type }) => {
   return type === "veg" ? (
