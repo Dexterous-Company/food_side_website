@@ -1,3 +1,4 @@
+// pages/selectRoutes/DeliverySelectionModal.js
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -11,8 +12,12 @@ import { STEPS } from "./constants";
 import {
   generateBookingSummary,
   selectRouteSearch,
+  selectSelectedRoute,
+  selectSelectedDeliveryPoint,
+  selectTowardsLocation,
   setSelectedDeliveryPoint,
   setSelectedRoute,
+  setTowardsLocation,
 } from "@/redux/delivery/deliverySlice";
 import {
   getDeliveryPointsByRoute,
@@ -102,6 +107,10 @@ const filterDeliveryPointsForRoute = (points, route) => {
 export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
   const dispatch = useDispatch();
   const routeSearch = useSelector(selectRouteSearch);
+  const savedRoute = useSelector(selectSelectedRoute);
+  const savedDeliveryPoint = useSelector(selectSelectedDeliveryPoint);
+  const savedTowardsLocation = useSelector(selectTowardsLocation);
+  
   const [step, setStep] = useState(1);
   const [selDest, setSelDest] = useState(null);
   const [selRoute, setSelRoute] = useState(null);
@@ -109,6 +118,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
   const [deliveryPoints, setDeliveryPoints] = useState([]);
   const [deliveryPointLoading, setDeliveryPointLoading] = useState(false);
   const [deliveryPointError, setDeliveryPointError] = useState("");
+  const [isInitializing, setIsInitializing] = useState(true);
   const [details, setDetails] = useState({
     name: "",
     phone: "",
@@ -118,31 +128,60 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     pincode: "",
   });
 
+  // Initialize state from Redux when modal opens
   useEffect(() => {
     if (isOpen) {
-      queueMicrotask(() => {
-        setStep(1);
+      setIsInitializing(true);
+      
+      // Restore saved destination from Redux
+      if (savedTowardsLocation && savedTowardsLocation !== "") {
+        const destObject = {
+          id: savedTowardsLocation,
+          name: savedTowardsLocation,
+          primaryText: savedTowardsLocation,
+          destination: savedTowardsLocation,
+        };
+        setSelDest(destObject);
+      } else {
         setSelDest(null);
+      }
+      
+      // Restore saved route from Redux
+      if (savedRoute && savedRoute._id) {
+        setSelRoute(savedRoute.fullRouteObject || savedRoute);
+      } else {
         setSelRoute(null);
+      }
+      
+      // Restore saved delivery point from Redux
+      if (savedDeliveryPoint && savedDeliveryPoint._id) {
+        setSelDP(savedDeliveryPoint.fullPointObject || savedDeliveryPoint);
+      } else {
         setSelDP(null);
-        setDeliveryPoints([]);
-        setDeliveryPointError("");
-        setDetails({
-          name: "",
-          phone: "",
-          email: "",
-          address: "",
-          city: "",
-          pincode: "",
-        });
-      });
+      }
+      
+      // Calculate which step to start from
+      if (savedDeliveryPoint && savedDeliveryPoint._id) {
+        setStep(4);
+      } else if (savedRoute && savedRoute._id) {
+        setStep(3);
+      } else if (savedTowardsLocation && savedTowardsLocation !== "") {
+        setStep(2);
+      } else {
+        setStep(1);
+      }
+      
+      setIsInitializing(false);
+      setDeliveryPointError("");
+    } else {
+      // Reset initialization flag when modal closes
+      setIsInitializing(true);
     }
-  }, [isOpen]);
+  }, [isOpen, savedTowardsLocation, savedRoute, savedDeliveryPoint]);
 
-  const routes = getRoutesForDestination(routeSearch);
-
+  // Load delivery points when route is selected
   useEffect(() => {
-    if (!selRoute || step < 3) return;
+    if (!selRoute || !selRoute._id || step !== 3 || isInitializing) return;
 
     const routeObjectId = selRoute._id || selRoute.id;
     let isMounted = true;
@@ -161,9 +200,13 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
             : routeSearch?.matchedDeliveryPoints || [];
 
         if (isMounted) {
-          setDeliveryPoints(
-            filterDeliveryPointsForRoute(sourcePoints, selRoute),
-          );
+          const filtered = filterDeliveryPointsForRoute(sourcePoints, selRoute);
+          setDeliveryPoints(filtered);
+          
+          // Auto-select delivery point if only one available
+          if (filtered.length === 1 && !selDP) {
+            handleSelectDeliveryPoint(filtered[0]);
+          }
         }
       } catch (error) {
         const fallbackPoints = filterDeliveryPointsForRoute(
@@ -187,20 +230,37 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     return () => {
       isMounted = false;
     };
-  }, [routeSearch?.matchedDeliveryPoints, selRoute, step]);
+  }, [routeSearch?.matchedDeliveryPoints, selRoute, step, isInitializing, selDP]);
 
   const canNext = useCallback(() => {
-    if (step === 1) return !!selDest;
-    if (step === 2) return !!selRoute;
-    if (step === 3) return !!selDP;
+    if (step === 1) return !!selDest && selDest.name;
+    if (step === 2) return !!selRoute && selRoute._id;
+    if (step === 3) return !!selDP && selDP._id;
     return true;
   }, [step, selDest, selRoute, selDP]);
 
   const handleSelectDestination = (destination) => {
-    setSelDest(destination);
+    const destObject = {
+      id: destination.id || destination.destination || destination.name,
+      name: destination.primaryText || destination.destination || destination.name,
+      primaryText: destination.primaryText || destination.destination || destination.name,
+      destination: destination.destination || destination.name,
+      origin: destination.origin || "",
+      secondaryText: destination.secondaryText || destination.origin || "",
+      routeId: destination.routeId,
+      routeName: destination.routeName
+    };
+    
+    setSelDest(destObject);
     setSelRoute(null);
     setSelDP(null);
     setDeliveryPoints([]);
+    
+    // Save to Redux
+    dispatch(setTowardsLocation(destObject.name));
+    
+    // Auto-advance to next step
+    setStep(2);
   };
 
   const handleSelectRoute = (route) => {
@@ -208,12 +268,14 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     setSelDP(null);
     setDeliveryPoints([]);
     dispatch(setSelectedRoute(route));
+    setStep(3);
   };
 
   const handleSelectDeliveryPoint = (point) => {
     setSelDP(point);
     dispatch(setSelectedDeliveryPoint(point));
     dispatch(generateBookingSummary());
+    setStep(4);
   };
 
   const handleNext = () => {
@@ -230,7 +292,11 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     }
   };
 
-  const handlePrev = () => setStep((s) => Math.max(1, s - 1));
+  const handlePrev = () => {
+    if (step > 1) {
+      setStep((s) => s - 1);
+    }
+  };
 
   const handleDetailsChange = (key, value) =>
     setDetails((prev) => ({ ...prev, [key]: value }));
@@ -241,7 +307,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     <div
       className="fixed inset-0 flex sm:items-end sm:justify-center bg-black/40 backdrop-blur-sm p-0 sm:p-4"
       onClick={(e) => e.target === e.currentTarget && onClose?.()}
-      style={{ zIndex: [9999] }}
+      style={{ zIndex: 9999 }}
     >
       <div className="bg-white w-full max-w-none sm:max-w-3xl sm:rounded-2xl shadow-2xl shadow-black/10 flex overflow-hidden h-full sm:h-[min(92dvh,720px)] max-h-none sm:max-h-[calc(100dvh-1rem)]">
         <div className="hidden md:flex">
@@ -288,7 +354,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
                 selDest={selDest}
                 selRoute={selRoute}
                 onSelectRoute={handleSelectRoute}
-                routes={routes}
+                routes={getRoutesForDestination(routeSearch)}
                 onBack={handlePrev}
               />
             )}
@@ -341,7 +407,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
               <button
                 onClick={handleNext}
                 disabled={!canNext()}
-                className={` w-full flex items-center justify-center sm:w-28 px-6 py-3 sm:py-2.5 text-sm font-semibold rounded-xl text-white transition-all duration-150
+                className={`w-full flex items-center justify-center sm:w-28 px-6 py-3 sm:py-2.5 text-sm font-semibold rounded-xl text-white transition-all duration-150
                   ${step === 1 ? "hidden md:inline-flex" : "inline-flex"}
                   ${
                     canNext()
