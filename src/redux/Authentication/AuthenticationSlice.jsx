@@ -6,7 +6,7 @@ const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 // Add this function to safely get data from localStorage
 const getInitialState = () => {
   // Check if window is defined (client-side only)
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     try {
       const isUserAuth = localStorage.getItem("isUserAuth");
       const userData = localStorage.getItem("userData");
@@ -33,7 +33,7 @@ const getInitialState = () => {
       console.error("Error loading from localStorage:", error);
     }
   }
-  
+
   return {
     isUserAuth: false,
     userData: null,
@@ -348,21 +348,45 @@ const AuthenticationSlice = createSlice({
       .addCase(get_setting_details.rejected, (state) => {
         state.setting_detailsLoading = false;
       })
+      // .addCase(verify_otp.fulfilled, (state, action) => {
+      //   if (action.payload?.success) {
+      //     // console.log(action.payload,"action.payload");
+      //     state.isUserAuth = true;
+      //     state.userData = action.payload?.data;
+      //     state.login_token = action.payload?.token || "";
+      //     // Save to localStorage
+      //     localStorage.setItem("isUserAuth", JSON.stringify(true));
+      //     localStorage.setItem(
+      //       "userData",
+      //       JSON.stringify(action.payload?.data),
+      //     );
+      //     if (action.payload?.token) {
+      //       localStorage.setItem("login_token", action.payload.token);
+      //     }
+      //   }
+      // })
+
+      // FIXED AuthenticationSlice.js
       .addCase(verify_otp.fulfilled, (state, action) => {
         if (action.payload?.success) {
-          // console.log(action.payload,"action.payload");
-          state.isUserAuth = true;
-          state.userData = action.payload?.data;
-          state.login_token = action.payload?.token || "";
-          // Save to localStorage
-          localStorage.setItem("isUserAuth", JSON.stringify(true));
-          localStorage.setItem(
-            "userData",
-            JSON.stringify(action.payload?.data),
-          );
-          if (action.payload?.token) {
-            localStorage.setItem("login_token", action.payload.token);
+          const userData = action.payload?.data;
+          // Check if user already has a name (existing user)
+          const isExistingUser =
+            userData && userData.name && userData.name.trim() !== "";
+
+          if (isExistingUser) {
+            // ONLY set authenticated for existing users
+            state.isUserAuth = true;
+            state.userData = userData;
+            state.login_token = action.payload?.token || "";
+
+            localStorage.setItem("isUserAuth", JSON.stringify(true));
+            localStorage.setItem("userData", JSON.stringify(userData));
+            if (action.payload?.token) {
+              localStorage.setItem("login_token", action.payload.token);
+            }
           }
+          // For new users (no name), DON'T set isUserAuth - let the registration form show
         }
       })
       .addCase(create_user.fulfilled, (state, action) => {
