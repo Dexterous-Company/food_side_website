@@ -1,7 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ClientLayout from "@/pages/Mainlayout/ClientLayout";
 import ReduxLayoutProviders from "@/pages/Mainlayout/ReduxLayoutProviders";
+import ClientLayout from "@/pages/Mainlayout/ClientLayout";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

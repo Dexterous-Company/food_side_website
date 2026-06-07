@@ -3,7 +3,7 @@
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "../../redux/Store";
-import { CartProvider } from "../context/CartContext";
+import { CartProvider } from "../../context/CartContext";
 
 export default function ReduxLayoutProviders({ children }) {
   return (
