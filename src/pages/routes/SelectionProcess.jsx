@@ -32,6 +32,30 @@ const SelectionProcess = () => {
   const selectedRoute = useSelector(selectSelectedRoute);
   const selectedDeliveryPoint = useSelector(selectSelectedDeliveryPoint);
 
+  // Helper function to safely get string value from location
+  const getLocationString = (location) => {
+    if (!location) return "";
+    if (typeof location === "string") return location;
+    if (typeof location === "object") {
+      // If it's an object, try to get a meaningful string
+      return location.location || location.name || location.address || JSON.stringify(location);
+    }
+    return "";
+  };
+
+  // Helper function to get first part of location
+  const getLocationShort = (location) => {
+    const locationStr = getLocationString(location);
+    return locationStr.split(",")[0] || "Origin";
+  };
+
+  // Helper function to get remaining parts of location
+  const getLocationLong = (location) => {
+    const locationStr = getLocationString(location);
+    const parts = locationStr.split(",");
+    return parts.slice(1).join(",") || "";
+  };
+
   const formatDate = (date) => {
     if (!date) return "";
     return date;
@@ -47,7 +71,9 @@ const SelectionProcess = () => {
       <Icon className={`${iconColor} text-xl mt-0.5 flex-shrink-0`} />
       <div className="flex-1 min-w-0">
         <p className="text-gray-400 text-[10px] font-semibold uppercase tracking-wider">{label}</p>
-        <p className="text-gray-900 text-sm font-semibold mt-0.5 truncate">{value}</p>
+        <p className="text-gray-900 text-sm font-semibold mt-0.5 truncate">
+          {typeof value === "object" ? JSON.stringify(value) : value || "N/A"}
+        </p>
         {subtitle && <p className="text-gray-400 text-[10px] mt-0.5">{subtitle}</p>}
       </div>
     </div>
@@ -69,7 +95,7 @@ const SelectionProcess = () => {
                     <div>
                       <p className="text-gray-400 text-[9px] uppercase tracking-wider">From</p>
                       <p className="text-gray-900 text-sm font-semibold truncate max-w-[120px]">
-                        {fromLocationFull?.split(",")[0] || "Origin"}
+                        {getLocationShort(fromLocationFull)}
                       </p>
                     </div>
                   </div>
@@ -82,7 +108,7 @@ const SelectionProcess = () => {
                     <div>
                       <p className="text-gray-400 text-[9px] uppercase tracking-wider">To</p>
                       <p className="text-gray-900 text-sm font-semibold truncate max-w-[120px]">
-                        {toLocation || "Destination"}
+                        {typeof toLocation === "string" ? toLocation : (toLocation?.name || "Destination")}
                       </p>
                     </div>
                     <FaMapMarkerAlt className="text-blue-500 text-sm" />
@@ -97,7 +123,7 @@ const SelectionProcess = () => {
                   <div className="flex-1">
                     <p className="text-gray-400 text-[9px] uppercase tracking-wider">Delivery Point</p>
                     <p className="text-gray-900 text-sm font-semibold truncate">
-                      {selectedDeliveryPoint?.name || "N/A"}
+                      {selectedDeliveryPoint?.name || (typeof selectedDeliveryPoint === "string" ? selectedDeliveryPoint : "N/A")}
                     </p>
                   </div>
                 </div>
@@ -124,15 +150,15 @@ const SelectionProcess = () => {
                     icon={MdLocationOn}
                     iconColor="text-amber-500"
                     label="From"
-                    value={fromLocationFull?.split(",")[0] || "Origin"}
-                    subtitle={fromLocationFull?.split(",").slice(1).join(",")}
+                    value={getLocationShort(fromLocationFull)}
+                    subtitle={getLocationLong(fromLocationFull)}
                   />
                   
                   <InfoRow
                     icon={FaMapMarkerAlt}
                     iconColor="text-blue-500"
                     label="To"
-                    value={toLocation || "Destination"}
+                    value={typeof toLocation === "string" ? toLocation : (toLocation?.name || "Destination")}
                     subtitle="Drop-off Point"
                   />
                   
@@ -222,8 +248,8 @@ const SelectionProcess = () => {
                       <MdLocationOn className="text-amber-500 text-lg" />
                       <div>
                         <p className="text-gray-400 text-[9px] uppercase tracking-wider">From</p>
-                        <p className="text-gray-900 font-bold">{fromLocationFull?.split(",")[0] || "Origin"}</p>
-                        <p className="text-gray-500 text-xs mt-0.5">{fromLocationFull?.split(",").slice(1).join(",")}</p>
+                        <p className="text-gray-900 font-bold">{getLocationShort(fromLocationFull)}</p>
+                        <p className="text-gray-500 text-xs mt-0.5">{getLocationLong(fromLocationFull)}</p>
                       </div>
                     </div>
                   </div>
@@ -234,7 +260,9 @@ const SelectionProcess = () => {
                     <div className="flex items-center gap-2 justify-end">
                       <div>
                         <p className="text-gray-400 text-[9px] uppercase tracking-wider">To</p>
-                        <p className="text-gray-900 font-bold">{toLocation || "Destination"}</p>
+                        <p className="text-gray-900 font-bold">
+                          {typeof toLocation === "string" ? toLocation : (toLocation?.name || "Destination")}
+                        </p>
                         <p className="text-gray-500 text-xs mt-0.5">Drop-off Point</p>
                       </div>
                       <FaMapMarkerAlt className="text-blue-500 text-lg" />

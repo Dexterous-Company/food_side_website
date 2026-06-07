@@ -1,5 +1,5 @@
-// deliverySlice.js
-import {createSlice} from '@reduxjs/toolkit';
+// redux/delivery/deliverySlice.js
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   // From SelectRouteDelivery Page
@@ -44,7 +44,7 @@ const initialState = {
     cityCount: 0,
     citiesCovered: [],
     description: '',
-    status: {isActive: true},
+    status: { isActive: true },
     fare: null,
     fullRouteObject: null,
   },
@@ -69,7 +69,7 @@ const initialState = {
       closingTime: '',
       workingDays: [],
     },
-    status: {isActive: true},
+    status: { isActive: true },
     estimatedTimeFromStart: 0,
     fullPointObject: null,
   },
@@ -97,8 +97,6 @@ const deliverySlice = createSlice({
   initialState,
   reducers: {
     // ========== From SelectRouteDelivery Page ==========
-
-    // Set pickup location with full details
     setPickupLocation: (state, action) => {
       const {
         fromLocation,
@@ -114,7 +112,7 @@ const deliverySlice = createSlice({
       state.fromLocation = fromLocation || '';
       state.fromLocationDetailed = fromLocationDetailed || '';
       state.currentLocation = currentLocation || '';
-      state.pickupCoordinates = coordinates || {lat: null, lng: null};
+      state.pickupCoordinates = coordinates || { lat: null, lng: null };
       state.pickupAddressDetails = {
         city: city || '',
         state: stateName || '',
@@ -124,7 +122,6 @@ const deliverySlice = createSlice({
       state.isPickupSet = true;
     },
 
-    // Update from location
     updateFromLocation: (state, action) => {
       state.fromLocation = action.payload;
     },
@@ -133,20 +130,22 @@ const deliverySlice = createSlice({
       state.fromLocationDetailed = action.payload;
     },
 
-    // Set destination (towards)
     setTowardsLocation: (state, action) => {
       state.towardsLocation = action.payload;
       state.isDestinationSet = !!action.payload;
     },
+    
     setRouteSearchQuery: (state, action) => {
       state.routeSearch.query = action.payload || '';
     },
+    
     setRouteSearchLoading: (state, action) => {
       state.routeSearch.loading = action.payload;
       if (action.payload) {
         state.routeSearch.error = '';
       }
     },
+    
     setRouteSearchResults: (state, action) => {
       const {
         query = '',
@@ -162,29 +161,22 @@ const deliverySlice = createSlice({
       state.routeSearch.loading = false;
       state.routeSearch.error = '';
     },
+    
     setRouteSearchError: (state, action) => {
       state.routeSearch.loading = false;
       state.routeSearch.error = action.payload || 'Unable to fetch routes';
     },
+    
     clearRouteSearch: state => {
       state.routeSearch = initialState.routeSearch;
     },
 
-    // Set journey date and time
     setJourneyDateTime: (state, action) => {
-      const {date, formattedDate, time, formattedTime} = action.payload;
-      if (date !== undefined) {
-        state.selectedDate = date;
-      }
-      if (formattedDate !== undefined) {
-        state.formattedDate = formattedDate;
-      }
-      if (time !== undefined) {
-        state.selectedTime = time;
-      }
-      if (formattedTime !== undefined) {
-        state.formattedTime = formattedTime;
-      }
+      const { date, formattedDate, time, formattedTime } = action.payload;
+      if (date !== undefined) state.selectedDate = date;
+      if (formattedDate !== undefined) state.formattedDate = formattedDate;
+      if (time !== undefined) state.selectedTime = time;
+      if (formattedTime !== undefined) state.formattedTime = formattedTime;
     },
 
     setJourneyDate: (state, action) => {
@@ -197,14 +189,11 @@ const deliverySlice = createSlice({
       state.formattedTime = action.payload.formattedTime;
     },
 
-    // Update pickup coordinates
     updatePickupCoordinates: (state, action) => {
       state.pickupCoordinates = action.payload;
     },
 
     // ========== From SelectOnlyRoute Page ==========
-
-    // Set selected route
     setSelectedRoute: (state, action) => {
       const route = action.payload;
       state.selectedRoute = {
@@ -220,30 +209,26 @@ const deliverySlice = createSlice({
         cityCount: route.cityCount || route.citiesCovered?.length || 0,
         citiesCovered: route.citiesCovered || [],
         description: route.description || '',
-        status: route.status || {isActive: true},
+        status: route.status || { isActive: true },
         fare: route.fare || null,
         fullRouteObject: route,
       };
       state.isRouteSelected = true;
     },
 
-    // Clear selected route
     clearSelectedRoute: state => {
       state.selectedRoute = initialState.selectedRoute;
       state.isRouteSelected = false;
     },
 
-    // Update specific route field
     updateRouteField: (state, action) => {
-      const {field, value} = action.payload;
+      const { field, value } = action.payload;
       if (field in state.selectedRoute) {
         state.selectedRoute[field] = value;
       }
     },
 
     // ========== From SelectDeliveryPoint Page ==========
-
-    // Set selected delivery point
     setSelectedDeliveryPoint: (state, action) => {
       const point = action.payload;
       state.selectedDeliveryPoint = {
@@ -265,22 +250,20 @@ const deliverySlice = createSlice({
           closingTime: point.timings?.closingTime || '',
           workingDays: point.timings?.workingDays || [],
         },
-        status: point.status || {isActive: true},
+        status: point.status || { isActive: true },
         estimatedTimeFromStart: point.estimatedTimeFromStart || 0,
         fullPointObject: point,
       };
       state.isDeliveryPointSelected = true;
     },
 
-    // Clear selected delivery point
     clearSelectedDeliveryPoint: state => {
       state.selectedDeliveryPoint = initialState.selectedDeliveryPoint;
       state.isDeliveryPointSelected = false;
     },
 
-    // Update specific delivery point field
     updateDeliveryPointField: (state, action) => {
-      const {category, field, value} = action.payload;
+      const { category, field, value } = action.payload;
       if (category && state.selectedDeliveryPoint[category]) {
         state.selectedDeliveryPoint[category][field] = value;
       } else if (field in state.selectedDeliveryPoint) {
@@ -289,8 +272,6 @@ const deliverySlice = createSlice({
     },
 
     // ========== Booking Summary ==========
-
-    // Generate complete booking summary
     generateBookingSummary: state => {
       state.bookingData = {
         pickupLocation: state.fromLocationDetailed || state.fromLocation,
@@ -299,20 +280,15 @@ const deliverySlice = createSlice({
         deliveryPointName: state.selectedDeliveryPoint.name,
         dateTime: `${state.formattedDate} ${state.formattedTime}`,
         totalDistance: `${state.selectedRoute.distanceKm} km`,
-        estimatedDuration: `${Math.floor(
-          state.selectedRoute.durationMinutes / 60,
-        )}h ${state.selectedRoute.durationMinutes % 60}m`,
+        estimatedDuration: `${Math.floor(state.selectedRoute.durationMinutes / 60)}h ${state.selectedRoute.durationMinutes % 60}m`,
       };
     },
 
-    // Update booking data manually
     updateBookingData: (state, action) => {
-      state.bookingData = {...state.bookingData, ...action.payload};
+      state.bookingData = { ...state.bookingData, ...action.payload };
     },
 
     // ========== Complete Delivery Data ==========
-
-    // Get all delivery data at once (for API submission)
     getAllDeliveryData: state => {
       return {
         pickup: {
@@ -336,21 +312,16 @@ const deliverySlice = createSlice({
       };
     },
 
-    // Set entire delivery data at once (for restoration)
     setAllDeliveryData: (state, action) => {
       const data = action.payload;
       if (data.pickup) {
         state.fromLocation = data.pickup.shortAddress || state.fromLocation;
-        state.fromLocationDetailed =
-          data.pickup.location || state.fromLocationDetailed;
-        state.pickupCoordinates =
-          data.pickup.coordinates || state.pickupCoordinates;
-        state.pickupAddressDetails =
-          data.pickup.addressDetails || state.pickupAddressDetails;
+        state.fromLocationDetailed = data.pickup.location || state.fromLocationDetailed;
+        state.pickupCoordinates = data.pickup.coordinates || state.pickupCoordinates;
+        state.pickupAddressDetails = data.pickup.addressDetails || state.pickupAddressDetails;
       }
       if (data.destination) {
-        state.towardsLocation =
-          data.destination.location || state.towardsLocation;
+        state.towardsLocation = data.destination.location || state.towardsLocation;
       }
       if (data.journey) {
         state.selectedDate = data.journey.date || state.selectedDate;
@@ -370,11 +341,8 @@ const deliverySlice = createSlice({
     },
 
     // ========== Reset Functions ==========
-
-    // Reset everything
     resetAllDeliveryData: () => initialState,
 
-    // Reset only pickup and destination (Step 1)
     resetPickupAndDestination: state => {
       state.fromLocation = '';
       state.fromLocationDetailed = '';
@@ -384,7 +352,7 @@ const deliverySlice = createSlice({
       state.selectedTime = null;
       state.formattedDate = '';
       state.formattedTime = '';
-      state.pickupCoordinates = {lat: null, lng: null};
+      state.pickupCoordinates = { lat: null, lng: null };
       state.pickupAddressDetails = {
         city: '',
         state: '',
@@ -396,21 +364,17 @@ const deliverySlice = createSlice({
       state.isDestinationSet = false;
     },
 
-    // Reset only route (Step 2)
     resetRouteSelection: state => {
       state.selectedRoute = initialState.selectedRoute;
       state.isRouteSelected = false;
     },
 
-    // Reset only delivery point (Step 3)
     resetDeliveryPointSelection: state => {
       state.selectedDeliveryPoint = initialState.selectedDeliveryPoint;
       state.isDeliveryPointSelected = false;
     },
 
     // ========== Utility Functions ==========
-
-    // Set status flags manually
     setPickupStatus: (state, action) => {
       state.isPickupSet = action.payload;
     },
@@ -431,7 +395,6 @@ const deliverySlice = createSlice({
 
 // ========== Export Actions ==========
 export const {
-  // From SelectRouteDelivery
   setPickupLocation,
   updateFromLocation,
   updateFromLocationDetailed,
@@ -445,32 +408,20 @@ export const {
   setJourneyDate,
   setJourneyTime,
   updatePickupCoordinates,
-
-  // From SelectOnlyRoute
   setSelectedRoute,
   clearSelectedRoute,
   updateRouteField,
-
-  // From SelectDeliveryPoint
   setSelectedDeliveryPoint,
   clearSelectedDeliveryPoint,
   updateDeliveryPointField,
-
-  // Booking Summary
   generateBookingSummary,
   updateBookingData,
-
-  // Complete Data
   getAllDeliveryData,
   setAllDeliveryData,
-
-  // Reset Functions
   resetAllDeliveryData,
   resetPickupAndDestination,
   resetRouteSelection,
   resetDeliveryPointSelection,
-
-  // Status Setters
   setPickupStatus,
   setDestinationStatus,
   setRouteSelectedStatus,
@@ -478,32 +429,22 @@ export const {
 } = deliverySlice.actions;
 
 // ========== Selectors ==========
-
-// Select specific pieces of state
 export const BselectFromLocation = state => state.delivery.fromLocation;
-export const selectFromLocationDetailed = state =>
-  state.delivery.fromLocationDetailed;
+export const selectFromLocationDetailed = state => state.delivery.fromLocationDetailed;
 export const selectTowardsLocation = state => state.delivery.towardsLocation;
 export const selectFormattedDate = state => state.delivery.formattedDate;
 export const selectFormattedTime = state => state.delivery.formattedTime;
 export const selectSelectedRoute = state => state.delivery.selectedRoute;
-export const selectSelectedDeliveryPoint = state =>
-  state.delivery.selectedDeliveryPoint;
+export const selectSelectedDeliveryPoint = state => state.delivery.selectedDeliveryPoint;
 export const selectBookingData = state => state.delivery.bookingData;
-export const selectPickupCoordinates = state =>
-  state.delivery.pickupCoordinates;
-export const selectPickupAddressDetails = state =>
-  state.delivery.pickupAddressDetails;
+export const selectPickupCoordinates = state => state.delivery.pickupCoordinates;
+export const selectPickupAddressDetails = state => state.delivery.pickupAddressDetails;
 export const selectRouteSearch = state => state.delivery.routeSearch;
-
-// Status selectors
 export const selectIsPickupSet = state => state.delivery.isPickupSet;
 export const selectIsDestinationSet = state => state.delivery.isDestinationSet;
 export const selectIsRouteSelected = state => state.delivery.isRouteSelected;
-export const selectIsDeliveryPointSelected = state =>
-  state.delivery.isDeliveryPointSelected;
+export const selectIsDeliveryPointSelected = state => state.delivery.isDeliveryPointSelected;
 
-// Complete data selector
 export const selectCompleteDeliveryData = state => ({
   pickup: {
     location: state.delivery.fromLocationDetailed,

@@ -1,10 +1,10 @@
-import Restaurants from "@/pages/restaurant_pages/Restaurants";
+import RestaurantsMainPage from "@/pages/home/RestaurantsMainPage";
 import React from "react";
 
 const page = () => {
   return (
-    <div>
-      {/* <Restaurants /> */}
+    <div className="py-2">
+      <RestaurantsMainPage />
     </div>
   );
 };

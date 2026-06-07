@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "../../context/CartContext"; // Adjust path as needed
 
 const FoodTypeIcon = ({ type }) => {
   return type === "veg" ? (
@@ -68,17 +69,25 @@ const CounterButton = ({ quantity, onIncrement, onDecrement }) => {
 
 export default function ProductCard({
   item,
-  quantity = 0,
-  onQuantityChange,
+  restaurantId,
+  restaurant,
   layout = "scroll",
 }) {
+  const { cartQuantities, addItem, decreaseItem, increaseItem } = useCart();
+  
+  // Get quantity from cart context
+  const quantity = cartQuantities[`${restaurantId}-${item.id}`] || 0;
+  
   const handleIncrement = () => {
-    onQuantityChange?.(quantity + 1);
+    addItem({ 
+      restaurant: { _id: restaurantId, ...restaurant }, 
+      product: item 
+    });
   };
 
   const handleDecrement = () => {
     if (quantity > 0) {
-      onQuantityChange?.(quantity - 1);
+      decreaseItem(restaurantId, item.id);
     }
   };
 
