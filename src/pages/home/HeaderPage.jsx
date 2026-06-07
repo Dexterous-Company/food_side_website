@@ -125,25 +125,13 @@ const HeaderPage = () => {
   const navItems = [
     {
       name: "Home",
-      isDropdown: true,
-      dropdownItems: [
-        {
-          name: "Homepage Classic",
-          link: "/",
-          icon: "🏠",
-          desc: "Elegant traditional layout",
-        },
-        {
-          name: "Homepage Video",
-          link: "/home-video",
-          icon: "🎬",
-          desc: "Full-screen video background",
-        },
-      ],
+      isDropdown: false,
+      link: "/",
     },
     {
       name: "Menu",
-      isDropdown: true,
+      isDropdown: false,
+      link: "/menu",
       dropdownItems: [
         {
           name: "Menu",
@@ -159,77 +147,33 @@ const HeaderPage = () => {
         },
       ],
     },
-    { name: "About", link: "/about", isDropdown: false },
+    { name: "About", link: "/about_us", isDropdown: false },
     {
       name: "Pages",
       isDropdown: true,
-      dropdownColumns: true,
-      dropdownItemsLeft: [
-        {
-          name: "Our Chefs",
-          link: "/our-chefs",
-          icon: "🍽️",
-          desc: "Meet the culinary team",
-        },
-        {
-          name: "Testimonials",
-          link: "/testimonials",
-          icon: "⭐",
-          desc: "What our guests say",
-        },
-        {
-          name: "Shop",
-          link: "/shop",
-          icon: "🛒",
-          desc: "Product catalog and online store",
-        },
-        {
-          name: "Shop Details",
-          link: "/shop-details",
-          icon: "🧾",
-          desc: "Product information and specifications",
-        },
+      dropdownItems: [
         {
           name: "Cart",
           link: "/cart",
           icon: "🛒",
           desc: "View and manage your shopping cart",
         },
-        {
-          name: "Checkout",
-          link: "/checkout",
-          icon: "💵",
-          desc: "Proceed to checkout",
-        },
-        {
-          name: "Gallery",
-          link: "/gallery",
-          icon: "📷",
-          desc: "Food & restaurant photos",
-        },
-        {
-          name: "Reservation",
-          link: "/reservation",
-          icon: "🥣",
-          desc: "Book your table",
-        },
-      ],
-      dropdownItemsRight: [
+
         {
           name: "FAQ",
-          link: "/faq",
+          link: "/accounts/faq",
           icon: "❓",
           desc: "Common questions answered",
         },
         {
           name: "Terms & Conditions",
-          link: "/terms",
+          link: "/terms_conditions",
           icon: "📄",
           desc: "Our policies & rules",
         },
         {
           name: "Privacy Policy",
-          link: "/privacy",
+          link: "/privacypolicy",
           icon: "🛡️",
           desc: "How we use your data",
         },
@@ -241,27 +185,7 @@ const HeaderPage = () => {
         },
       ],
     },
-    {
-      name: "Blog",
-      isDropdown: true,
-      dropdownItems: [
-        {
-          name: "Blog",
-          link: "/blog",
-          icon: "📰",
-          desc: "Blog layout",
-          badge: null,
-        },
-        {
-          name: "Blog Details",
-          link: "/blog-details",
-          icon: "📝",
-          desc: "Full article detail page",
-          badge: "Hot",
-        },
-      ],
-    },
-    { name: "Contact", link: "/contact", isDropdown: false },
+    { name: "Contact", link: "/contact_us", isDropdown: false },
   ];
 
   // Determine text color based on scroll and page
@@ -763,7 +687,7 @@ const HeaderPage = () => {
                           : "text-[#ff581b]"
                       }`}
                     >
-                      {userName}
+                      {userName?.split(" ")[0]}
                     </span>
                     <FaAngleDown
                       className={`text-xs transition-transform duration-300 ${showAuthDropdown ? "rotate-180" : ""} ${
@@ -779,14 +703,14 @@ const HeaderPage = () => {
                     <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-[1000] animate-in fade-in slide-in-from-top-2 duration-200">
                       <div className="px-4 py-3 border-b border-gray-100">
                         <div className="font-semibold text-[#121212]">
-                          {userName}
+                          {userName?.split(" ")[0]}
                         </div>
                         <div className="text-xs text-gray-500">Logged in</div>
                       </div>
                       <button
                         onClick={() => {
                           setShowAuthDropdown(false);
-                          router.push("/profile");
+                          router.push("/accounts");
                         }}
                         className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors group"
                       >
@@ -839,7 +763,7 @@ const HeaderPage = () => {
       </header>
 
       {/* Delivery Selection Modal */}
-      <DeliverySelectionModal 
+      <DeliverySelectionModal
         isOpen={isDeliveryModalOpen}
         onClose={() => setIsDeliveryModalOpen(false)}
       />
