@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
-import { useCart } from "../../context/CartContext"; // Adjust path as needed
+import { useCart } from "../../context/CartContext";
 
 const FoodTypeIcon = ({ type }) => {
   return type === "veg" ? (
@@ -79,8 +79,31 @@ export default function ProductCard({
   const quantity = cartQuantities[`${restaurantId}-${item.id}`] || 0;
   
   const handleIncrement = () => {
+    // IMPORTANT: Create restaurant object with both IDs from the product data
+    // The product item contains restaurantId (MongoDB) and RESTID (Business ID)
+    const restaurantWithIds = {
+      _id: item.restaurantId || restaurantId, // Use product's restaurantId or the passed one
+      id: item.restaurantId || restaurantId,
+      RESTID: item.RESTID || restaurant?.RESTID, // Use product's RESTID first
+      // Preserve all other restaurant data
+      name: restaurant?.name || item.restaurantName,
+      rating: restaurant?.rating,
+      deliveryTime: restaurant?.deliveryTime,
+      cuisine: restaurant?.cuisine,
+      offer: restaurant?.offer,
+      badge: restaurant?.badge,
+      ...restaurant // Spread remaining restaurant data
+    };
+    
+    console.log("Adding to cart - Restaurant with IDs:", {
+      _id: restaurantWithIds._id,
+      RESTID: restaurantWithIds.RESTID,
+      productRestaurantId: item.restaurantId,
+      productRESTID: item.RESTID
+    });
+    
     addItem({ 
-      restaurant: { _id: restaurantId, ...restaurant }, 
+      restaurant: restaurantWithIds, 
       product: item 
     });
   };
