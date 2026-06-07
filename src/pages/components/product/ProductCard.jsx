@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../../context/CartContext";
+import { ProductBottomSheet } from "@/pages/restaurant_pages/ProductBottomSheet";
 
 const FoodTypeIcon = ({ type }) => {
   return type === "veg" ? (
@@ -73,12 +75,49 @@ export default function ProductCard({
   restaurant,
   layout = "scroll",
 }) {
+  const router = useRouter();
+  const [isMobile, setIsMobile] = useState(false);
+  const [showBottomSheet, setShowBottomSheet] = useState(false);
   const { cartQuantities, addItem, decreaseItem, increaseItem } = useCart();
-  
+
   // Get quantity from cart context
   const quantity = cartQuantities[`${restaurantId}-${item.id}`] || 0;
-  
-  const handleIncrement = () => {
+
+  // Detect if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Handle product card click
+  const handleProductClick = (e) => {
+    // Don't trigger if clicking on add to cart button or counter buttons
+    if (e.target.closest('.add-to-cart-area')) {
+      return;
+    }
+    
+    if (isMobile) {
+      // On mobile: open bottom sheet
+      setShowBottomSheet(true);
+    } else {
+      // On desktop: navigate to product details page
+      router.push(`/restaurant-page/${restaurantId}/product/${item.id}`);
+    }
+  };
+
+  // Close bottom sheet
+  const handleCloseSheet = () => {
+    setShowBottomSheet(false);
+  };
+
+  const handleIncrement = (e) => {
+    if (e) e.stopPropagation(); // Prevent triggering product click
     // IMPORTANT: Create restaurant object with both IDs from the product data
     // The product item contains restaurantId (MongoDB) and RESTID (Business ID)
     const restaurantWithIds = {
@@ -92,23 +131,24 @@ export default function ProductCard({
       cuisine: restaurant?.cuisine,
       offer: restaurant?.offer,
       badge: restaurant?.badge,
-      ...restaurant // Spread remaining restaurant data
+      ...restaurant, // Spread remaining restaurant data
     };
-    
+
     console.log("Adding to cart - Restaurant with IDs:", {
       _id: restaurantWithIds._id,
       RESTID: restaurantWithIds.RESTID,
       productRestaurantId: item.restaurantId,
-      productRESTID: item.RESTID
+      productRESTID: item.RESTID,
     });
-    
-    addItem({ 
-      restaurant: restaurantWithIds, 
-      product: item 
+
+    addItem({
+      restaurant: restaurantWithIds,
+      product: item,
     });
   };
 
-  const handleDecrement = () => {
+  const handleDecrement = (e) => {
+    if (e) e.stopPropagation(); // Prevent triggering product click
     if (quantity > 0) {
       decreaseItem(restaurantId, item.id);
     }
@@ -118,111 +158,140 @@ export default function ProductCard({
   const cardClasses =
     layout === "scroll"
       ? "w-[100px] sm:min-w-[200px] md:min-w-[220px] max-w-[180px] sm:max-w-[200px] md:max-w-[220px] flex-shrink-0"
-      : "w-[calc(50%-6px)] sm:w-[calc(33.333%-10px)] md:w-[calc(25%-12px)] lg:w-[calc(20%-12px)]";
+      : "w-[calc(32%-6px)] sm:w-[calc(31.222%-10px)] md:w-[calc(21%-12px)] lg:w-[calc(16%-12px)]";
 
   const imageHeight =
     layout === "scroll"
       ? "h-[90px] sm:h-[130px] md:h-[200px]"
-      : "h-[130px] sm:h-[150px] md:h-[180px]";
+      : "h-[100px] sm:h-[150px] md:h-[180px]";
+
+  // Prepare data for bottom sheet
+  const bottomSheetItem = {
+    id: item.id,
+    name: item.name,
+    img: item.image,
+    price: item.price,
+    originalPrice: item.oldPrice,
+    isVeg: item.type === "veg",
+    desc: item.description || "A delicious dish prepared fresh with quality ingredients.",
+    stock: item.stock || 10,
+  };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.3 }}
-      className={cardClasses}
-    >
-      <div className="relative overflow-hidden rounded-xl group">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-          className="relative"
-        >
-          <Image
-            src={item.image}
-            alt={item.name}
-            width={300}
-            height={180}
-            className={`${imageHeight} w-full object-cover`}
-          />
-        </motion.div>
+    <>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={{ y: -5 }}
+        transition={{ duration: 0.3 }}
+        className={`${cardClasses} cursor-pointer`}
+        onClick={handleProductClick}
+      >
+        <div className="relative overflow-hidden rounded-xl group">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+            className="relative"
+          >
+            <Image
+              src={item.image}
+              alt={item.name}
+              width={300}
+              height={180}
+              className={`${imageHeight} w-full object-cover`}
+            />
+          </motion.div>
 
-        <motion.div
-          initial={{ x: -100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.1 }}
-          className="absolute left-2 top-2 rounded-md bg-[#FF7A1A] px-1.5 sm:px-2 py-0.5 sm:py-1 text-[9px] sm:text-[10px] font-bold text-white"
-        >
-          {item.offer}
-        </motion.div>
+          {item.offer && (
+            <motion.div
+              initial={{ x: -100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              className="absolute left-2 top-2 rounded-md bg-[#FF7A1A] px-1.5 sm:px-2 py-0.5 sm:py-1 text-[9px] sm:text-[10px] font-bold text-white"
+            >
+              {item.offer}
+            </motion.div>
+          )}
 
-        <div className="absolute bottom-2 right-2">
-          <AnimatePresence mode="wait">
-            {quantity === 0 ? (
-              <motion.button
-                key="add"
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                exit={{ scale: 0, rotate: 180 }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={handleIncrement}
-                className="flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all"
-              >
-                <FiPlus
-                  size={14}
-                  className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-green-500"
-                  strokeWidth={3}
-                 />
-              </motion.button>
-            ) : (
-              <CounterButton
-                key="counter"
-                quantity={quantity}
-                onIncrement={handleIncrement}
-                onDecrement={handleDecrement}
-              />
-            )}
-          </AnimatePresence>
+          <div className="absolute bottom-2 right-2 add-to-cart-area">
+            <AnimatePresence mode="wait">
+              {quantity === 0 ? (
+                <motion.button
+                  key="add"
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  exit={{ scale: 0, rotate: 180 }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={handleIncrement}
+                  className="flex h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all"
+                >
+                  <FiPlus
+                    size={14}
+                    className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-green-500"
+                    strokeWidth={3}
+                  />
+                </motion.button>
+              ) : (
+                <CounterButton
+                  key="counter"
+                  quantity={quantity}
+                  onIncrement={handleIncrement}
+                  onDecrement={handleDecrement}
+                />
+              )}
+            </AnimatePresence>
+          </div>
         </div>
-      </div>
 
-      <div className="mt-2 flex items-start gap-1.5">
-        <FoodTypeIcon type={item.type} />
-        <h3 className="line-clamp-2 text-[13px] sm:text-[14px] font-semibold leading-5 text-gray-900">
-          {item.name}
-        </h3>
-      </div>
+        <div className="mt-2 flex items-start gap-1.5">
+          <FoodTypeIcon type={item.type} />
+          <h3 className="line-clamp-2 text-[13px] sm:text-[14px] font-semibold leading-5 text-gray-900">
+            {item.name}
+          </h3>
+        </div>
 
-      <div className="mt-1 flex flex-wrap items-center gap-1">
-        <motion.span
-          key={item.price}
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          className="text-[16px] sm:text-[18px] font-bold text-gray-900"
-        >
-          ₹{item.price}
-        </motion.span>
+        <div className="mt-1 flex flex-wrap items-center gap-1">
+          <motion.span
+            key={item.price}
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            className="text-[16px] sm:text-[18px] font-bold text-gray-900"
+          >
+            ₹{item.price}
+          </motion.span>
 
-        <span className="text-[11px] sm:text-[12px] text-gray-400 line-through">
-          ₹{item.oldPrice}
-        </span>
+          {item.oldPrice && item.oldPrice > item.price && (
+            <>
+              <span className="text-[11px] sm:text-[12px] text-gray-400 line-through">
+                ₹{item.oldPrice}
+              </span>
 
-        <span className="text-[10px] sm:text-[12px] font-medium text-green-600">
-          Save ₹{item.save}
-        </span>
-      </div>
+              <span className="text-[10px] sm:text-[12px] font-medium text-green-600">
+                Save ₹{item.save}
+              </span>
+            </>
+          )}
+        </div>
 
-      {quantity > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-2 text-xs text-orange-600 font-semibold"
-        >
-          Subtotal: ₹{item.price * quantity}
-        </motion.div>
+        {quantity > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-2 text-xs text-orange-600 font-semibold"
+          >
+            Subtotal: ₹{item.price * quantity}
+          </motion.div>
+        )}
+      </motion.div>
+
+      {/* Bottom Sheet for Mobile */}
+      {showBottomSheet && (
+        <ProductBottomSheet
+          item={bottomSheetItem}
+          onClose={handleCloseSheet}
+        />
       )}
-    </motion.div>
+    </>
   );
 }
