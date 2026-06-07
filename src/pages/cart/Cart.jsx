@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { useCart } from "../context/CartContext"; // Adjust path as needed
+import { useCart } from "../../context/CartContext"; // Adjust path as needed
 import {
   FaLock,
   FaSnowflake,

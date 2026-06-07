@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../../../context/CartContext";
 
 const FoodTypeIcon = ({ type }) => {
   return type === "veg" ? (

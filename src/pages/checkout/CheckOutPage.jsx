@@ -4,14 +4,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../../context/CartContext";
 import { createOrder, clearOrderState } from "../../redux/Order/OrderSlice";
 import {
   processCODOrder,
   clearPaymentState,
 } from "../../redux/payment/paymentSlice";
 import { selectCompleteDeliveryData } from "../../redux/delivery/deliverySlice";
-import Toast from "../UI/Toast";
+import Toast from "../../UI/Toast";
 import OrderOverview from "./OrderOverview";
 import LoginPrompt from "./LoginPrompt";
 import UserProfile from "./UserProfile";

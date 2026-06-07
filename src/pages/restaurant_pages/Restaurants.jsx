@@ -1,506 +1,1102 @@
+// app/restaurant-page/[id]/page.jsx
 "use client";
-import { useState } from "react";
-import { ProductCard, FeaturedBanner, Stars, RupeeIcon } from "./Productcard";
-import categories from "./categories.json";
-import menuItems from "./menus.json";
-import restaurants from "./restaurants.json";
+import { useState, useEffect, useCallback } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import {
+  FiSearch,
+  FiGrid,
+  FiList,
+  FiStar,
+  FiChevronLeft,
+  FiShare2,
+  FiClock,
+  FiMapPin,
+  FiFilter,
+  FiX,
+  FiDollarSign,
+  FiPercent,
+  FiPackage,
+  FiHeart,
+  FiShoppingBag,
+  FiSliders,
+  FiCheckCircle,
+  FiAward,
+  FiTruck,
+  FiCoffee,
+  FiTrendingUp,
+  FiThumbsUp,
+} from "react-icons/fi";
+import { FaLeaf, FaFire, FaRegStar, FaRegClock } from "react-icons/fa";
+import ProductCard from "../components/product/ProductCard";
+import { useCart } from "@/context/CartContext";
+import { restaurantApi } from "../../../utils/restaurantApi";
+import toast, { Toaster } from "react-hot-toast";
 
-// ── Icons ─────────────────────────────────────────────────────────────────────
-const Icon = {
-  Search:  () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>,
-  Grid:    () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>,
-  List:    () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>,
-  Star:    () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 text-amber-500"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
-  Check:   () => <svg viewBox="0 0 20 20" fill="currentColor" className="w-2.5 h-2.5"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>,
-  Box:     () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>,
-  Leaf:    () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5"><path d="M2 2s4 2 8 6 8 10 8 14M14 2s4 4 4 10-4 10-4 10"/></svg>,
-  AllGrid: () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5"><rect x="3" y="3" width="4" height="4"/><rect x="10" y="3" width="4" height="4"/><rect x="17" y="3" width="4" height="4"/><rect x="3" y="10" width="4" height="4"/><rect x="10" y="10" width="4" height="4"/><rect x="17" y="10" width="4" height="4"/><rect x="3" y="17" width="4" height="4"/><rect x="10" y="17" width="4" height="4"/><rect x="17" y="17" width="4" height="4"/></svg>,
+// Stats Card Component
+const StatsCard = ({ icon, value, label }) => (
+  <div className="flex flex-col items-center">
+    <span className="text-xl font-bold text-white">{value}</span>
+    <span className="text-xs text-white/80">{label}</span>
+  </div>
+);
+
+// Mobile Filter Drawer
+const MobileFilterDrawer = ({ isOpen, onClose, children }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/50 z-50 lg:hidden"
+          />
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "tween", duration: 0.3 }}
+            className="fixed right-0 top-0 h-full w-85 bg-white shadow-2xl z-50 lg:hidden overflow-y-auto"
+          >
+            <div className="sticky top-0 bg-white border-b border-gray-100 p-4 flex justify-between items-center">
+              <h3 className="font-bold text-lg flex items-center gap-2">
+                <FiSliders className="text-orange-500" />
+                Filters
+              </h3>
+              <button
+                onClick={onClose}
+                className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+              >
+                <FiX size={18} />
+              </button>
+            </div>
+            <div className="p-4">{children}</div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
 };
 
-const getId = v => v?.$oid || v?._id?.$oid || v?._id || v?.id || v;
-
-const categoryById       = new Map(categories.map(c => [getId(c),  c]));
-const restaurantByRestId = new Map(restaurants.map(r => [r.RESTID, r]));
-
-const categoryList = [
-  { id:"all", name:"All Products", icon: Icon.AllGrid, count: menuItems.length },
-  ...categories.map(cat => ({
-    id:    cat.slugurl,
-    name:  cat.name,
-    icon:  Icon.Box,
-    count: menuItems.filter(item => getId(item.categoryId) === getId(cat)).length,
-  }))
-].filter(c => c.id === "all" || c.count > 0);
-
-const products = menuItems.map(item => {
-  const restaurant  = restaurantByRestId.get(item.RESTID);
-  const category    = categoryById.get(getId(item.categoryId));
-  const hasDiscount = Number(item.discount_price) > 0 && Number(item.discount_price) < Number(item.price);
-  return {
-    id:                          getId(item),
-    name:                        item.name,
-    desc:                        item.description || "",
-    price:                       hasDiscount ? item.discount_price : item.price,
-    originalPrice:               hasDiscount ? item.price : null,
-    discount_price:              item.discount_price,
-    img:                         item.image,
-    isAvailable:                 item.isAvailable,
-    isVeg:                       item.isVeg,
-    recommended:                 item.recommended || false,
-    trending:                    item.trending    || false,
-    rating:                      item.rating      || 5,
-    reviewCount:                 item.reviewCount || item.stock || 0,
-    estimateTimePrepareMenuItem: item.estimateTimePrepareMenuItem || 25,
-    category:                    category?.slugurl || "fast-food",
-    categoryName:                category?.name   || "Fast Food",
-    restaurantName:              restaurant?.name,
-    restaurantCity:              restaurant?.address?.city,
-    stock:                       item.stock || 0,
-    badge:                       item.trending ? "Trending" : item.recommended ? "Recommended" : item.isVeg ? "Veg" : null,
-    badgeType:                   item.trending ? "hot"      : item.recommended ? "bestseller"  : item.isVeg ? "new" : null,
-  };
-});
-
-const maxProductPrice  = Math.max(200, ...products.map(p => Number(p.price) || 0));
-const featuredProduct  = products.find(p => p.trending) || products.find(p => p.recommended) || products[0];
-const activeRestaurant = restaurants[0] || {};
-
-// ── Veg / Non-veg mark ────────────────────────────────────────────────────────
-function FoodMark({ isVeg, size = 14 }) {
-  const color = isVeg ? "#10b981" : "#e11d48";
+// Category Filter Component
+const CategoryFilter = ({ categories, selectedCategory, onSelectCategory }) => {
   return (
-    <span className={`inline-flex items-center justify-center flex-shrink-0 rounded-sm border-2`}
-      style={{ width: size, height: size, borderColor: color }}>
-      {isVeg
-        ? <span className="rounded-full" style={{ width: size * 0.5, height: size * 0.5, background: color }} />
-        : <span className="block" style={{ width:0, height:0, borderLeft:`${size*0.3}px solid transparent`, borderRight:`${size*0.3}px solid transparent`, borderBottom:`${size*0.53}px solid ${color}` }} />
-      }
-    </span>
+    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+      <button
+        onClick={() => onSelectCategory(null)}
+        className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all duration-200 ${
+          selectedCategory === null
+            ? "bg-orange-500 text-white shadow-lg shadow-orange-500/25"
+            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+        }`}
+      >
+        All Items
+      </button>
+      {categories.map((category) => (
+        <button
+          key={category.categoryId}
+          onClick={() => onSelectCategory(category.categoryId)}
+          className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all duration-200 ${
+            selectedCategory === category.categoryId
+              ? "bg-orange-500 text-white shadow-lg shadow-orange-500/25"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          }`}
+        >
+          {category.categoryName}
+        </button>
+      ))}
+    </div>
   );
-}
+};
 
-// ── Product Detail Bottom Sheet ───────────────────────────────────────────────
-function ProductBottomSheet({ item, onClose }) {
-  const [qty, setQty] = useState(1);
-  if (!item) return null;
-
-  const origPrice = Number(item.originalPrice) || Number(item.price);
-  const price     = Number(item.price) || 0;
-  const save      = Math.max(0, origPrice - price);
-  const discount  = save > 0 ? Math.round((save / origPrice) * 100) : 0;
+// Sort Options Component
+const SortOptions = ({ sortBy, onSortChange }) => {
+  const options = [
+    { value: "featured", label: "✨ Featured", icon: "🔥" },
+    { value: "price-asc", label: "💰 Price: Low to High", icon: "📈" },
+    { value: "price-desc", label: "💰 Price: High to Low", icon: "📉" },
+    { value: "rating", label: "⭐ Top Rated", icon: "🏆" },
+  ];
 
   return (
-    <>
-      {/* Backdrop */}
-      <div
-        onClick={onClose}
-        className="fixed inset-0 z-[100] bg-black/55 animate-[fadeIn_0.22s_ease]"
-      />
-
-      {/* Sheet */}
-      <div className="fixed bottom-0 left-0 right-0 z-[101] bg-white rounded-t-2xl max-h-[88vh] overflow-y-auto animate-[slideUp_0.3s_cubic-bezier(0.32,0.72,0,1)]">
-        {/* Hero image with X button */}
-        <div className="relative h-[220px] bg-black overflow-hidden">
-          <img
-            src={item.img}
-            alt={item.name}
-            className="w-full h-full object-cover block"
+    <div className="relative">
+      <select
+        value={sortBy}
+        onChange={(e) => onSortChange(e.target.value)}
+        className="px-4 py-3 pr-10 border border-gray-200 rounded-xl text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none cursor-pointer"
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+        <svg
+          className="w-4 h-4 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
           />
-          {/* dark top gradient for X button visibility */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-transparent" />
-          {/* Discount badge */}
-          {discount > 0 && (
-            <span className="absolute left-3 top-3 bg-orange-600 text-white rounded-md py-1.5 px-2 text-[11px] font-black leading-none">
-              {discount}% OFF
-            </span>
-          )}
-          {/* Close button */}
+        </svg>
+      </div>
+    </div>
+  );
+};
+
+// Price Range Slider
+const PriceRangeSlider = ({ min, max, value, onChange }) => {
+  const percentage = ((value - min) / (max - min)) * 100;
+
+  return (
+    <div className="space-y-3">
+      <div className="flex justify-between items-center">
+        <span className="text-sm text-gray-600">₹{min}</span>
+        <span className="text-sm font-semibold text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
+          Up to ₹{value}
+        </span>
+        <span className="text-sm text-gray-600">₹{max}</span>
+      </div>
+      <div className="relative">
+        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full transition-all duration-300"
+            style={{ width: `${percentage}%` }}
+          />
+        </div>
+        <input
+          type="range"
+          min={min}
+          max={max}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="absolute top-0 left-0 w-full h-2 opacity-0 cursor-pointer"
+        />
+        <div
+          className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-orange-500 rounded-full shadow-md cursor-pointer transition-all hover:scale-110"
+          style={{
+            left: `${percentage}%`,
+            transform: `translateX(-50%) translateY(-50%)`,
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+// Helper function to transform API data to match ProductCard format
+const transformProductForCard = (product, restaurantData) => {
+  const hasDiscount =
+    product.discount_price > 0 && product.discount_price < product.price;
+
+  return {
+    id: product._id,
+    name: product.name,
+    description: product.description || "",
+    price: hasDiscount ? product.discount_price : product.price,
+    oldPrice: product.price,
+    save: hasDiscount ? product.price - product.discount_price : 0,
+    discountPercent: hasDiscount
+      ? Math.round(
+          ((product.price - product.discount_price) / product.price) * 100,
+        )
+      : 0,
+    image: product.image || "/placeholder-food.jpg",
+    type: product.isVeg ? "veg" : "nonveg",
+    isVeg: product.isVeg,
+    recommended: product.recommended || false,
+    trending: product.trending || false,
+    rating: product.rating || 4.5,
+    offer: product.trending
+      ? "TRENDING"
+      : product.recommended
+        ? "RECOMMENDED"
+        : null,
+    restaurantId: restaurantData._id,
+    RESTID: restaurantData.RESTID,
+    categoryId: product.categoryId,
+    stock: product.stock || 0,
+  };
+};
+
+// Main Component
+export default function RestaurantShopPage() {
+  const params = useParams();
+  const router = useRouter();
+  const restaurantId = params.restaurant;
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [restaurantData, setRestaurantData] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+
+  // Filter states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [sortBy, setSortBy] = useState("featured");
+  const [viewMode, setViewMode] = useState("grid");
+  const [priceRange, setPriceRange] = useState(1000);
+  const [selectedRating, setSelectedRating] = useState(null);
+  const [foodType, setFoodType] = useState("all");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [maxPrice, setMaxPrice] = useState(1000);
+
+  const { cartQuantities } = useCart();
+
+  // Share functionality
+  const handleShare = async () => {
+    try {
+      if (
+        navigator.share &&
+        /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+      ) {
+        await navigator.share({
+          title: restaurantData?.name || "Restaurant",
+          text: `Check out ${restaurantData?.name} on Restrova! Great food awaits you.`,
+          url: window.location.href,
+        });
+        toast.success("Shared successfully!");
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Link copied to clipboard!");
+      }
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        toast.error("Failed to share");
+      }
+    }
+  };
+
+  // Fetch restaurant data from API
+  useEffect(() => {
+    const fetchRestaurantData = async () => {
+      try {
+        setLoading(true);
+        const response =
+          await restaurantApi.getRestaurantFullDetails(restaurantId);
+
+        if (response.success) {
+          setRestaurantData(response.restaurant);
+          setCategories(response.categories || []);
+
+          // Transform all products
+          const transformedProducts = [];
+          response.categories.forEach((category) => {
+            category.products.forEach((product) => {
+              transformedProducts.push(
+                transformProductForCard(product, response.restaurant),
+              );
+            });
+          });
+          setAllProducts(transformedProducts);
+
+          // Set max price for range filter
+          const maxProductPrice = Math.max(
+            ...transformedProducts.map((p) => p.price),
+            500,
+          );
+          setMaxPrice(maxProductPrice);
+          setPriceRange(maxProductPrice);
+        } else {
+          setError(response.message || "Failed to fetch restaurant data");
+          toast.error(response.message || "Failed to fetch restaurant data");
+        }
+      } catch (err) {
+        console.error("Error fetching restaurant:", err);
+        setError(
+          err.message || "An error occurred while fetching restaurant data",
+        );
+        toast.error("Failed to load restaurant details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (restaurantId) {
+      fetchRestaurantData();
+    }
+  }, [restaurantId]);
+
+  // Filter and sort products
+  const getFilteredProducts = useCallback(() => {
+    let filtered = [...allProducts];
+
+    if (selectedCategory) {
+      filtered = filtered.filter((p) => p.categoryId === selectedCategory);
+    }
+    if (foodType !== "all") {
+      filtered = filtered.filter((p) =>
+        foodType === "veg" ? p.isVeg : !p.isVeg,
+      );
+    }
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (p) =>
+          p.name.toLowerCase().includes(query) ||
+          p.description.toLowerCase().includes(query),
+      );
+    }
+    filtered = filtered.filter((p) => p.price <= priceRange);
+    if (selectedRating) {
+      filtered = filtered.filter((p) => p.rating >= selectedRating);
+    }
+
+    switch (sortBy) {
+      case "price-asc":
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "price-desc":
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case "rating":
+        filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      default:
+        filtered.sort((a, b) => {
+          if (a.trending && !b.trending) return -1;
+          if (!a.trending && b.trending) return 1;
+          if (a.recommended && !b.recommended) return -1;
+          if (!a.recommended && b.recommended) return 1;
+          return 0;
+        });
+    }
+    return filtered;
+  }, [
+    allProducts,
+    selectedCategory,
+    foodType,
+    searchQuery,
+    priceRange,
+    selectedRating,
+    sortBy,
+  ]);
+
+  const filteredProducts = getFilteredProducts();
+  const trendingProducts = filteredProducts.filter((p) => p.trending);
+  const recommendedProducts = filteredProducts.filter(
+    (p) => p.recommended && !p.trending,
+  );
+  const otherProducts = filteredProducts.filter(
+    (p) => !p.trending && !p.recommended,
+  );
+
+  const activeFiltersCount = [
+    selectedCategory ? 1 : 0,
+    foodType !== "all" ? 1 : 0,
+    priceRange < maxPrice ? 1 : 0,
+    selectedRating ? 1 : 0,
+    searchQuery ? 1 : 0,
+  ].filter(Boolean).length;
+
+  // Container classes for products
+  const containerClasses =
+    viewMode === "grid"
+      ? "mt-4 sm:mt-6 flex gap-3 sm:gap-4 flex-wrap  pb-2"
+      : "mt-4 sm:mt-6 flex flex-wrap gap-3 sm:gap-4";
+
+  // Get header image - Priority: first product image > restaurant image > default
+  const headerImage =
+    allProducts[0]?.image ||
+    restaurantData?.bannerUrl ||
+    restaurantData?.image ||
+    "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200";
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-20 h-20 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+          <h2 className="text-xl font-semibold text-gray-800">
+            Loading deliciousness...
+          </h2>
+          <p className="text-gray-500 mt-2">
+            Please wait while we prepare your menu
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !restaurantData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center max-w-md px-6">
+          <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <FiX className="text-red-500" size={40} />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            Oops! Something went wrong
+          </h2>
+          <p className="text-gray-500 mb-6">
+            {error || "Restaurant not found"}
+          </p>
           <button
-            onClick={onClose}
-            aria-label="Close"
-            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/50 border-none text-white text-lg leading-none flex items-center justify-center cursor-pointer"
-          >✕</button>
+            onClick={() => router.back()}
+            className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Toaster position="top-center" />
+
+      <div className="relative h-[280px] md:h-[320px] w-full overflow-hidden bg-black">
+        {/* Background Image - Using Next.js Image */}
+        <Image
+          src={headerImage}
+          alt={restaurantData?.name || "Restaurant"}
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+          onError={(e) => {
+            // Fallback if image fails to load
+            e.currentTarget.src = "/restaurant-banner.jpg";
+          }}
+        />
+
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
+
+        {/* Header Icons */}
+        <div className="absolute top-5 left-4 right-4 flex justify-between z-20">
+          <button
+            onClick={() => router.back()}
+            className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/70 transition-all"
+          >
+            <FiChevronLeft size={22} />
+          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handleShare}
+              className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/70 transition-all"
+            >
+              <FiShare2 size={18} />
+            </button>
+            <button className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/70 transition-all relative">
+              <FiShoppingBag size={18} />
+              {Object.values(cartQuantities).reduce((a, b) => a + b, 0) > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-orange-500 to-red-500 rounded-full text-xs font-bold flex items-center justify-center text-white">
+                  {Object.values(cartQuantities).reduce((a, b) => a + b, 0)}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
 
-        {/* Content */}
-        <div className="p-[18px_16px_32px]">
-
-          {/* Name row + Add button */}
-          <div className="flex items-start justify-between gap-3 mb-2.5">
-            <div className="flex items-start gap-2 flex-1">
-              <span className="mt-0.5"><FoodMark isVeg={item.isVeg} size={15} /></span>
-              <h2 className="text-lg font-extrabold text-[#1a1a1a] leading-tight">
-                {item.name}
-              </h2>
+        {/* Restaurant Info Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-20">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
+              <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm px-2 py-1 rounded-lg">
+                <FiClock size={14} />
+                <span className="text-sm">
+                  {restaurantData.deliveryTime || "25-35"} mins
+                </span>
+              </div>
+              <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm px-2 py-1 rounded-lg">
+                <FiTruck size={14} />
+                <span className="text-sm">Free Delivery</span>
+              </div>
             </div>
-
-            {/* Add / Qty controls */}
-            {qty === 1 && (
-              <button
-                onClick={() => setQty(1)}
-                className="flex-shrink-0 h-9 min-w-[72px] rounded-lg border-[1.5px] border-[#15966a] bg-white text-[#15966a] text-sm font-extrabold cursor-pointer font-inherit"
-              >
-                Add
-              </button>
-            )}
-            {qty > 1 && (
-              <div className="flex items-center gap-0 border-[1.5px] border-[#15966a] rounded-lg overflow-hidden flex-shrink-0">
-                <button onClick={() => setQty(q => Math.max(1, q - 1))}
-                  className="w-8 h-9 border-none bg-white text-[#15966a] text-xl cursor-pointer font-inherit">−</button>
-                <span className="w-7 text-center text-sm font-extrabold text-[#1a1a1a]">{qty}</span>
-                <button onClick={() => setQty(q => q + 1)}
-                  className="w-8 h-9 border-none bg-white text-[#15966a] text-xl cursor-pointer font-inherit">+</button>
+            <h1 className="text-3xl md:text-4xl font-bold mb-3">
+              {restaurantData.name}
+            </h1>
+            <div className="flex flex-wrap items-center gap-3 text-sm">
+              <div className="flex items-center gap-1">
+                <FiStar className="fill-yellow-400 text-yellow-400" size={14} />
+                <span className="font-semibold">
+                  {restaurantData.rating || "4.5"}
+                </span>
+              </div>
+              <span className="text-white/40">•</span>
+              <div className="flex items-center gap-1">
+                <FiMapPin size={12} />
+                <span>{restaurantData.address?.area || "Your Location"}</span>
+              </div>
+              <span className="text-white/40">•</span>
+              <div className="flex items-center gap-1">
+                <FiCoffee size={12} />
+                <span>{restaurantData.cuisine || "Multi-Cuisine"}</span>
+              </div>
+            </div>
+            {restaurantData.offer && (
+              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg mt-3">
+                <FiPercent size={12} className="text-yellow-400" />
+                <span className="text-xs font-semibold">
+                  {restaurantData.offer}
+                </span>
               </div>
             )}
           </div>
-
-          {/* Price row */}
-          <div className="flex items-baseline gap-1.5 mb-1">
-            <strong className="text-[17px] font-black text-black">₹{price}</strong>
-            {save > 0 && <s className="text-[13px] text-gray-400 font-semibold">₹{origPrice}</s>}
-            {save > 0 && (
-              <span className="text-[11px] font-extrabold text-white bg-[#15966a] rounded-md py-0.5 px-1.5">SAVE</span>
-            )}
-          </div>
-
-          {/* Stock */}
-          {item.stock > 0 && (
-            <div className="text-xs text-red-500 font-bold mb-1">
-              Only {item.stock} left
-            </div>
-          )}
-
-          {/* Customisable tag */}
-          <div className="text-xs text-gray-400 mb-3.5">Customisable</div>
-
-          {/* Divider */}
-          <div className="h-px bg-gray-100 mb-3.5" />
-
-          {/* Description */}
-          {item.desc ? (
-            <p className="text-[13px] text-gray-600 leading-relaxed">{item.desc}</p>
-          ) : (
-            <p className="text-[13px] text-gray-300 leading-relaxed">
-              A delicious dish prepared fresh with quality ingredients.
-            </p>
-          )}
-
         </div>
       </div>
-    </>
-  );
-}
-
-// ── Mobile dish card ──────────────────────────────────────────────────────────
-function MobileDishCard({ item, onOpen }) {
-  const origPrice = Number(item.originalPrice) || Number(item.price);
-  const price     = Number(item.price) || 0;
-  const save      = Math.max(0, origPrice - price);
-  const discount  = save > 0 ? Math.round((save / origPrice) * 100) : 0;
-
-  return (
-    <article className="min-w-0 cursor-pointer" onClick={() => onOpen(item)}>
-      {/* Image */}
-      <div className="relative aspect-[1/0.88] rounded-lg overflow-hidden bg-gray-100 mb-2">
-        <img src={item.img} alt={item.name}
-          className="w-full h-full object-cover block" />
-        {discount > 0 && (
-          <span className="absolute left-1.5 top-1.5 bg-orange-600 text-white rounded-md py-1 px-1.5 text-[10px] font-black leading-none z-[2]">{discount}% OFF</span>
-        )}
-        <button
-          aria-label={`Add ${item.name}`}
-          onClick={e => { e.stopPropagation(); onOpen(item); }}
-          className="absolute right-1.5 bottom-1.5 w-[30px] h-[30px] rounded-full bg-white border-none text-[#15966a] text-[22px] font-light flex items-center justify-center shadow-md cursor-pointer leading-none pb-[1px]"
-        >+</button>
-      </div>
-
-      {/* Name */}
-      <div className="flex items-start gap-1 mb-1.5">
-        <span className="mt-0.5"><FoodMark isVeg={item.isVeg} size={13} /></span>
-        <span className="text-[13px] font-extrabold text-[#1a1a1a] leading-tight line-clamp-2">{item.name}</span>
-      </div>
-
-      {/* Price */}
-      <div className="flex items-baseline flex-wrap gap-0.5">
-        <strong className="text-sm font-black text-black leading-none">₹{price}</strong>
-        {save > 0 && <s className="text-[11px] text-gray-400 font-bold">₹{origPrice}</s>}
-        {save > 0 && <span className="text-[11px] text-[#15966a] font-extrabold">Save ₹{save}</span>}
-      </div>
-    </article>
-  );
-}
-
-// ── Mobile collapsible section ────────────────────────────────────────────────
-function MobileSection({ title, items, onOpen }) {
-  const [open, setOpen] = useState(true)
-  if (!items.length) return null;
-  return (
-    <div className={`border-b border-gray-100 ${open ? 'pb-5' : 'pb-0'} mb-5`}>
-      <button
-        onClick={() => setOpen(o => !o)}
-        aria-expanded={open}
-        className="w-full bg-transparent border-none p-0 pb-4 flex items-center justify-between cursor-pointer text-left"
-      >
-        <span className="text-xl font-black text-[#1a1a1a]">
-          {title} ({items.length})
-        </span>
-        <span className={`text-lg font-black text-[#444] inline-block transition-transform duration-250 select-none leading-none ${open ? 'rotate-0' : 'rotate-180'}`}>∧</span>
-      </button>
-      {open && (
-        <div className="grid grid-cols-3 gap-[14px_10px]">
-          {items.map(item => <MobileDishCard key={item.id} item={item} onOpen={onOpen} />)}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Desktop sidebar card ──────────────────────────────────────────────────────
-function SbCard({ title, icon, children, style = {} }) {
-  return (
-    <div className="bg-white rounded-xl border border-black/5 overflow-hidden shadow-sm" style={style}>
-      <div className="bg-[#1a1a1a] py-3.5 px-5 flex items-center gap-2.5">
-        <div className="w-[34px] h-[34px] rounded-lg bg-orange-600/15 border border-orange-600/25 flex items-center justify-center text-[#ff581b]">{icon}</div>
-        <span className="text-[13px] font-extrabold text-white">{title}</span>
-      </div>
-      <div className="p-2">{children}</div>
-    </div>
-  );
-}
-
-// ── Root ──────────────────────────────────────────────────────────────────────
-export default function RestrovaShop() {
-  const [selCat,      setSelCat]      = useState("all");
-  const [price,       setPrice]       = useState(maxProductPrice);
-  const [search,      setSearch]      = useState("");
-  const [sort,        setSort]        = useState("featured");
-  const [view,        setView]        = useState("grid");
-  const [selRating,   setSelRating]   = useState(null);
-  const [foodType,    setFoodType]    = useState("all");
-  const [activeItem,  setActiveItem]  = useState(null);   // bottom sheet
-
-  const filtered = products
-    .filter(p => selCat === "all" || p.category === selCat)
-    .filter(p => foodType === "all" || (foodType === "veg" ? p.isVeg : !p.isVeg))
-    .filter(p => p.price <= price)
-    .filter(p => !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.desc.toLowerCase().includes(search.toLowerCase()))
-    .filter(p => {
-      if (!selRating) return true;
-      if (selRating === 5) return p.rating >= 4.9;
-      if (selRating === 4) return p.rating >= 4;
-      return p.rating >= 3;
-    })
-    .sort((a, b) => {
-      if (sort === "price-asc")  return a.price - b.price;
-      if (sort === "price-desc") return b.price - a.price;
-      if (sort === "rating")     return b.rating - a.rating;
-      return 0;
-    });
-
-  const recommendedItems = filtered.filter(p => p.recommended);
-  const trendingItems    = filtered.filter(p => p.trending);
-  const otherItems       = filtered.filter(p => !p.recommended && !p.trending);
-  const mobileHeroImage  = featuredProduct?.img || products[0]?.img;
-
-  const chipStyle = (active) => ({
-    height:"40px", borderRadius:"999px",
-    border:`1.5px solid ${active ? "#ccc" : "#ddd"}`,
-    background: active ? "#f5f5f7" : "#fff",
-    padding:"0 16px", fontSize:"13px", fontWeight:700, color:"#222",
-    display:"flex", alignItems:"center", gap:"8px",
-    cursor:"pointer", whiteSpace:"nowrap", flexShrink:0, fontFamily:"inherit",
-  });
-
-  return (
-    <div className="font-['-apple-system',BlinkMacSystemFont,'Segoe_UI',sans-serif] text-gray-500 bg-gray-50 min-h-screen">
-      <style>{`
-        @keyframes slideUp{
-          from{transform:translateY(100%)}
-          to{transform:translateY(0)}
-        }
-        @keyframes fadeIn{
-          from{opacity:0}
-          to{opacity:1}
-        }
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      `}</style>
-
-      {/* ── Bottom Sheet (mobile product detail) ─────────────────────────── */}
-      {activeItem && (
-        <ProductBottomSheet item={activeItem} onClose={() => setActiveItem(null)} />
-      )}
-
-      {/* ══════════════════════════ MOBILE VIEW ══════════════════════════ */}
-      <div className="mobile-shop block md:hidden bg-white min-h-screen text-[#222] pb-10">
-
-        {/* Hero */}
-        <div className="relative h-[240px] bg-black overflow-hidden">
-          <img src={mobileHeroImage} alt={activeRestaurant.name || "Restaurant"}
-            className="w-full h-full object-cover block" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/28 via-transparent to-black/5" />
-          <button aria-label="Back" className="absolute top-5 left-4 w-[38px] h-[38px] rounded-full bg-black/42 border-none text-white flex items-center justify-center cursor-pointer z-[3]">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" className="w-5 h-5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          </button>
-          <button aria-label="Share" className="absolute top-5 right-4 w-[38px] h-[38px] rounded-full bg-black/42 border-none text-white flex items-center justify-center cursor-pointer z-[3]">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="w-5 h-5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-4.2M8.6 13.4l6.8 4.2"/></svg>
-          </button>
-        </div>
-
-        {/* White sheet */}
-        <div className="relative z-[2] -mt-5 bg-white rounded-t-2xl pt-5 px-4 pb-0">
-          <h1 className="text-[26px] font-extrabold text-[#1a1a1a] leading-tight mb-1.5">
-            {activeRestaurant.name || "Habibo Restaurant"}
-          </h1>
-          <div className="flex items-center gap-1.5 text-sm text-gray-600 font-medium mb-1.5">
-            <span className="text-[#15966a] text-base">★</span>
-            <span>4.0 • 25-30 mins • Food</span>
-          </div>
-          <div className="text-sm font-bold text-[#d71920] mb-3.5">Fresh picks for you</div>
-
-          {/* Search */}
-          <label className="h-[46px] bg-[#f1f1f3] rounded-full flex items-center gap-2.5 px-[18px] mb-4 cursor-text">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2.5" className="w-[18px] h-[18px] flex-shrink-0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-            <input type="text" placeholder="Search for dishes" value={search} onChange={e => setSearch(e.target.value)}
-              className="border-0 outline-none bg-transparent text-[15px] text-[#333] w-full" />
-          </label>
-
-          {/* Filter chips */}
-          <div className="flex gap-2 mb-4 overflow-x-auto pb-0.5">
-            <button onClick={() => setFoodType(foodType === "veg" ? "all" : "veg")} aria-pressed={foodType === "veg"} style={chipStyle(foodType === "veg")}>
-              <FoodMark isVeg={true} size={14} />
-              <span className="inline-block w-[38px] h-2.5 rounded-full bg-gray-300" />
-            </button>
-            <button onClick={() => setFoodType(foodType === "nonveg" ? "all" : "nonveg")} aria-pressed={foodType === "nonveg"} style={chipStyle(foodType === "nonveg")}>
-              <FoodMark isVeg={false} size={14} />
-              <span className="inline-block w-[38px] h-2.5 rounded-full bg-gray-300" />
-            </button>
-            <button onClick={() => setSort(sort === "rating" ? "featured" : "rating")} style={chipStyle(sort === "rating")}>Popularity</button>
-          </div>
-
- 
-
-          {/* Sections */}
-          <MobileSection title="Trending"    items={trendingItems.length    ? trendingItems    : filtered.slice(0, 6)} onOpen={setActiveItem} />
-          <MobileSection title="Recommended" items={recommendedItems.length ? recommendedItems : otherItems.slice(0, 6)} onOpen={setActiveItem} />
-          {otherItems.length > 0 && <MobileSection title="All Items" items={otherItems} onOpen={setActiveItem} />}
-        </div>
-      </div>
-
-      {/* ══════════════════════════ DESKTOP VIEW ══════════════════════════ */}
-      <section className="desktop-shop hidden md:block py-10">
-        <div className="max-w-[1480px] mx-auto px-6">
-          <div className="shop-layout grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-10">
-
-            {/* Sidebar */}
-            <aside>
-              <SbCard title="Categories" icon={<Icon.AllGrid/>}>
-                {categoryList.map(c => (
-                  <button key={c.id} onClick={() => setSelCat(c.id)}
-                    className={`w-full flex items-center gap-2.5 py-2.5 px-3.5 rounded-lg ${selCat===c.id ? 'bg-[#ff581b] text-white' : 'bg-transparent text-gray-500'} font-semibold text-sm cursor-pointer text-left transition-all duration-200`}
-                    onMouseEnter={e => { if(selCat!==c.id){ e.currentTarget.style.background="rgba(255,88,27,0.06)"; e.currentTarget.style.color="#ff581b"; }}}
-                    onMouseLeave={e => { if(selCat!==c.id){ e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#6b7280"; }}}>
-                    <span className={selCat===c.id ? "text-white/80" : "text-[#ff581b]"}><c.icon/></span>
-                    {c.name}
-                    <span className={`ml-auto text-[11px] font-extrabold py-0.5 px-2 rounded-full ${selCat===c.id ? "bg-gray-800 text-white" : "bg-black/5 text-gray-500"}`}>{c.count}</span>
+      {/* Main Content - Rounded Top */}
+      <div className="relative -mt-6 bg-white rounded-t-3xl shadow-xl">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          {/* Search and Controls */}
+          <div className="bg-white rounded-2xl p-4 shadow-lg border border-gray-100 mb-6">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1 relative">
+                <FiSearch
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
+                <input
+                  type="text"
+                  placeholder="Search for dishes..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                />
+              </div>
+              <div className="flex gap-3">
+                <SortOptions sortBy={sortBy} onSortChange={setSortBy} />
+                <div className="flex gap-1 border border-gray-200 rounded-xl overflow-hidden bg-white">
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    className={`p-3 transition-all duration-200 ${viewMode === "grid" ? "bg-gradient-to-r from-orange-500 to-red-500 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
+                  >
+                    <FiGrid size={18} />
                   </button>
-                ))}
-              </SbCard>
-
-              <SbCard title="Price Range" icon={<RupeeIcon/>} style={{ marginTop:"16px" }}>
-                <div className="py-1 pb-2">
-                  <div className="flex justify-between text-xs font-bold text-[#1a1a1a] mb-3">
-                    <span><RupeeIcon/>0</span>
-                    <span>Up to <span className="text-[#ff581b]"><RupeeIcon/>{price}</span></span>
-                  </div>
-                  <input type="range" min="10" max={maxProductPrice} value={price} onChange={e => setPrice(+e.target.value)}
-                    className="w-full h-1 rounded-sm appearance-none cursor-pointer"
-                    style={{ background: `linear-gradient(to right, #ff581b ${(price-10)/(maxProductPrice-10)*100}%, rgba(0,0,0,0.1) ${(price-10)/(maxProductPrice-10)*100}%)` }} />
+                  <button
+                    onClick={() => setViewMode("list")}
+                    className={`p-3 transition-all duration-200 ${viewMode === "list" ? "bg-gradient-to-r from-orange-500 to-red-500 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
+                  >
+                    <FiList size={18} />
+                  </button>
                 </div>
-              </SbCard>
-
-              <SbCard title="Rating" icon={<Icon.Star/>} style={{ marginTop:"16px" }}>
-                {[5,4,3].map(r => {
-                  const count = products.filter(p => r===5 ? p.rating>=4.9 : p.rating>=r).length;
-                  return (
-                    <div key={r} onClick={() => setSelRating(selRating===r ? null : r)}
-                      className={`flex items-center gap-2.5 p-2 rounded-lg cursor-pointer transition-colors duration-200 ${selRating===r ? 'bg-orange-600/5' : 'bg-transparent'}`}
-                      onMouseEnter={e => e.currentTarget.style.background="rgba(255,88,27,0.06)"}
-                      onMouseLeave={e => e.currentTarget.style.background=selRating===r ? "rgba(255,88,27,0.06)" : "transparent"}>
-                      <Stars rating={r}/>
-                      <span className="text-[13px] font-semibold text-gray-500 flex-1">{r}+ Stars</span>
-                      <span className="text-[11px] text-gray-400">({count})</span>
-                      <div className={`w-[18px] h-[18px] rounded-[5px] border-2 flex items-center justify-center transition-all duration-200 ${selRating===r ? 'border-[#ff581b] bg-[#ff581b]' : 'border-black/20 bg-transparent'}`}>
-                        {selRating===r && <Icon.Check/>}
-                      </div>
-                    </div>
-                  );
-                })}
-              </SbCard>
-
-              <SbCard title="Food Type" icon={<Icon.Leaf/>} style={{ marginTop:"16px" }}>
-                {[
-                  { id:"all",    name:"All",     count:products.length,                       color:"#ff581b" },
-                  { id:"veg",    name:"Veg",     count:products.filter(p=>p.isVeg).length,    color:"#16a34a" },
-                  { id:"nonveg", name:"Non Veg", count:products.filter(p=>!p.isVeg).length,   color:"#dc2626" },
-                ].map(type => (
-                  <button key={type.id} onClick={() => setFoodType(type.id)}
-                    className={`w-full flex items-center gap-2.5 py-2.5 px-3.5 rounded-lg font-semibold text-sm cursor-pointer text-left transition-all duration-200 ${foodType===type.id ? `text-white` : 'bg-transparent text-gray-500'}`}
-                    style={{ background: foodType===type.id ? type.color : 'transparent' }}
-                    onMouseEnter={e => { if(foodType!==type.id){ e.currentTarget.style.background="rgba(255,88,27,0.06)"; e.currentTarget.style.color=type.color; }}}
-                    onMouseLeave={e => { if(foodType!==type.id){ e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#6b7280"; }}}>
-                    <span className="w-[18px] h-[18px] rounded-[5px] border-2 inline-flex items-center justify-center bg-white"
-                      style={{ borderColor: foodType===type.id ? "#fff" : type.color }}>
-                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: type.color }} />
+                <button
+                  onClick={() => setIsFilterOpen(true)}
+                  className="lg:hidden p-3 border border-gray-200 rounded-xl relative"
+                >
+                  <FiFilter size={18} />
+                  {activeFiltersCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {activeFiltersCount}
                     </span>
-                    {type.name}
-                    <span className={`ml-auto text-[11px] font-extrabold py-0.5 px-2 rounded-full ${foodType===type.id ? "bg-white/25 text-white" : "bg-black/5 text-gray-500"}`}>{type.count}</span>
-                  </button>
-                ))}
-              </SbCard>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Desktop Sidebar - Beautiful Filter Section */}
+            <aside className="hidden lg:block w-80 flex-shrink-0">
+              <div className="sticky top-4 space-y-5">
+                {/* Categories Section */}
+                <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100">
+                  <div className="bg-gradient-to-r from-orange-500 to-red-500 px-5 py-3">
+                    <h3 className="font-bold text-white flex items-center gap-2">
+                      <FiPackage size={18} />
+                      Categories
+                    </h3>
+                  </div>
+                  <div className="p-4 space-y-1 max-h-[300px] overflow-y-auto custom-scrollbar">
+                    <button
+                      onClick={() => setSelectedCategory(null)}
+                      className={`w-full text-left px-3 py-2.5 rounded-xl text-sm transition-all duration-200 flex justify-between items-center ${
+                        selectedCategory === null
+                          ? "bg-gradient-to-r from-orange-50 to-red-50 text-orange-600 font-semibold border-l-4 border-orange-500"
+                          : "hover:bg-gray-50 text-gray-700"
+                      }`}
+                    >
+                      <span>🍽️ All Items</span>
+                      <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
+                        {allProducts.length}
+                      </span>
+                    </button>
+                    {categories.map((category) => (
+                      <button
+                        key={category.categoryId}
+                        onClick={() => setSelectedCategory(category.categoryId)}
+                        className={`w-full text-left px-3 py-2.5 rounded-xl text-sm transition-all duration-200 flex justify-between items-center ${
+                          selectedCategory === category.categoryId
+                            ? "bg-gradient-to-r from-orange-50 to-red-50 text-orange-600 font-semibold border-l-4 border-orange-500"
+                            : "hover:bg-gray-50 text-gray-700"
+                        }`}
+                      >
+                        <span>{category.categoryName}</span>
+                        <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
+                          {category.products.length}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Food Type Filter */}
+                <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100">
+                  <div className="bg-gradient-to-r from-green-500 to-emerald-500 px-5 py-3">
+                    <h3 className="font-bold text-white flex items-center gap-2">
+                      <FaLeaf size={16} />
+                      Food Type
+                    </h3>
+                  </div>
+                  <div className="p-4 space-y-2">
+                    {[
+                      {
+                        id: "all",
+                        name: "All Items",
+                        icon: "🍽️",
+                        count: allProducts.length,
+                      },
+                      {
+                        id: "veg",
+                        name: "Pure Veg",
+                        icon: "🥬",
+                        count: allProducts.filter((p) => p.isVeg).length,
+                      },
+                      {
+                        id: "nonveg",
+                        name: "Non Veg",
+                        icon: "🍗",
+                        count: allProducts.filter((p) => !p.isVeg).length,
+                      },
+                    ].map((type) => (
+                      <button
+                        key={type.id}
+                        onClick={() => setFoodType(type.id)}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 ${
+                          foodType === type.id
+                            ? "bg-green-50 text-green-600 font-semibold border-l-4 border-green-500"
+                            : "hover:bg-gray-50 text-gray-700"
+                        }`}
+                      >
+                        <span className="text-lg">{type.icon}</span>
+                        <span className="flex-1 text-left">{type.name}</span>
+                        <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
+                          {type.count}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Price Range Filter */}
+                <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100">
+                  <div className="bg-gradient-to-r from-blue-500 to-indigo-500 px-5 py-3">
+                    <h3 className="font-bold text-white flex items-center gap-2">
+                      <FiDollarSign size={18} />
+                      Price Range
+                    </h3>
+                  </div>
+                  <div className="p-4">
+                    <PriceRangeSlider
+                      min={0}
+                      max={maxPrice}
+                      value={priceRange}
+                      onChange={setPriceRange}
+                    />
+                  </div>
+                </div>
+
+                {/* Rating Filter */}
+                <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100">
+                  <div className="bg-gradient-to-r from-yellow-500 to-amber-500 px-5 py-3">
+                    <h3 className="font-bold text-white flex items-center gap-2">
+                      <FiStar size={18} />
+                      Rating
+                    </h3>
+                  </div>
+                  <div className="p-4 space-y-2">
+                    {[4, 3].map((rating) => (
+                      <button
+                        key={rating}
+                        onClick={() =>
+                          setSelectedRating(
+                            selectedRating === rating ? null : rating,
+                          )
+                        }
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 ${
+                          selectedRating === rating
+                            ? "bg-yellow-50 text-yellow-600 font-semibold border-l-4 border-yellow-500"
+                            : "hover:bg-gray-50 text-gray-700"
+                        }`}
+                      >
+                        <div className="flex items-center gap-1">
+                          <FiStar
+                            className="text-yellow-500 fill-yellow-500"
+                            size={16}
+                          />
+                          <span className="font-medium">{rating}.0+ Stars</span>
+                        </div>
+                        <div
+                          className={`ml-auto w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                            selectedRating === rating
+                              ? "border-yellow-500 bg-yellow-500"
+                              : "border-gray-300"
+                          }`}
+                        >
+                          {selectedRating === rating && (
+                            <FiCheckCircle size={12} className="text-white" />
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Active Filters Summary */}
+                {activeFiltersCount > 0 && (
+                  <div className="bg-orange-50 rounded-2xl p-4 border border-orange-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-semibold text-orange-600">
+                        Active Filters
+                      </span>
+                      <button
+                        onClick={() => {
+                          setSelectedCategory(null);
+                          setFoodType("all");
+                          setPriceRange(maxPrice);
+                          setSelectedRating(null);
+                          setSearchQuery("");
+                        }}
+                        className="text-xs text-orange-600 hover:text-orange-700 font-medium"
+                      >
+                        Clear all
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedCategory && (
+                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-white rounded-lg text-xs text-gray-600">
+                          {
+                            categories.find(
+                              (c) => c.categoryId === selectedCategory,
+                            )?.categoryName
+                          }
+                          <button
+                            onClick={() => setSelectedCategory(null)}
+                            className="ml-1 hover:text-red-500"
+                          >
+                            ✕
+                          </button>
+                        </span>
+                      )}
+                      {foodType !== "all" && (
+                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-white rounded-lg text-xs text-gray-600">
+                          {foodType === "veg" ? "🥬 Veg" : "🍗 Non Veg"}
+                          <button
+                            onClick={() => setFoodType("all")}
+                            className="ml-1 hover:text-red-500"
+                          >
+                            ✕
+                          </button>
+                        </span>
+                      )}
+                      {priceRange < maxPrice && (
+                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-white rounded-lg text-xs text-gray-600">
+                          Up to ₹{priceRange}
+                          <button
+                            onClick={() => setPriceRange(maxPrice)}
+                            className="ml-1 hover:text-red-500"
+                          >
+                            ✕
+                          </button>
+                        </span>
+                      )}
+                      {selectedRating && (
+                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-white rounded-lg text-xs text-gray-600">
+                          {selectedRating}+ Stars
+                          <button
+                            onClick={() => setSelectedRating(null)}
+                            className="ml-1 hover:text-red-500"
+                          >
+                            ✕
+                          </button>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             </aside>
 
-            {/* Main */}
-            <div>
-              <FeaturedBanner featured={featuredProduct}/>
-              <div className="flex items-center gap-3 mb-6 flex-wrap">
-                <div className="flex-1 min-w-[200px] relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><Icon.Search/></span>
-                  <input type="text" placeholder="Search products…" value={search} onChange={e => setSearch(e.target.value)}
-                    className="w-full py-2.5 px-4 pl-10 border border-black/10 rounded-full text-[13px] text-[#1a1a1a] outline-none bg-white transition-colors duration-200 focus:border-[#ff581b] focus:shadow-[0_0_0_4px_rgba(255,88,27,0.1)]" />
-                </div>
-                <select value={sort} onChange={e => setSort(e.target.value)}
-                  className="py-2.5 pl-4 pr-9 border border-black/10 rounded-full text-[13px] font-semibold text-[#1a1a1a] outline-none bg-white appearance-none"
-                  style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff581b' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center", backgroundSize: "14px" }}>
-                  <option value="featured">Featured</option>
-                  <option value="price-asc">Price: Low → High</option>
-                  <option value="price-desc">Price: High → Low</option>
-                  <option value="rating">Top Rated</option>
-                </select>
-                <div className="text-[13px] font-semibold text-gray-500 whitespace-nowrap">
-                  <strong className="text-[#ff581b] font-serif text-base">{filtered.length}</strong> products
-                </div>
-                <div className="flex gap-1.5">
-                  {[{ m:"grid", I:Icon.Grid },{ m:"list", I:Icon.List }].map(({ m, I }) => (
-                    <button key={m} onClick={() => setView(m)}
-                      className={`w-[38px] h-[38px] rounded-lg border flex items-center justify-center cursor-pointer transition-all duration-200 ${view===m ? 'border-none bg-[#ff581b] text-white' : 'border-black/10 bg-white text-gray-500'}`}>
-                      <I/>
-                    </button>
-                  ))}
-                </div>
+            {/* Products Section */}
+            <main className="flex-1">
+              {/* Categories Tabs - Mobile */}
+              <div className="lg:hidden mb-6 overflow-x-auto">
+                <CategoryFilter
+                  categories={categories}
+                  selectedCategory={selectedCategory}
+                  onSelectCategory={setSelectedCategory}
+                />
               </div>
-              <div className={`grid gap-5 ${view==="list" ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'}`}>
-                {filtered.map(p => <ProductCard key={p.id} item={p} viewMode={view}/>)}
-              </div>
-            </div>
 
+              {/* Results Count & Filter Status */}
+              <div className="mb-5 flex flex-wrap justify-between items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-6 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></div>
+                  <p className="text-sm text-gray-600">
+                    Showing{" "}
+                    <span className="font-bold text-gray-900">
+                      {filteredProducts.length}
+                    </span>{" "}
+                    of{" "}
+                    <span className="font-semibold">{allProducts.length}</span>{" "}
+                    delicious items
+                  </p>
+                </div>
+                {activeFiltersCount > 0 && (
+                  <button
+                    onClick={() => {
+                      setSelectedCategory(null);
+                      setFoodType("all");
+                      setPriceRange(maxPrice);
+                      setSelectedRating(null);
+                      setSearchQuery("");
+                    }}
+                    className="text-sm text-orange-600 font-semibold flex items-center gap-1"
+                  >
+                    <FiX size={14} />
+                    Clear all filters ({activeFiltersCount})
+                  </button>
+                )}
+              </div>
+
+              {/* Products Display */}
+              {filteredProducts.length === 0 ? (
+                <div className="text-center py-16 bg-gray-50 rounded-2xl">
+                  <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <FiSearch size={40} className="text-gray-400" />
+                  </div>
+                  <p className="text-gray-500 text-lg font-medium">
+                    No products found
+                  </p>
+                  <p className="text-gray-400 text-sm mt-1">
+                    Try adjusting your filters or search term
+                  </p>
+                  <button
+                    onClick={() => {
+                      setSearchQuery("");
+                      setSelectedCategory(null);
+                      setFoodType("all");
+                      setPriceRange(maxPrice);
+                      setSelectedRating(null);
+                    }}
+                    className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition-all"
+                  >
+                    Reset all filters
+                  </button>
+                </div>
+              ) : (
+                <>
+                  {/* Trending Section */}
+                  {trendingProducts.length > 0 && (
+                    <div className="mb-10">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-6 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></div>
+                        <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                          <FaFire className="text-orange-500" />
+                          Trending Now
+                          <span className="text-sm font-normal text-gray-500">
+                            ({trendingProducts.length})
+                          </span>
+                        </h2>
+                      </div>
+                      <div className={containerClasses}>
+                        {trendingProducts.map((product) => (
+                          <ProductCard
+                            key={product.id}
+                            item={product}
+                            restaurantId={restaurantData._id}
+                            restaurant={restaurantData}
+                            layout={viewMode === "grid" ? "grid" : "list"}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Recommended Section */}
+                  {recommendedProducts.length > 0 && (
+                    <div className="mb-10">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-6 bg-gradient-to-b from-green-500 to-emerald-500 rounded-full"></div>
+                        <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                          <FiThumbsUp className="text-green-500" />
+                          Chef's Recommendation
+                          <span className="text-sm font-normal text-gray-500">
+                            ({recommendedProducts.length})
+                          </span>
+                        </h2>
+                      </div>
+                      <div className={containerClasses}>
+                        {recommendedProducts.map((product) => (
+                          <ProductCard
+                            key={product.id}
+                            item={product}
+                            restaurantId={restaurantData._id}
+                            restaurant={restaurantData}
+                            layout={viewMode === "grid" ? "grid" : "list"}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* All Items Section */}
+                  {otherProducts.length > 0 && (
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-6 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full"></div>
+                        <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                          🍽️ All Items
+                          <span className="text-sm font-normal text-gray-500">
+                            ({otherProducts.length})
+                          </span>
+                        </h2>
+                      </div>
+                      <div className={containerClasses}>
+                        {otherProducts.map((product) => (
+                          <ProductCard
+                            key={product.id}
+                            item={product}
+                            restaurantId={restaurantData._id}
+                            restaurant={restaurantData}
+                            layout={viewMode === "grid" ? "grid" : "list"}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </main>
           </div>
         </div>
-      </section>
+      </div>
+
+      {/* Mobile Filter Drawer */}
+      <MobileFilterDrawer
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+      >
+        <div className="space-y-6">
+          {/* Categories */}
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <FiPackage className="text-orange-500" />
+              Categories
+            </h4>
+            <div className="space-y-1">
+              <button
+                onClick={() => {
+                  setSelectedCategory(null);
+                  setIsFilterOpen(false);
+                }}
+                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${selectedCategory === null ? "bg-orange-50 text-orange-600 font-medium" : "hover:bg-gray-50"}`}
+              >
+                All Items ({allProducts.length})
+              </button>
+              {categories.map((cat) => (
+                <button
+                  key={cat.categoryId}
+                  onClick={() => {
+                    setSelectedCategory(cat.categoryId);
+                    setIsFilterOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${selectedCategory === cat.categoryId ? "bg-orange-50 text-orange-600 font-medium" : "hover:bg-gray-50"}`}
+                >
+                  {cat.categoryName} ({cat.products.length})
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Food Type */}
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <FaLeaf className="text-green-500" />
+              Food Type
+            </h4>
+            <div className="space-y-1">
+              {["all", "veg", "nonveg"].map((type) => (
+                <button
+                  key={type}
+                  onClick={() => {
+                    setFoodType(type);
+                    setIsFilterOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm capitalize transition-all ${foodType === type ? "bg-orange-50 text-orange-600 font-medium" : "hover:bg-gray-50"}`}
+                >
+                  {type === "all" ? "All Items" : type}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Price Range */}
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <FiDollarSign className="text-green-600" />
+              Price Range
+            </h4>
+            <PriceRangeSlider
+              min={0}
+              max={maxPrice}
+              value={priceRange}
+              onChange={setPriceRange}
+            />
+          </div>
+
+          {/* Rating */}
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <FiStar className="text-yellow-500" />
+              Rating
+            </h4>
+            <div className="space-y-1">
+              {[4, 3].map((rating) => (
+                <button
+                  key={rating}
+                  onClick={() =>
+                    setSelectedRating(selectedRating === rating ? null : rating)
+                  }
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${selectedRating === rating ? "bg-orange-50 text-orange-600 font-medium" : "hover:bg-gray-50"}`}
+                >
+                  {rating}+ Stars
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Reset Button */}
+          {activeFiltersCount > 0 && (
+            <button
+              onClick={() => {
+                setSelectedCategory(null);
+                setFoodType("all");
+                setPriceRange(maxPrice);
+                setSelectedRating(null);
+                setSearchQuery("");
+                setIsFilterOpen(false);
+              }}
+              className="w-full mt-4 py-3 bg-orange-500 text-white rounded-xl font-semibold"
+            >
+              Reset All Filters
+            </button>
+          )}
+        </div>
+      </MobileFilterDrawer>
     </div>
   );
 }

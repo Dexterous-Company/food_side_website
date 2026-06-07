@@ -219,7 +219,6 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
 
     try {
       let response;
-
       if (deliveryPointId) {
         // API endpoint (same as app)
         const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/delivery/restaurants-with-products/by-delivery-point/${deliveryPointId}`;
