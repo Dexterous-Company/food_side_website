@@ -1,4 +1,4 @@
-// components/FoodMark.jsx
+// pages/restaurant_pages/FoodMark.jsx
 export function FoodMark({ isVeg, size = 14 }) {
   const color = isVeg ? "#10b981" : "#e11d48";
   return (
@@ -26,3 +26,10 @@ export function FoodMark({ isVeg, size = 14 }) {
     </span>
   );
 }
+
+// Add default export for Next.js page requirement
+const FoodMarkPage = () => {
+  return <div>FoodMark Component - This is not a page</div>;
+};
+
+export default FoodMarkPage;

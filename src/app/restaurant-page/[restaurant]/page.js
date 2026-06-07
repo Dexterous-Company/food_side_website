@@ -1,5 +1,5 @@
 import React from 'react';
-import Restaurants from "@/pages/restaurant_pages/Restaurants";
+import Restaurants from "@/views/restaurant_pages/Restaurants";
 const page = () => {
   return (
     <div>

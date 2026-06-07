@@ -1,5 +1,5 @@
 // redux/delivery/deliverySlice.js
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   // From SelectRouteDelivery Page
@@ -445,30 +445,67 @@ export const selectIsDestinationSet = state => state.delivery.isDestinationSet;
 export const selectIsRouteSelected = state => state.delivery.isRouteSelected;
 export const selectIsDeliveryPointSelected = state => state.delivery.isDeliveryPointSelected;
 
-export const selectCompleteDeliveryData = state => ({
-  pickup: {
-    location: state.delivery.fromLocationDetailed,
-    shortAddress: state.delivery.fromLocation,
-    coordinates: state.delivery.pickupCoordinates,
-    addressDetails: state.delivery.pickupAddressDetails,
-  },
-  destination: {
-    location: state.delivery.towardsLocation,
-  },
-  journey: {
-    date: state.delivery.selectedDate,
-    formattedDate: state.delivery.formattedDate,
-    time: state.delivery.selectedTime,
-    formattedTime: state.delivery.formattedTime,
-  },
-  route: state.delivery.selectedRoute,
-  deliveryPoint: state.delivery.selectedDeliveryPoint,
-  bookingSummary: state.delivery.bookingData,
-  isComplete:
-    state.delivery.isPickupSet &&
-    state.delivery.isDestinationSet &&
-    state.delivery.isRouteSelected &&
-    state.delivery.isDeliveryPointSelected,
-});
+export const selectCompleteDeliveryData = createSelector(
+  [
+    BselectFromLocation,
+    selectFromLocationDetailed,
+    selectTowardsLocation,
+    selectFormattedDate,
+    selectFormattedTime,
+    selectSelectedRoute,
+    selectSelectedDeliveryPoint,
+    selectBookingData,
+    selectPickupCoordinates,
+    selectPickupAddressDetails,
+    selectIsPickupSet,
+    selectIsDestinationSet,
+    selectIsRouteSelected,
+    selectIsDeliveryPointSelected,
+    state => state.delivery.selectedDate,
+    state => state.delivery.selectedTime,
+  ],
+  (
+    fromLocation,
+    fromLocationDetailed,
+    towardsLocation,
+    formattedDate,
+    formattedTime,
+    selectedRoute,
+    selectedDeliveryPoint,
+    bookingData,
+    pickupCoordinates,
+    pickupAddressDetails,
+    isPickupSet,
+    isDestinationSet,
+    isRouteSelected,
+    isDeliveryPointSelected,
+    selectedDate,
+    selectedTime,
+  ) => ({
+    pickup: {
+      location: fromLocationDetailed,
+      shortAddress: fromLocation,
+      coordinates: pickupCoordinates,
+      addressDetails: pickupAddressDetails,
+    },
+    destination: {
+      location: towardsLocation,
+    },
+    journey: {
+      date: selectedDate,
+      formattedDate,
+      time: selectedTime,
+      formattedTime,
+    },
+    route: selectedRoute,
+    deliveryPoint: selectedDeliveryPoint,
+    bookingSummary: bookingData,
+    isComplete:
+      isPickupSet &&
+      isDestinationSet &&
+      isRouteSelected &&
+      isDeliveryPointSelected,
+  }),
+);
 
 export default deliverySlice.reducer;

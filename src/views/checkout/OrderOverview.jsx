@@ -128,7 +128,7 @@ const OrderOverview = ({ isDesktop = true }) => {
                 </div>
                 <div className="flex-1">
                   <p className="text-[10px] font-semibold text-emerald-600 uppercase tracking-wide mb-0.5">
-                    Pickup Location
+                    Current Location
                   </p>
                   <p className="text-xs font-medium text-gray-800 leading-relaxed">
                     {getPickupDisplay()}
@@ -274,7 +274,7 @@ const OrderOverview = ({ isDesktop = true }) => {
             </div>
             <div className="flex-1">
               <p className="text-[10px] font-semibold text-emerald-600 uppercase tracking-wide mb-0.5">
-                Pickup Location
+                Current Location
               </p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {pickupLocation}

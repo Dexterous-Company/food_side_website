@@ -1,10 +1,9 @@
-// pages/home.js or app/page.js
 "use client";
-import About from "@/pages/home/About";
-import HeroSection from "@/pages/home/HeroSection";
-import RestaurantsMainPage from "@/pages/home/RestaurantsMainPage";
-import SelectionProcess from "@/pages/routes/SelectionProcess";
-import DeliverySelectionModal from "@/pages/selectRoutes/DeliverySelectionModal";
+import About from "@/views/home/About";
+import HeroSection from "@/views/home/HeroSection";
+import RestaurantsMainPage from "@/views/home/RestaurantsMainPage";
+import SelectionProcess from "@/views/routes/SelectionProcess";
+import DeliverySelectionModal from "@/views/selectRoutes/DeliverySelectionModal";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { 
@@ -17,6 +16,7 @@ import {
 
 const Page = () => {
   const [open, setOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const dispatch = useDispatch();
   const isDestinationSet = useSelector(selectIsDestinationSet);
   const isRouteSelected = useSelector(selectIsRouteSelected);
@@ -24,6 +24,8 @@ const Page = () => {
   const deliveryData = useSelector(selectCompleteDeliveryData);
 
   useEffect(() => {
+    setIsClient(true);
+    
     // Check if modal should open based on saved data
     const hasData = localStorage.getItem('deliveryDataShown');
     const hasCompleteSelection = isDestinationSet || isRouteSelected || isDeliveryPointSelected;
@@ -51,6 +53,22 @@ const Page = () => {
     localStorage.removeItem('lastBooking');
     setOpen(true);
   };
+
+  // Don't render modal until client-side to avoid hydration issues
+  if (!isClient) {
+    return (
+      <div>
+        <div className="relative">
+          <HeroSection />
+        </div>
+        <div className="-mt-30 relative" style={{zIndex:99}}>
+          <SelectionProcess />
+        </div>
+        <RestaurantsMainPage />
+        <About />
+      </div>
+    );
+  }
 
   return (
     <div>

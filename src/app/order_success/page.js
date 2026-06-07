@@ -1,4 +1,4 @@
-import OrderSuccessPage from '@/pages/checkout/OrderSuccessPage';
+import OrderSuccessPage from '@/views/checkout/OrderSuccessPage';
 import React from 'react';
 
 const page = () => {
