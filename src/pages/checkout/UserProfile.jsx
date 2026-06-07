@@ -21,7 +21,7 @@ const UserProfile = ({ userData }) => {
   };
 
   return (
-    <div className="mb-4 p-3 bg-white rounded-xl border border-gray-200 shadow-sm">
+    <div className="mb-3 p-3 bg-white rounded-xl border border-gray-200 shadow-sm">
       {/* Responsive layout - changes based on breakpoints */}
       <div className="flex flex-col gap-4">
         

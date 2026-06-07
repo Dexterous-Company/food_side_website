@@ -186,7 +186,7 @@ const LoginPrompt = ({ isDesktop, isUserAuth, userData, onLogin }) => {
 
       const createResult = await dispatch(create_user(newUserData)).unwrap();
 
-      console.log("Create user response:", createResult);
+      console.log("Create user response data:", createResult);
 
       if (createResult.success) {
         const createdUser =

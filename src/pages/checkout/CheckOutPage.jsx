@@ -556,7 +556,7 @@ const CheckOutPage = () => {
               <>
                 <UserProfile isDesktop={true} userData={userData} />
 
-                <div className="mt-3 pt-3 border-t border-gray-200">
+                <div className="mt-3 pt-2 border-t border-gray-200">
                   <div className="mb-2">
                     <p className="text-[9px] text-green-600 font-semibold">
                       ✓ STEP 2 Payment Method
