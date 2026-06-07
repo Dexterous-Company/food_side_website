@@ -28,7 +28,7 @@ const HeroSection = () => {
 
   return (
     <section
-      className="hero-section relative min-h-screen bg-gradient-to-br from-[#0d0d0d] via-[#1a0a00] to-[#0d0d0d] overflow-hidden flex items-center p-0"
+      className="hero-section -mt-15 relative min-h-screen bg-gradient-to-br from-[#0d0d0d] via-[#1a0a00] to-[#0d0d0d] overflow-hidden flex items-center p-0"
       id="hero"
     >
       {/* Floating Shapes - Food decorations */}

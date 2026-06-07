@@ -31,20 +31,6 @@ import {
 const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 
-// --- Helper Components for Responsive Design ---
-const MobileHeader = () => (
-  <div className="mb-8 text-center lg:hidden">
-    <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-100 to-orange-100 px-6 py-3 shadow-sm">
-      <div className="relative">
-        <div className="absolute inset-0 animate-ping rounded-full bg-amber-400/30" />
-        <Utensils className="relative h-5 w-5 text-amber-600" />
-      </div>
-      <span className="text-lg font-semibold text-stone-800">Food Side</span>
-    </div>
-    <p className="mt-3 text-sm text-stone-600">Trusted by Food Businesses</p>
-  </div>
-);
-
 const DesktopLeftPanel = () => (
   <div className="relative hidden w-3xl flex-col justify-between overflow-hidden lg:flex">
     <div className="absolute inset-0">
@@ -168,9 +154,7 @@ const Toast = ({ message, type, onClose }) => {
 
 // Check email exists function
 
-
 // Check mobile exists function
-
 
 // Registration Form Component with Redux
 const RegisterForm = ({ onRegisterSuccess }) => {
@@ -178,9 +162,11 @@ const RegisterForm = ({ onRegisterSuccess }) => {
   const router = useRouter();
 
   // Redux state
-  const { login_token, isUserAuth, mobileNumber: savedMobileNumber } = useSelector(
-    (state) => state.Authentication || {}
-  );
+  const {
+    login_token,
+    isUserAuth,
+    mobileNumber: savedMobileNumber,
+  } = useSelector((state) => state.Authentication || {});
 
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -191,7 +177,10 @@ const RegisterForm = ({ onRegisterSuccess }) => {
   const [focusedField, setFocusedField] = useState(null);
 
   // Get route params (if coming from login with mobile number)
-  const routeParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const routeParams =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search)
+      : null;
   const routeMobileNumber = routeParams?.get("mobileNumber") || "";
   const lockPhoneNumber = routeParams?.get("lockPhoneNumber") === "true";
   const isPhoneEditable = !lockPhoneNumber && !isLoading;
@@ -213,7 +202,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
       setPhoneNumber(
         String(nextPhoneNumber)
           .replace(/[^0-9]/g, "")
-          .slice(0, 10)
+          .slice(0, 10),
       );
     } else {
       setPhoneNumber("");
@@ -322,7 +311,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
         } else {
           showToastMessage(
             result.message || "Unable to create account. Please try again.",
-            true
+            true,
           );
         }
       } catch (error) {
@@ -378,9 +367,8 @@ const RegisterForm = ({ onRegisterSuccess }) => {
         />
       )}
 
-      <MobileHeader />
 
-      <div className="relative rounded-3xl bg-white p-8 shadow-2xl lg:p-10">
+      <div className="relative rounded-3xl bg-white p-5 sm:p-8 shadow-2xl lg:p-10">
         <Image
           src="/main_log_fd.png"
           alt="Food Side"
@@ -389,11 +377,11 @@ const RegisterForm = ({ onRegisterSuccess }) => {
           height={100}
         />
 
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <h1 className="font-['Playfair_Display'] text-4xl font-bold text-stone-900">
             Create Account
           </h1>
-          <p className="mt-2 text-stone-500">
+          <p className="mt-1 text-stone-500 sm:text-base text-sm">
             Join FoodSide and start ordering your favorite meals
           </p>
         </div>
@@ -593,14 +581,14 @@ const RegisterForm = ({ onRegisterSuccess }) => {
         </button>
 
         {/* Divider */}
-        <div className="mt-6 flex items-center gap-4">
+        <div className="mt-4 sm:mt-6 flex items-center gap-4">
           <div className="h-px flex-1 bg-stone-200" />
           <span className="text-sm text-stone-400">Or</span>
           <div className="h-px flex-1 bg-stone-200" />
         </div>
 
         {/* Sign In Link */}
-        <div className="mt-6 text-center">
+        <div className="mt-4 sm:mt-6 text-center">
           <p className="text-sm text-stone-500">
             Already have an account?{" "}
             <Link
@@ -613,7 +601,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
         </div>
 
         {/* Terms and Privacy */}
-        <div className="mt-6 text-center">
+        <div className="mt-2 sm:mt-6 text-center">
           <p className="text-xs text-stone-400">
             By creating an account, you agree to our{" "}
             <Link
@@ -669,8 +657,25 @@ const RegisterForm = ({ onRegisterSuccess }) => {
 const RegisterPage = ({ onRegister }) => {
   const MobileBackgroundDecorations = () => (
     <div className="absolute inset-0 overflow-hidden lg:hidden">
-      <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-amber-100/50" />
-      <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-orange-100/50" />
+      {/* Top Right Circle */}
+      <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-amber-100/50">
+        <img
+          src="/foof.png"
+          alt="pizza"
+          className="w-full h-full rounded-full "
+        />
+      </div>
+
+      {/* Bottom Left Circle */}
+      <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-orange-100/50">
+        <img
+          src="/fooddd.avif"
+          alt="tacos"
+          className="w-full h-full object-contain rounded-full "
+        />
+      </div>
+
+      {/* Center Circle */}
       <div className="absolute top-1/2 left-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-50/30" />
     </div>
   );
@@ -681,9 +686,9 @@ const RegisterPage = ({ onRegister }) => {
       <DesktopLeftPanel />
 
       {/* Right Panel - Registration Form */}
-      <div className="relative flex flex-1 items-center justify-center bg-white p-6 sm:p-10">
+      <div className="relative flex flex-1 items-center justify-center bg-white p-3 sm:p-10">
         <MobileBackgroundDecorations />
-        <MobileFloatingImages />
+        {/* <MobileFloatingImages /> */}
         <RegisterForm onRegisterSuccess={() => onRegister?.(true)} />
       </div>
     </div>
