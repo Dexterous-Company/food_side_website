@@ -5,7 +5,8 @@ import { FaStar, FaStarHalfAlt, FaRegStar, FaChevronLeft, FaChevronRight, FaUser
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { SiMastercard, SiVisa, SiPaypal, SiAmericanexpress } from 'react-icons/si';
 
-const RestaurantDetails = () => {
+
+const ProductDetails = () => {
   // Gallery state
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -673,4 +674,4 @@ const RestaurantDetails = () => {
   );
 };
 
-export default RestaurantDetails;
+export default ProductDetails;

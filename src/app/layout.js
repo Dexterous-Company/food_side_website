@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/pages/Mainlayout/ClientLayout";
+import ReduxLayoutProviders from "@/pages/Mainlayout/ReduxLayoutProviders";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -69,7 +70,9 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
       <body className="min-h-screen flex flex-col">
-        <ClientLayout>{children}</ClientLayout>
+        <ReduxLayoutProviders>
+          <ClientLayout>{children}</ClientLayout>
+        </ReduxLayoutProviders>
       </body>
     </html>
   );
