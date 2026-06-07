@@ -1,14 +1,12 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   FaFacebookF,
   FaInstagram,
   FaTwitter,
-  FaLinkedinIn,
-  FaMapMarkerAlt,
-  FaPhoneAlt,
+  FaLinkedinIn, FaPhoneAlt,
   FaEnvelope,
   FaClock,
   FaCcVisa,
@@ -16,7 +14,7 @@ import {
   FaCcPaypal,
   FaCcAmex,
   FaChevronUp,
-  FaPaperPlane,
+  FaPaperPlane
 } from "react-icons/fa";
 
 const FooterPage = () => {

@@ -521,7 +521,7 @@ const CheckOutPage = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#f5f5f5" }}>
+    <div className="min-h-screen pt-5" style={{ backgroundColor: "#f5f5f5" }}>
       {toastMessage && (
         <div
           className={`fixed top-4 right-4 z-50 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg ${
@@ -534,8 +534,8 @@ const CheckOutPage = () => {
       )}
 
       {/* DESKTOP LAYOUT */}
-      <div className="hidden lg:block">
-        <div className="max-w-[1400px] mx-auto px-8 pt-6 pb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 px-3 sm:px-6">
+        <div className="md:col-span-2 flex flex-col gap-3">
           <OrderOverview
             isDesktop={true}
             orderOverview={orderOverview}
@@ -543,10 +543,8 @@ const CheckOutPage = () => {
             formatRouteName={formatRouteName}
             RUPEE={RUPEE}
           />
-        </div>
 
-        <div className="flex max-w-[1400px] mx-auto gap-6 pb-12">
-          <div className="w-[58%] bg-white rounded-2xl shadow-sm p-6">
+          <div className=" bg-white rounded-2xl shadow-sm p-3">
             {!isUserAuth ? (
               <LoginPrompt
                 isDesktop={true}
@@ -558,13 +556,13 @@ const CheckOutPage = () => {
               <>
                 <UserProfile isDesktop={true} userData={userData} />
 
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <span>STEP 2 •</span>
-                    <span className="text-gray-500 font-normal">
-                      Payment Method
-                    </span>
-                  </h2>
+                <div className="mt-3 pt-2 border-t border-gray-200">
+                  <div className="mb-2">
+                    <p className="text-[9px] text-green-600 font-semibold">
+                      ✓ STEP 2 Payment Method
+                    </p>
+                  </div>
+
                   <PaymentMethods
                     selectedPayment={selectedPayment}
                     onSelectPayment={setSelectedPayment}
@@ -574,110 +572,21 @@ const CheckOutPage = () => {
               </>
             )}
           </div>
-
-          <div className="w-[38%] lg:sticky lg:top-24">
-            <OrderSummary
-              cartItems={cartItems}
-              subtotal={totals.subtotal}
-              deliveryFee={totals.deliveryFee}
-              total={totals.finalTotal}
-              isContactSubmitted={true}
-              isProcessing={isLoading}
-              onPlaceOrder={handlePlaceOrder}
-              RUPEE={RUPEE}
-            />
-          </div>
         </div>
-      </div>
 
-      {/* MOBILE LAYOUT */}
-      <div className="lg:hidden max-w-md mx-auto bg-white min-h-screen">
-        <div className="px-5 pt-6 pb-2">
-          <h1 className="text-xl font-bold text-gray-900">Checkout</h1>
-        </div>
-        <div className="px-5 pb-8">
-          <OrderOverview
-            isDesktop={false}
-            orderOverview={orderOverview}
-            totals={totals}
-            formatRouteName={formatRouteName}
-            RUPEE={RUPEE}
-          />
-
-          {!isUserAuth ? (
-            <LoginPrompt
-              isDesktop={false}
-              isUserAuth={isUserAuth}
-              userData={userData}
-              onLogin={() => router.push("/login")}
-            />
-          ) : (
-            <>
-              <UserProfile isDesktop={false} userData={userData} />
-
-              <div className="mt-6">
-                <BillSummary
-                  totals={totals}
-                  selectedPayment={selectedPayment}
-                  onSelectPayment={setSelectedPayment}
-                  isContactSubmitted={true}
-                  orderOverview={orderOverview}
-                  RUPEE={RUPEE}
-                />
-                <div className="mt-2 mb-4">
-                  <button
-                    onClick={handlePlaceOrder}
-                    disabled={isLoading}
-                    className="w-full bg-[#ff581b] hover:bg-[#e04e14] transition-all rounded-2xl py-4 shadow-md flex items-center justify-center gap-2 text-white font-semibold disabled:opacity-70"
-                  >
-                    {isLoading ? (
-                      <>
-                        <svg
-                          className="animate-spin h-5 w-5 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                        <span>Processing...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Place Order</span>
-                        <svg
-                          className="w-5 h-5 text-white animate-pulse"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M13 7l5 5m0 0l-5 5m5-5H6"
-                          />
-                        </svg>
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
+        <OrderSummary
+          cartItems={cartItems}
+          subtotal={totals.subtotal}
+          deliveryFee={totals.deliveryFee}
+          total={totals.finalTotal}
+          isContactSubmitted={true}
+          isProcessing={isLoading}
+          onPlaceOrder={handlePlaceOrder}
+          RUPEE={RUPEE}
+          selectedPayment={selectedPayment}
+          onSelectPayment={setSelectedPayment}
+          isEnabled={true}
+        />
       </div>
     </div>
   );
