@@ -115,7 +115,7 @@ const OrderOverview = ({ isDesktop = true }) => {
           </div>
         )}
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 px-6 pb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 px-6 pb-6">
           {/* Left Section - Location & Route */}
           <div className="lg:col-span-1 space-y-2">
             {/* Pickup Location Card */}
@@ -133,8 +133,7 @@ const OrderOverview = ({ isDesktop = true }) => {
                   </p>
                 </div>
               </div>
-            </div>
-
+            </div>  
             {/* Route Card */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
               <div className="flex items-start gap-3 p-4">
