@@ -30,22 +30,10 @@ import {
   checkEmailExists,
   checkMobileExists,
 } from "../../redux/Authentication/AuthenticationSlice";
+import { FaCheckCircle, FaExclamationCircle, FaTimes } from "react-icons/fa";
+import { MdError } from "react-icons/md";
 
 const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
-// --- Helper Components for Responsive Design ---
-const MobileHeader = () => (
-  <div className="mb-8 text-center lg:hidden">
-    <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-100 to-orange-100 px-6 py-3 shadow-sm">
-      <div className="relative">
-        <div className="absolute inset-0 animate-ping rounded-full bg-amber-400/30" />
-        <Utensils className="relative h-5 w-5 text-amber-600" />
-      </div>
-      <span className="text-lg font-semibold text-stone-800">Food Side</span>
-    </div>
-    <p className="mt-3 text-sm text-stone-600">Trusted by Food Businesses</p>
-  </div>
-);
 
 const DesktopLeftPanel = () => (
   <div className="relative hidden w-3xl flex-col justify-between overflow-hidden lg:flex">
@@ -146,24 +134,45 @@ const MobileFloatingImages = () => (
 );
 
 // Toast component for web
-const Toast = ({ message, type, onClose }) => {
+const Toast = ({ message, type, onClose, duration = 3000 }) => {
   useEffect(() => {
-    const timer = setTimeout(onClose, 3000);
+    const timer = setTimeout(onClose, duration);
     return () => clearTimeout(timer);
-  }, [onClose]);
+  }, [onClose, duration]);
+
+  const config = {
+    success: {
+      icon: <FaCheckCircle className="h-5 w-5" />,
+      bgClass: "bg-gradient-to-r from-green-500 to-emerald-500",
+    },
+    error: {
+      icon: <MdError className="h-5 w-5" />,
+      bgClass: "bg-gradient-to-r from-red-500 to-rose-500",
+    },
+    warning: {
+      icon: <FaExclamationCircle className="h-5 w-5" />,
+      bgClass: "bg-gradient-to-r from-amber-500 to-orange-500",
+    },
+  };
+
+  const { icon, bgClass } = config[type] || config.success;
 
   return (
-    <div
-      className={`fixed top-4 right-4 z-50 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg animate-in slide-in-from-top-2 ${
-        type === "error" ? "bg-red-500" : "bg-green-500"
-      } text-white`}
-    >
-      {type === "error" ? (
-        <AlertCircle className="h-4 w-4" />
-      ) : (
-        <CheckCircle className="h-4 w-4" />
-      )}
-      <span className="text-sm">{message}</span>
+    <div className="fixed top-6 left-6 right-6 z-50">
+      <div
+        className={`flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg ${bgClass} text-white min-w-[280px] max-w-md`}
+      >
+        <div className="flex-shrink-0">{icon}</div>
+        <div className="flex-1">
+          <p className="text-sm font-medium">{message}</p>
+        </div>
+        <button
+          onClick={onClose}
+          className="flex-shrink-0 text-white/70 hover:text-white"
+        >
+          <FaTimes className="h-4 w-4" />
+        </button>
+      </div>
     </div>
   );
 };
@@ -178,9 +187,11 @@ const RegisterForm = ({ onRegisterSuccess }) => {
   const router = useRouter();
 
   // Redux state
-  const { login_token, isUserAuth, mobileNumber: savedMobileNumber } = useSelector(
-    (state) => state.Authentication || {}
-  );
+  const {
+    login_token,
+    isUserAuth,
+    mobileNumber: savedMobileNumber,
+  } = useSelector((state) => state.Authentication || {});
 
   // Step management
   const [step, setStep] = useState("details"); // "details" or "otp"
@@ -206,7 +217,10 @@ const RegisterForm = ({ onRegisterSuccess }) => {
   });
 
   // Get route params (if coming from login with mobile number)
-  const routeParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const routeParams =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search)
+      : null;
   const routeMobileNumber = routeParams?.get("mobileNumber") || "";
   const lockPhoneNumber = routeParams?.get("lockPhoneNumber") === "true";
   const isPhoneEditable = !lockPhoneNumber && !isLoading && step === "details";
@@ -214,7 +228,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
   // Redirect if already authenticated
   useEffect(() => {
     if (isUserAuth && login_token) {
-      router.replace("/SelectRouteDelivery");
+      router.replace("/");
     }
   }, [isUserAuth, login_token, router]);
 
@@ -228,7 +242,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
       setPhoneNumber(
         String(nextPhoneNumber)
           .replace(/[^0-9]/g, "")
-          .slice(0, 10)
+          .slice(0, 10),
       );
     }
   }, [lockPhoneNumber, routeMobileNumber, savedMobileNumber]);
@@ -236,11 +250,11 @@ const RegisterForm = ({ onRegisterSuccess }) => {
   // Timer logic for OTP resend
   useEffect(() => {
     if (resendTimer <= 0) return;
-    
+
     const timerId = setInterval(() => {
-      setResendTimer(prevTimer => (prevTimer > 1 ? prevTimer - 1 : 0));
+      setResendTimer((prevTimer) => (prevTimer > 1 ? prevTimer - 1 : 0));
     }, 1000);
-    
+
     return () => clearInterval(timerId);
   }, [resendTimer]);
 
@@ -251,9 +265,9 @@ const RegisterForm = ({ onRegisterSuccess }) => {
   const formatCountdown = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(
-      remainingSeconds
-    ).padStart(2, '0')}`;
+    return `${String(minutes).padStart(2, "0")}:${String(
+      remainingSeconds,
+    ).padStart(2, "0")}`;
   };
 
   const startResendTimer = () => {
@@ -325,7 +339,10 @@ const RegisterForm = ({ onRegisterSuccess }) => {
     if (cleaned.length <= 10) {
       setPhoneNumber(cleaned);
       if (fieldErrors.phoneNumber) {
-        setFieldErrors({ ...fieldErrors, phoneNumber: validatePhoneField(cleaned) });
+        setFieldErrors({
+          ...fieldErrors,
+          phoneNumber: validatePhoneField(cleaned),
+        });
       }
     }
   };
@@ -341,10 +358,10 @@ const RegisterForm = ({ onRegisterSuccess }) => {
   };
 
   const getErrorMessage = (error) => {
-    if (typeof error === 'string') {
+    if (typeof error === "string") {
       return error;
     }
-    return error?.message || 'Something went wrong. Please try again.';
+    return error?.message || "Something went wrong. Please try again.";
   };
 
   // Send OTP - using Redux action
@@ -369,7 +386,8 @@ const RegisterForm = ({ onRegisterSuccess }) => {
     if (mobileExists) {
       setFieldErrors({
         ...fieldErrors,
-        phoneNumber: "This mobile number is already registered. Please login instead.",
+        phoneNumber:
+          "This mobile number is already registered. Please login instead.",
       });
       return;
     }
@@ -379,7 +397,8 @@ const RegisterForm = ({ onRegisterSuccess }) => {
     if (emailExists) {
       setFieldErrors({
         ...fieldErrors,
-        email: "This email is already registered. Please use a different email or login.",
+        email:
+          "This email is already registered. Please use a different email or login.",
       });
       return;
     }
@@ -392,7 +411,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
         send_otp({
           mobKey: phoneNumber,
           userType: "user",
-        })
+        }),
       ).unwrap();
 
       if (result.success) {
@@ -424,7 +443,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
         send_otp({
           mobKey: phoneNumber,
           userType: "user",
-        })
+        }),
       ).unwrap();
 
       if (result.success) {
@@ -458,7 +477,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
           mobKey: phoneNumber,
           userType: "user",
           otp: otp,
-        })
+        }),
       ).unwrap();
 
       if (verifyResult.success) {
@@ -475,29 +494,37 @@ const RegisterForm = ({ onRegisterSuccess }) => {
         if (createResult.success) {
           showToastMessage(`Welcome ${fullName}! Registration successful!`);
           setTimeout(() => {
-            router.replace("/SelectRouteDelivery");
+            router.replace("/");
           }, 500);
         } else {
           showToastMessage(
-            createResult.message || "Unable to create account. Please try again.",
-            true
+            createResult.message ||
+              "Unable to create account. Please try again.",
+            true,
           );
         }
       } else {
-        setFieldErrors({ ...fieldErrors, otp: verifyResult.message || "Invalid OTP. Please try again." });
+        setFieldErrors({
+          ...fieldErrors,
+          otp: verifyResult.message || "Invalid OTP. Please try again.",
+        });
       }
     } catch (error) {
       const message = getErrorMessage(error);
       if (message.toLowerCase().includes("email already exists")) {
         setFieldErrors((prev) => ({
           ...prev,
-          email: "This email is already registered. Please use a different email or login.",
+          email:
+            "This email is already registered. Please use a different email or login.",
         }));
         setStep("details");
-      } else if (message.toLowerCase().includes("mobile number already exists")) {
+      } else if (
+        message.toLowerCase().includes("mobile number already exists")
+      ) {
         setFieldErrors((prev) => ({
           ...prev,
-          phoneNumber: "This mobile number is already registered. Please login instead.",
+          phoneNumber:
+            "This mobile number is already registered. Please login instead.",
         }));
         setStep("details");
       } else {
@@ -522,7 +549,8 @@ const RegisterForm = ({ onRegisterSuccess }) => {
     }
   };
 
-  const isDetailsDisabled = !fullName.trim() || !email.trim() || phoneNumber.length !== 10 || isLoading;
+  const isDetailsDisabled =
+    !fullName.trim() || !email.trim() || phoneNumber.length !== 10 || isLoading;
   const isOtpDisabled = otp.length !== 6 || isLoading;
 
   return (
@@ -535,9 +563,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
         />
       )}
 
-      <MobileHeader />
-
-      <div className="relative rounded-3xl bg-white p-8 shadow-2xl lg:p-10">
+      <div className="relative rounded-3xl bg-white p-5 sm:p-8 shadow-2xl lg:p-10">
         <Image
           src="/main_log_fd.png"
           alt="Food Side"
@@ -546,11 +572,11 @@ const RegisterForm = ({ onRegisterSuccess }) => {
           height={100}
         />
 
-        <div className="mb-6">
+        <div className="mb-3 sm:mb-6">
           <h1 className="font-['Playfair_Display'] text-4xl font-bold text-stone-900">
             {step === "details" ? "Create Account" : "Verify Your Number"}
           </h1>
-          <p className="mt-2 text-stone-500">
+          <p className="mt:1 sm:mt-2 text-stone-500 sm:text-base text-sm">
             {step === "details"
               ? "Enter your details to get started with Food Side"
               : `We've sent a 6-digit code to ${phoneNumber}`}
@@ -567,7 +593,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
 
         {/* Step 1: User Details Form */}
         {step === "details" && (
-          <div className="space-y-5">
+          <div className="space-y-2 sm:space-y-5">
             {/* Full Name Field */}
             <div className="group">
               <label className="mb-2 block text-sm font-semibold text-stone-700">
@@ -583,8 +609,8 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                     focusedField === "name"
                       ? "border-amber-400 shadow-lg bg-white"
                       : fieldErrors.fullName
-                      ? "border-red-300"
-                      : "border-stone-200 hover:border-stone-300"
+                        ? "border-red-300"
+                        : "border-stone-200 hover:border-stone-300"
                   }`}
                 >
                   <User
@@ -593,8 +619,8 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                       focusedField === "name"
                         ? "text-amber-500"
                         : fieldErrors.fullName
-                        ? "text-red-400"
-                        : "text-stone-400"
+                          ? "text-red-400"
+                          : "text-stone-400"
                     }`}
                   />
                   <input
@@ -642,8 +668,8 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                     focusedField === "email"
                       ? "border-amber-400 shadow-lg bg-white"
                       : fieldErrors.email
-                      ? "border-red-300"
-                      : "border-stone-200 hover:border-stone-300"
+                        ? "border-red-300"
+                        : "border-stone-200 hover:border-stone-300"
                   }`}
                 >
                   <Mail
@@ -652,8 +678,8 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                       focusedField === "email"
                         ? "text-amber-500"
                         : fieldErrors.email
-                        ? "text-red-400"
-                        : "text-stone-400"
+                          ? "text-red-400"
+                          : "text-stone-400"
                     }`}
                   />
                   <input
@@ -700,8 +726,8 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                     focusedField === "phone"
                       ? "border-amber-400 shadow-lg bg-white"
                       : fieldErrors.phoneNumber
-                      ? "border-red-300"
-                      : "border-stone-200 hover:border-stone-300"
+                        ? "border-red-300"
+                        : "border-stone-200 hover:border-stone-300"
                   }`}
                 >
                   <Phone
@@ -710,8 +736,8 @@ const RegisterForm = ({ onRegisterSuccess }) => {
                       focusedField === "phone"
                         ? "text-amber-500"
                         : fieldErrors.phoneNumber
-                        ? "text-red-400"
-                        : "text-stone-400"
+                          ? "text-red-400"
+                          : "text-stone-400"
                     }`}
                   />
                   <input
@@ -911,8 +937,25 @@ const RegisterForm = ({ onRegisterSuccess }) => {
 const RegisterPageNew = ({ onRegister }) => {
   const MobileBackgroundDecorations = () => (
     <div className="absolute inset-0 overflow-hidden lg:hidden">
-      <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-amber-100/50" />
-      <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-orange-100/50" />
+      {/* Top Right Circle */}
+      <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-amber-100/50">
+        <img
+          src="/foof.png"
+          alt="pizza"
+          className="w-full h-full rounded-full "
+        />
+      </div>
+
+      {/* Bottom Left Circle */}
+      <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-orange-100/50">
+        <img
+          src="/fooddd.avif"
+          alt="tacos"
+          className="w-full h-full object-contain rounded-full "
+        />
+      </div>
+
+      {/* Center Circle */}
       <div className="absolute top-1/2 left-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-50/30" />
     </div>
   );
@@ -923,9 +966,9 @@ const RegisterPageNew = ({ onRegister }) => {
       <DesktopLeftPanel />
 
       {/* Right Panel - Registration Form */}
-      <div className="relative flex flex-1 items-center justify-center bg-white p-6 sm:p-10">
+      <div className="relative flex flex-1 items-center justify-center bg-white p-3 sm:p-10">
         <MobileBackgroundDecorations />
-        <MobileFloatingImages />
+        {/* <MobileFloatingImages /> */}
         <RegisterForm onRegisterSuccess={() => onRegister?.(true)} />
       </div>
     </div>
