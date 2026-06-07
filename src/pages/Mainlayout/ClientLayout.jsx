@@ -5,6 +5,7 @@ import Header from "@/pages/components/Header";
 import Footer from "@/pages/components/Footer";
 import FloatingCartBanner from "../cart/FloatingCartBanner";
 import { useCart } from "../../context/CartContext";
+import MobileFooter from "../home/MobileFooter";
 
 // ✅ Same like RN
 const BANNER_ENABLED_ROUTES = [
@@ -41,7 +42,7 @@ export default function ClientLayout({ children }) {
     <>
       {!hideHeader && <Header />}
 
-      <main className={`flex-1 ${!hideHeader ? 'mt-15' : 'mt-0'}`}>
+      <main className={`flex-1 ${!hideHeader ? "mt-15" : "mt-0"}`}>
         {children}
       </main>
 
@@ -63,8 +64,8 @@ export default function ClientLayout({ children }) {
           onPressClear={clearCart}
         />
       )}
-
-      {!hideFooter && <Footer />}
+      <div className="sm:block hidden">{!hideFooter && <Footer />}</div>
+      <div className="sm:hidden block">{!hideFooter && <MobileFooter />}</div>
     </>
   );
 }

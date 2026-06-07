@@ -1,121 +1,351 @@
-// components/Checkout/OrderSummary.jsx
+
 "use client";
 import React from "react";
-import Image from "next/image";
-import { FaReceipt, FaTag, FaTruck, FaBox, FaPercent, FaCheckCircle, FaCcVisa, FaCcMastercard, FaCcAmex, FaApple, FaGooglePay } from "react-icons/fa";
+import {
+  FaReceipt,
+  FaTruck,
+  FaBox,
+  FaCheckCircle,
+  FaLock,
+  FaCcVisa,
+  FaCcMastercard,
+  FaCcAmex,
+  FaApple,
+  FaGooglePay,
+} from "react-icons/fa";
 
-const OrderSummary = ({ cartItems, subtotal, deliveryFee, total, isContactSubmitted, isProcessing, onPlaceOrder, RUPEE = "₹" }) => {
+const OrderSummary = ({
+  cartItems = [],
+  totals,
+  selectedPayment,
+  onSelectPayment,
+  isContactSubmitted,
+  orderOverview,
+  RUPEE = "₹",
+  isProcessing,
+  onPlaceOrder,
+}) => {
+  // Calculate totals if not provided
+  const calculatedSubtotal = totals?.subtotal || cartItems.reduce((sum, item) => {
+    const price = item.newPrice || item.price || 0;
+    const qty = item.qty || item.quantity || 1;
+    return sum + (price * qty);
+  }, 0);
 
-  console.log(cartItems, "cartItems");
+  const calculatedDeliveryFee = totals?.deliveryFee ?? 50;
+  const calculatedFinalTotal = totals?.finalTotal || calculatedSubtotal + calculatedDeliveryFee;
+  const calculatedItemCount = totals?.itemCount || cartItems.length;
+
+  const deliveryFee = calculatedDeliveryFee;
+  const finalTotal = calculatedFinalTotal;
+  const subtotal = calculatedSubtotal;
+  const itemCount = calculatedItemCount;
 
   return (
-    <div className="bg-gray-900 rounded-xl overflow-hidden shadow-md flex flex-col">
-      <div className="flex items-center gap-2 p-4 bg-gray-900">
-        <div className="w-8 h-8 rounded-lg bg-[#ff581b]/20 border border-[#ff581b]/30 grid place-items-center text-[#ff581b] text-base">
-          <FaReceipt className="text-base" />
+    <div className="lg:sticky lg:top-24">
+      <div className="bg-white rounded-xl overflow-hidden shadow-md flex flex-col h-full">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 bg-gray-900 border-b border-gray-800">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-[#ff581b]/20 border border-[#ff581b]/30 grid place-items-center text-[#ff581b]">
+              <FaReceipt className="text-base" />
+            </div>
+            <div>
+              <div className="font-['Raleway',sans-serif] text-sm font-black text-white tracking-tight">
+                Order Summary
+              </div>
+              <div className="text-[10px] text-white/35 font-medium">
+                {itemCount} {itemCount === 1 ? "item" : "items"}
+              </div>
+            </div>
+          </div>
+          {orderOverview?.dateLabel && (
+            <div className="text-right">
+              <div className="text-[9px] text-white/30 uppercase">Schedule</div>
+              <div className="text-[10px] text-white/70 font-medium">
+                {orderOverview.dateLabel}
+                {orderOverview.timeLabel && ` • ${orderOverview.timeLabel}`}
+              </div>
+            </div>
+          )}
         </div>
-        <div>
-          <div className="font-['Raleway',sans-serif] text-sm font-black text-white tracking-tight">Order Summary</div>
-          <div className="text-[10px] text-white/35 font-medium">{cartItems.length} items</div>
-        </div>
-      </div>
 
-      <div className="bg-white border border-gray-100 border-t-0 rounded-b-xl overflow-hidden flex flex-col">
-        <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
-          {cartItems.map((item) => (
-            <div key={item.id} className="flex items-center gap-3 px-4 py-3 border-b border-gray-100">
-              {/* Product Image */}
-              <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
-                {item.image ? (
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                    <FaReceipt className="text-gray-400 text-lg" />
+        <div className="bg-white border border-gray-100 border-t-0 rounded-b-xl overflow-hidden flex flex-col">
+          {/* Cart Items List */}
+          <div className="max-h-[280px] overflow-y-auto custom-scrollbar">
+            {cartItems.length === 0 ? (
+              <div className="px-4 py-8 text-center">
+                <FaBox className="text-gray-300 text-3xl mx-auto mb-2" />
+                <p className="text-xs text-gray-400">No items in cart</p>
+              </div>
+            ) : (
+              cartItems.map((item) => {
+                const price = item.newPrice || item.price || 0;
+                const qty = item.qty || item.quantity || 1;
+                const itemTotal = price * qty;
+                
+                return (
+                  <div
+                    key={item.id}
+                    className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                  >
+                    {/* Product Image */}
+                    <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
+                      {item.image ? (
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                          <FaBox className="text-gray-400 text-lg" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Product Details */}
+                    <div className="flex-1 min-w-0">
+                      <div className="font-['Raleway',sans-serif] text-xs font-bold text-gray-900 leading-tight truncate">
+                        {item.name}
+                      </div>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-[10px] text-gray-500 font-medium">
+                          Qty: {qty}
+                        </span>
+                        <span className="text-[9px] text-gray-400">•</span>
+                        <span className="text-[10px] text-[#ff581b] font-semibold">
+                          {RUPEE}{price.toFixed(2)} each
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Price */}
+                    <div className="text-right">
+                      <div className="font-['Raleway',sans-serif] text-sm font-extrabold text-gray-900">
+                        {RUPEE}{itemTotal.toFixed(2)}
+                      </div>
+                      {qty > 1 && (
+                        <div className="text-[8px] text-gray-400">
+                          {RUPEE}{price.toFixed(2)} × {qty}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                )}
+                );
+              })
+            )}
+          </div>
+
+          {/* Bill Breakdown */}
+          <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
+            <div className="space-y-2">
+              {/* Subtotal */}
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-600 flex items-center gap-1.5">
+                  <FaReceipt className="text-[#ff581b] text-[9px]" />
+                  Subtotal
+                </span>
+                <span className="text-xs font-semibold text-gray-900">
+                  {RUPEE}{subtotal.toFixed(2)}
+                </span>
               </div>
+
+              {/* Delivery Fee */}
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-600 flex items-center gap-1.5">
+                  <FaTruck className="text-[#ff581b] text-[9px]" />
+                  Delivery Fee
+                </span>
+                <span className={`text-xs font-semibold ${deliveryFee === 0 ? "text-emerald-600" : "text-gray-900"}`}>
+                  {deliveryFee === 0 ? "FREE ✓" : `${RUPEE}${deliveryFee.toFixed(2)}`}
+                </span>
+              </div>
+
+              {/* Packaging */}
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-600 flex items-center gap-1.5">
+                  <FaBox className="text-[#ff581b] text-[9px]" />
+                  Packaging
+                </span>
+                <span className="text-xs font-semibold text-emerald-600">Included</span>
+              </div>
+
+              {/* Divider */}
+              <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-2" />
+
+              {/* Total */}
+              <div className="flex justify-between items-center pt-1">
+                <span className="text-sm font-bold text-gray-900">Total</span>
+                <div className="text-right">
+                  <span className="text-[#ff581b] font-bold text-sm"> {RUPEE}</span>
+                  <span className="text-xl font-black text-gray-900 ml-0.5">
+                    {finalTotal.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Free Delivery Message */}
+              {deliveryFee > 0 && (
+                <div className="mt-2 pt-2 border-t border-dashed border-emerald-200">
+                  <p className="text-[9px] text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg inline-flex items-center gap-1">
+                    ✨ Add {RUPEE}{(50 - subtotal).toFixed(2)} more for free delivery
+                  </p>
+                </div>
+              )}
+              {deliveryFee === 0 && subtotal > 0 && (
+                <div className="mt-2 pt-2 border-t border-dashed border-emerald-200">
+                  <p className="text-[9px] text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg inline-flex items-center gap-1">
+                    <FaCheckCircle className="text-emerald-600 text-[8px]" />
+                    Free delivery unlocked!
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Payment Method Selection */}
+          {/* <div className="px-4 py-3 border-t border-gray-100">
+            <h3 className="text-xs font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
+              <FaLock className="text-[9px] text-gray-400" />
+              Payment Method
+            </h3>
+            <div className="space-y-2">
+              <div
+                onClick={() => isContactSubmitted && onSelectPayment?.("cod")}
+                className={`rounded-lg border-2 p-3 cursor-pointer transition-all duration-200 ${
+                  selectedPayment === "cod"
+                    ? "border-[#ff581b] bg-gradient-to-r from-orange-50 to-amber-50"
+                    : "border-gray-200 hover:border-gray-300"
+                } ${!isContactSubmitted ? "opacity-50 cursor-not-allowed" : ""}`}
+              >
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-xs font-semibold text-gray-800">
+                        Cash on Delivery
+                      </span>
+                      <span className="text-[8px] sm:text-[9px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded-full">
+                        ACTIVE
+                      </span>
+                    </div>
+                    <p className="text-[9px] sm:text-[10px] text-gray-500 mt-0.5">
+                      Pay when you receive your order
+                    </p>
+                    <p className="text-[8px] sm:text-[9px] text-gray-400 mt-0.5">
+                      Direct payment to delivery partner
+                    </p>
+                  </div>
+                  <div
+                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ml-3 ${
+                      selectedPayment === "cod"
+                        ? "border-[#ff581b]"
+                        : "border-gray-300"
+                    }`}
+                  >
+                    {selectedPayment === "cod" && (
+                      <div className="w-2 h-2 rounded-full bg-[#ff581b]"></div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-lg border-2 border-gray-200 bg-gray-100 opacity-70 p-3 cursor-not-allowed">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-xs font-semibold text-gray-500">
+                        Online Payment
+                      </span>
+                      <span className="text-[8px] sm:text-[9px] font-bold text-orange-600 bg-orange-100 px-1.5 py-0.5 rounded-full">
+                        COMING SOON
+                      </span>
+                    </div>
+                    <p className="text-[9px] sm:text-[10px] text-gray-400 mt-0.5">
+                      UPI / Cards / Net Banking
+                    </p>
+                    <p className="text-[8px] sm:text-[9px] text-gray-400 mt-0.5">
+                      Secure payment gateway
+                    </p>
+                  </div>
+                  <div className="w-4 h-4 rounded-full border-2 border-gray-300 bg-gray-200 flex-shrink-0 ml-3"></div>
+                </div>
+              </div>
+            </div>
+          </div> */}
+
+          {/* Accepted Cards */}
+          {/* <div className="px-4 py-3 border-t border-gray-100 flex items-center justify-between flex-wrap gap-2">
+            <span className="text-[8px] font-bold tracking-[1px] uppercase text-gray-400">
+              Secure payments
+            </span>
+            <div className="flex gap-1.5 flex-wrap items-center">
+              <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-600 hover:shadow-sm transition-shadow">
+                <FaCcVisa />
+              </div>
+              <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-600 hover:shadow-sm transition-shadow">
+                <FaCcMastercard />
+              </div>
+              <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-600 hover:shadow-sm transition-shadow">
+                <FaCcAmex />
+              </div>
+              <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-600 hover:shadow-sm transition-shadow">
+                <FaApple />
+              </div>
+              <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-600 hover:shadow-sm transition-shadow">
+                <FaGooglePay />
+              </div>
+            </div>
+          </div> */}
+
+          {/* Security Message */}
+          {/* <div className="px-4 py-2 bg-gray-50 border-t border-gray-100">
+            <p className="text-[8px] text-gray-400 text-center flex items-center justify-center gap-1">
+              <FaLock className="text-[8px]" />
+              Your payment information is secure with us
+            </p>
+          </div> */}
+
+          {/* Place Order Button */}
+          {onPlaceOrder && (
+            <div className="p-4 pt-2 border-t border-gray-100">
+              <button
+                onClick={onPlaceOrder}
+                disabled={isProcessing || !isContactSubmitted || selectedPayment !== "cod" || cartItems.length === 0}
+                className="relative w-full overflow-hidden rounded-full bg-gradient-to-r from-[#ff581b] to-orange-500 py-2.5 px-4 text-xs font-bold uppercase text-white shadow-md transition-all duration-200 hover:shadow-lg hover:from-[#e84d15] hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-md"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  {isProcessing ? (
+                    <>
+                      <svg className="animate-spin h-3 w-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Processing...
+                    </>
+                  ) : (
+                    `Place Order • ${RUPEE}${finalTotal.toFixed(2)}`
+                  )}
+                </span>
+              </button>
               
-              {/* Product Details */}
-              <div className="flex-1 min-w-0">
-                <div className="font-['Raleway',sans-serif] text-xs font-bold text-gray-900 leading-tight truncate">{item.name}</div>
-                <div className="text-[10px] text-gray-500 font-medium mt-0.5">Qty: {item.qty || item.quantity || 1}</div>
-              </div>
-              
-              {/* Price */}
-              <div className="font-['Raleway',sans-serif] text-sm font-extrabold text-gray-900 whitespace-nowrap">
-                {RUPEE}{((item.newPrice || item.price || 0) * (item.qty || item.quantity || 1)).toFixed(2)}
-              </div>
+              {!isContactSubmitted && (
+                <p className="text-[8px] text-amber-600 text-center mt-2">
+                  Please complete contact details to place order
+                </p>
+              )}
+              {isContactSubmitted && selectedPayment !== "cod" && (
+                <p className="text-[8px] text-amber-600 text-center mt-2">
+                  Please select COD as payment method
+                </p>
+              )}
+              {cartItems.length === 0 && (
+                <p className="text-[8px] text-gray-400 text-center mt-2">
+                  Your cart is empty
+                </p>
+              )}
             </div>
-          ))}
-        </div>
-
-        <div className="h-px bg-gradient-to-r from-transparent via-[#ff581b]/30 to-transparent my-0.5 mx-4"></div>
-
-        <div className="pt-0.5">
-          <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
-            <div className="text-xs font-semibold text-gray-500 flex items-center gap-1">
-              <FaReceipt className="text-[#ff581b] text-[10px]" /> Subtotal
-            </div>
-            <div className="font-['Raleway',sans-serif] text-sm font-bold text-gray-900">{RUPEE}{subtotal?.toFixed(2) || 0}</div>
-          </div>
-          <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
-            <div className="text-xs font-semibold text-gray-500 flex items-center gap-1">
-              <FaTruck className="text-[#ff581b] text-[10px]" /> Delivery Fee
-            </div>
-            <div className={`font-['Raleway',sans-serif] text-sm font-bold ${deliveryFee === 0 ? 'text-emerald-600' : 'text-gray-900'}`}>
-              {deliveryFee === 0 ? "FREE" : `${RUPEE}${deliveryFee}`}
-            </div>
-          </div>
-          <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
-            <div className="text-xs font-semibold text-gray-500 flex items-center gap-1">
-              <FaBox className="text-[#ff581b] text-[10px]" /> Packaging
-            </div>
-            <div className="font-['Raleway',sans-serif] text-sm font-bold text-emerald-600">Included</div>
-          </div>
-        </div>
-
-        <div className="bg-gray-900 px-4 py-3 flex items-center justify-between gap-3 mt-1">
-          <div>
-            <div className="text-[10px] font-bold tracking-[1.5px] uppercase text-white/40">Total</div>
-          </div>
-          <div className="font-['Raleway',sans-serif] text-2xl font-black text-white leading-none tracking-[-0.5px]">
-            <sup className="text-sm text-[#ff581b] font-bold">{RUPEE}</sup>{total?.toFixed(2) || 0}
-          </div>
-        </div>
-
-        {deliveryFee === 0 && subtotal > 0 && (
-          <div className="px-4 py-2 bg-emerald-50 border-t border-emerald-200 flex items-center gap-2">
-            <FaCheckCircle className="text-emerald-600 text-xs" />
-            <div className="text-[11px] font-semibold text-emerald-600">
-              <span className="font-extrabold">Free delivery</span> applied
-            </div>
-          </div>
-        )}
-
-        <div className="px-4 py-3">
-          <button
-            onClick={onPlaceOrder}
-            disabled={isProcessing || !isContactSubmitted}
-            className="relative inline-block font-bold text-xs uppercase bg-[#ff581b] text-white rounded-full py-3 pl-5 pr-[48px] overflow-hidden transition-all duration-300 hover:bg-gray-900 text-center w-full shadow-md"
-          >
-            {isProcessing ? "Processing..." : "Proceed to Order"}
-            {/* <span className="absolute top-1/2 right-2 w-7 h-7 bg-white rounded-full -translate-y-1/2"></span> */}
-          </button>
-        </div>
-
-        <div className="px-4 py-2 border-t border-gray-100 flex items-center justify-center gap-2 flex-wrap">
-          <span className="text-[9px] font-bold tracking-[1px] uppercase text-gray-500">We accept</span>
-          <div className="flex gap-1 flex-wrap items-center">
-            <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-800"><FaCcVisa /></div>
-            <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-800"><FaCcMastercard /></div>
-            <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-800"><FaCcAmex /></div>
-            <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-800"><FaApple /></div>
-            <div className="bg-gray-100 border border-gray-200 rounded-md px-1.5 py-1 text-sm text-gray-800"><FaGooglePay /></div>
-          </div>
+          )}
         </div>
       </div>
     </div>

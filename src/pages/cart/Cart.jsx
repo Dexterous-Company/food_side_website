@@ -373,11 +373,11 @@ const Cart = () => {
           </div>
 
           {/* Grid 2: Cart Items */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 bg-white shadow-md rounded-2xl">
             {/* Cart Header */}
-            <div className="flex items-center justify-between gap-4 flex-wrap mb-3 sm:mb-4">
+            <div className="flex bg-gray-900 rounded-t-2xl p-3 items-center justify-between gap-4 flex-wrap mb-3 sm:mb-4">
               <div>
-                <div className="text-base sm:text-lg font-black text-gray-900 tracking-tight">
+                <div className="text-base sm:text-lg font-black text-white tracking-tight">
                   Order Items
                 </div>
                 <div className="text-[10px] text-gray-500 font-medium">
@@ -387,14 +387,14 @@ const Cart = () => {
               </div>
               <button
                 onClick={clearCart}
-                className="text-[10px] font-bold text-gray-500 hover:text-red-600 flex items-center gap-1 transition-colors"
+                className="text-[10px] font-bold text-white/70 hover:text-red-600 flex items-center gap-1 transition-colors"
               >
                 <FaTrashCan className="text-[10px]" /> Clear Cart
               </button>
             </div>
 
             {/* Cart Items List */}
-            <div className="space-y-2 sm:space-y-3 lg:max-h-[600px] lg:overflow-y-auto lg:pr-2">
+            <div className="space-y-2 sm:space-y-3 lg:max-h-[600px] lg:overflow-y-auto lg:pr-2 px-2">
               {cartItems.map((item) => (
                 <div
                   key={item.id}
