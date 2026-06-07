@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Header from "@/pages/components/Header";
 import Footer from "@/pages/components/Footer";
 import FloatingCartBanner from "../cart/FloatingCartBanner";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../../context/CartContext";
 import MobileFooter from "../home/MobileFooter";
 
 // ✅ Same like RN

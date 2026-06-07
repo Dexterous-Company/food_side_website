@@ -2,7 +2,7 @@
 
 // redux/Order/OrderSlice.js
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import orderService from '../../pages/services/orderService';
+import orderService from '../../services/orderService';
 
 const sortOrdersByDate = orders =>
   [...orders].sort(

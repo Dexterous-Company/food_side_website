@@ -14,7 +14,7 @@ import {
 import { MdPayments, MdCreditCard, MdDeliveryDining } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import Lottie from "lottie-react";
-import successAnimation from "../animations/success.json";
+import successAnimation from "../../animations/success.json";
 import axios from "axios";
 
 const OrderSuccessPage = ({ onContinueShopping }) => {
