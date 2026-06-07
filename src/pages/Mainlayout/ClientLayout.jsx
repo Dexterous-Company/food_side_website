@@ -16,11 +16,7 @@ const BANNER_ENABLED_ROUTES = [
   "/product",
 ];
 
-const BOTTOM_10_ROUTES = [
-  "/restaurant",
-  "/SearchResult",
-  "/product",
-];
+const BOTTOM_10_ROUTES = ["/restaurant", "/SearchResult", "/product"];
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
@@ -45,16 +41,16 @@ export default function ClientLayout({ children }) {
     <>
       {!hideHeader && <Header />}
 
-      <main className="flex-1">{children}</main>
+      <main className={`flex-1 ${!hideHeader ? 'mt-15' : 'mt-0'}`}>
+        {children}
+      </main>
 
       {/* ✅ Floating Banner */}
       {shouldShowBanner && (
         <FloatingCartBanner
           visible={!!cartSummary}
           restaurantName={cartSummary?.restaurant?.title}
-          restaurantImage={
-            cartSummary?.restaurant?.products?.[0]?.image
-          }
+          restaurantImage={cartSummary?.restaurant?.products?.[0]?.image}
           totalItems={cartSummary?.totalItems}
           totalPrice={cartSummary?.totalPrice}
           bottomOffset={bottomOffset}

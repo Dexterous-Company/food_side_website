@@ -327,7 +327,7 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
               <motion.button
                 whileHover={{ scale: 1.05, rotate: 90 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 transition-colors flex-shrink-0"
+                className="flex h-9 w-9 text-black sm:h-10 sm:w-10 items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 transition-colors flex-shrink-0"
               >
                 <FiArrowRight size={18} />
               </motion.button>
