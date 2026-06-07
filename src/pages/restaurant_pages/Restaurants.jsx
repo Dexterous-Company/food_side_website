@@ -1,6 +1,6 @@
 // app/restaurant-page/[id]/page.jsx
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -34,13 +34,6 @@ import { useCart } from "@/context/CartContext";
 import { restaurantApi } from "../../../utils/restaurantApi";
 import toast, { Toaster } from "react-hot-toast";
 
-// Stats Card Component
-const StatsCard = ({ icon, value, label }) => (
-  <div className="flex flex-col items-center">
-    <span className="text-xl font-bold text-white">{value}</span>
-    <span className="text-xs text-white/80">{label}</span>
-  </div>
-);
 
 // Mobile Filter Drawer
 const MobileFilterDrawer = ({ isOpen, onClose, children }) => {
@@ -53,14 +46,14 @@ const MobileFilterDrawer = ({ isOpen, onClose, children }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/50 z-50 lg:hidden"
+            className="fixed inset-0 bg-black/50 z-[99999] lg:hidden"
           />
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed right-0 top-0 h-full w-85 bg-white shadow-2xl z-50 lg:hidden overflow-y-auto"
+            className="fixed right-0 top-0 h-full w-65 bg-white shadow-2xl z-[99999] lg:hidden overflow-y-auto"
           >
             <div className="sticky top-0 bg-white border-b border-gray-100 p-4 flex justify-between items-center">
               <h3 className="font-bold text-lg flex items-center gap-2">
@@ -115,44 +108,123 @@ const CategoryFilter = ({ categories, selectedCategory, onSelectCategory }) => {
 
 // Sort Options Component
 const SortOptions = ({ sortBy, onSortChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  
   const options = [
-    { value: "featured", label: "✨ Featured", icon: "🔥" },
-    { value: "price-asc", label: "💰 Price: Low to High", icon: "📈" },
-    { value: "price-desc", label: "💰 Price: High to Low", icon: "📉" },
-    { value: "rating", label: "⭐ Top Rated", icon: "🏆" },
+    { value: "featured", label: "Featured", icon: "🔥", description: "Most popular items" },
+    { value: "price-asc", label: "Price: Low to High", icon: "📈", description: "Cheapest first" },
+    { value: "price-desc", label: "Price: High to Low", icon: "📉", description: "Premium first" },
+    { value: "rating", label: "Top Rated", icon: "⭐", description: "Highest rated items" },
   ];
 
+  const selectedOption = options.find(opt => opt.value === sortBy) || options[0];
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Close on escape key
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === "Escape" && isOpen) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen]);
+
   return (
-    <div className="relative">
-      <select
-        value={sortBy}
-        onChange={(e) => onSortChange(e.target.value)}
-        className="px-4 py-3 pr-10 border border-gray-200 rounded-xl text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none cursor-pointer"
+    <div className="relative" ref={dropdownRef}>
+      {/* Dropdown Trigger Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="group px-4 py-3 pr-10 bg-white border border-gray-200 rounded-xl text-sm font-medium hover:border-orange-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 flex items-center gap-2 min-w-[200px] justify-between"
       >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+        <div className="flex items-center gap-2">
+          <span className="text-base">{selectedOption.icon}</span>
+          <span className="text-gray-700">{selectedOption.label}</span>
+        </div>
         <svg
-          className="w-4 h-4 text-gray-400"
+          className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
-      </div>
+      </button>
+
+      {/* Dropdown Menu */}
+      {isOpen && (
+        <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="py-1">
+            {options.map((option, index) => (
+              <button
+                key={option.value}
+                onClick={() => {
+                  onSortChange(option.value);
+                  setIsOpen(false);
+                }}
+                className={`
+                  w-full px-4 py-3 text-left transition-all duration-150
+                  flex items-center gap-3
+                  ${sortBy === option.value 
+                    ? "bg-orange-50 text-orange-600" 
+                    : "hover:bg-gray-50 text-gray-700"
+                  }
+                  ${index !== options.length - 1 ? "border-b border-gray-100" : ""}
+                `}
+              >
+                {/* Icon */}
+                <div className={`
+                  w-8 h-8 rounded-lg flex items-center justify-center text-lg
+                  ${sortBy === option.value 
+                    ? "bg-orange-100" 
+                    : "bg-gray-50 group-hover:bg-gray-100"
+                  }
+                `}>
+                  {option.icon}
+                </div>
+                
+                {/* Text Content */}
+                <div className="flex-1">
+                  <div className={`
+                    text-sm font-medium
+                    ${sortBy === option.value ? "text-orange-600" : "text-gray-700"}
+                  `}>
+                    {option.label}
+                  </div>
+                  {option.description && (
+                    <div className="text-xs text-gray-400 mt-0.5">
+                      {option.description}
+                    </div>
+                  )}
+                </div>
+
+                {/* Checkmark for selected */}
+                {sortBy === option.value && (
+                  <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
 
 // Price Range Slider
 const PriceRangeSlider = ({ min, max, value, onChange }) => {
@@ -183,7 +255,7 @@ const PriceRangeSlider = ({ min, max, value, onChange }) => {
           className="absolute top-0 left-0 w-full h-2 opacity-0 cursor-pointer"
         />
         <div
-          className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-orange-500 rounded-full shadow-md cursor-pointer transition-all hover:scale-110"
+          className="absolute top-[0.7rem] -translate-y-1/2 w-4 h-4 bg-white border-2 border-orange-500 rounded-full shadow-md cursor-pointer transition-all hover:scale-110"
           style={{
             left: `${percentage}%`,
             transform: `translateX(-50%) translateY(-50%)`,
@@ -476,33 +548,36 @@ export default function RestaurantShopPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
 
         {/* Header Icons */}
-        <div className="absolute top-5 left-4 right-4 flex justify-between z-20">
-          <button
-            onClick={() => router.back()}
-            className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/70 transition-all"
-          >
-            <FiChevronLeft size={22} />
-          </button>
-          <div className="flex gap-2">
+        <div className="md:hidden block">
+          <div className="absolute top-5 left-4 right-4 flex justify-between z-20">
             <button
-              onClick={handleShare}
+              onClick={() => router.back()}
               className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/70 transition-all"
             >
-              <FiShare2 size={18} />
+              <FiChevronLeft size={22} />
             </button>
-            <button className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/70 transition-all relative">
-              <FiShoppingBag size={18} />
-              {Object.values(cartQuantities).reduce((a, b) => a + b, 0) > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-orange-500 to-red-500 rounded-full text-xs font-bold flex items-center justify-center text-white">
-                  {Object.values(cartQuantities).reduce((a, b) => a + b, 0)}
-                </span>
-              )}
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={handleShare}
+                className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/70 transition-all"
+              >
+                <FiShare2 size={18} />
+              </button>
+              <button className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/70 transition-all relative">
+                <FiShoppingBag size={18} />
+                {Object.values(cartQuantities).reduce((a, b) => a + b, 0) >
+                  0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-orange-500 to-red-500 rounded-full text-xs font-bold flex items-center justify-center text-white">
+                    {Object.values(cartQuantities).reduce((a, b) => a + b, 0)}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Restaurant Info Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-20">
+        <div className="absolute bottom-10  md:bottom-20 left-0 right-0 p-6 text-white z-20">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center gap-2 mb-3 flex-wrap">
               <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm px-2 py-1 rounded-lg">
@@ -548,11 +623,12 @@ export default function RestaurantShopPage() {
           </div>
         </div>
       </div>
+
       {/* Main Content - Rounded Top */}
-      <div className="relative -mt-6 bg-white rounded-t-3xl shadow-xl">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="relative -mt-6 bg-white rounded-t-xl md:rounded-t-3xl shadow-xl">
+        <div className="w-full mx-auto px-3 md:px-7 py-6">
           {/* Search and Controls */}
-          <div className="bg-white rounded-2xl p-4 shadow-lg border border-gray-100 mb-6">
+          <div className="bg-white rounded-2xl p-2 md:p-4 shadow-lg border border-gray-100 mb-3 md:mb-6">
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1 relative">
                 <FiSearch
@@ -569,20 +645,6 @@ export default function RestaurantShopPage() {
               </div>
               <div className="flex gap-3">
                 <SortOptions sortBy={sortBy} onSortChange={setSortBy} />
-                <div className="flex gap-1 border border-gray-200 rounded-xl overflow-hidden bg-white">
-                  <button
-                    onClick={() => setViewMode("grid")}
-                    className={`p-3 transition-all duration-200 ${viewMode === "grid" ? "bg-gradient-to-r from-orange-500 to-red-500 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-                  >
-                    <FiGrid size={18} />
-                  </button>
-                  <button
-                    onClick={() => setViewMode("list")}
-                    className={`p-3 transition-all duration-200 ${viewMode === "list" ? "bg-gradient-to-r from-orange-500 to-red-500 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-                  >
-                    <FiList size={18} />
-                  </button>
-                </div>
                 <button
                   onClick={() => setIsFilterOpen(true)}
                   className="lg:hidden p-3 border border-gray-200 rounded-xl relative"
@@ -599,169 +661,29 @@ export default function RestaurantShopPage() {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Desktop Sidebar - Beautiful Filter Section */}
-            <aside className="hidden lg:block w-80 flex-shrink-0">
-              <div className="sticky top-4 space-y-5">
-                {/* Categories Section */}
-                <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100">
-                  <div className="bg-gradient-to-r from-orange-500 to-red-500 px-5 py-3">
+            {/* Desktop Sidebar - Unified Filter Panel */}
+            <aside className="hidden lg:block w-80 flex-shrink-0 no-scrollbar">
+              <div className="sticky top-4">
+                <div className="bg-white rounded-2xl shadow-xl border no-scrollbar border-gray-100 overflow-hidden">
+                  {/* Header with Clear All */}
+                  <div className="px-5 py-4 bg-gradient-to-r from-gray-800 to-gray-900 flex items-center justify-between">
                     <h3 className="font-bold text-white flex items-center gap-2">
-                      <FiPackage size={18} />
-                      Categories
-                    </h3>
-                  </div>
-                  <div className="p-4 space-y-1 max-h-[300px] overflow-y-auto custom-scrollbar">
-                    <button
-                      onClick={() => setSelectedCategory(null)}
-                      className={`w-full text-left px-3 py-2.5 rounded-xl text-sm transition-all duration-200 flex justify-between items-center ${
-                        selectedCategory === null
-                          ? "bg-gradient-to-r from-orange-50 to-red-50 text-orange-600 font-semibold border-l-4 border-orange-500"
-                          : "hover:bg-gray-50 text-gray-700"
-                      }`}
-                    >
-                      <span>🍽️ All Items</span>
-                      <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
-                        {allProducts.length}
-                      </span>
-                    </button>
-                    {categories.map((category) => (
-                      <button
-                        key={category.categoryId}
-                        onClick={() => setSelectedCategory(category.categoryId)}
-                        className={`w-full text-left px-3 py-2.5 rounded-xl text-sm transition-all duration-200 flex justify-between items-center ${
-                          selectedCategory === category.categoryId
-                            ? "bg-gradient-to-r from-orange-50 to-red-50 text-orange-600 font-semibold border-l-4 border-orange-500"
-                            : "hover:bg-gray-50 text-gray-700"
-                        }`}
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
-                        <span>{category.categoryName}</span>
-                        <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
-                          {category.products.length}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Food Type Filter */}
-                <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100">
-                  <div className="bg-gradient-to-r from-green-500 to-emerald-500 px-5 py-3">
-                    <h3 className="font-bold text-white flex items-center gap-2">
-                      <FaLeaf size={16} />
-                      Food Type
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                        />
+                      </svg>
+                      Filter Menu
                     </h3>
-                  </div>
-                  <div className="p-4 space-y-2">
-                    {[
-                      {
-                        id: "all",
-                        name: "All Items",
-                        icon: "🍽️",
-                        count: allProducts.length,
-                      },
-                      {
-                        id: "veg",
-                        name: "Pure Veg",
-                        icon: "🥬",
-                        count: allProducts.filter((p) => p.isVeg).length,
-                      },
-                      {
-                        id: "nonveg",
-                        name: "Non Veg",
-                        icon: "🍗",
-                        count: allProducts.filter((p) => !p.isVeg).length,
-                      },
-                    ].map((type) => (
-                      <button
-                        key={type.id}
-                        onClick={() => setFoodType(type.id)}
-                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 ${
-                          foodType === type.id
-                            ? "bg-green-50 text-green-600 font-semibold border-l-4 border-green-500"
-                            : "hover:bg-gray-50 text-gray-700"
-                        }`}
-                      >
-                        <span className="text-lg">{type.icon}</span>
-                        <span className="flex-1 text-left">{type.name}</span>
-                        <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
-                          {type.count}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Price Range Filter */}
-                <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100">
-                  <div className="bg-gradient-to-r from-blue-500 to-indigo-500 px-5 py-3">
-                    <h3 className="font-bold text-white flex items-center gap-2">
-                      <FiDollarSign size={18} />
-                      Price Range
-                    </h3>
-                  </div>
-                  <div className="p-4">
-                    <PriceRangeSlider
-                      min={0}
-                      max={maxPrice}
-                      value={priceRange}
-                      onChange={setPriceRange}
-                    />
-                  </div>
-                </div>
-
-                {/* Rating Filter */}
-                <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100">
-                  <div className="bg-gradient-to-r from-yellow-500 to-amber-500 px-5 py-3">
-                    <h3 className="font-bold text-white flex items-center gap-2">
-                      <FiStar size={18} />
-                      Rating
-                    </h3>
-                  </div>
-                  <div className="p-4 space-y-2">
-                    {[4, 3].map((rating) => (
-                      <button
-                        key={rating}
-                        onClick={() =>
-                          setSelectedRating(
-                            selectedRating === rating ? null : rating,
-                          )
-                        }
-                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 ${
-                          selectedRating === rating
-                            ? "bg-yellow-50 text-yellow-600 font-semibold border-l-4 border-yellow-500"
-                            : "hover:bg-gray-50 text-gray-700"
-                        }`}
-                      >
-                        <div className="flex items-center gap-1">
-                          <FiStar
-                            className="text-yellow-500 fill-yellow-500"
-                            size={16}
-                          />
-                          <span className="font-medium">{rating}.0+ Stars</span>
-                        </div>
-                        <div
-                          className={`ml-auto w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                            selectedRating === rating
-                              ? "border-yellow-500 bg-yellow-500"
-                              : "border-gray-300"
-                          }`}
-                        >
-                          {selectedRating === rating && (
-                            <FiCheckCircle size={12} className="text-white" />
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Active Filters Summary */}
-                {activeFiltersCount > 0 && (
-                  <div className="bg-orange-50 rounded-2xl p-4 border border-orange-200">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-semibold text-orange-600">
-                        Active Filters
-                      </span>
+                    {activeFiltersCount > 0 && (
                       <button
                         onClick={() => {
                           setSelectedCategory(null);
@@ -770,63 +692,322 @@ export default function RestaurantShopPage() {
                           setSelectedRating(null);
                           setSearchQuery("");
                         }}
-                        className="text-xs text-orange-600 hover:text-orange-700 font-medium"
+                        className="text-xs text-gray-300 hover:text-white transition-colors flex items-center gap-1"
                       >
+                        <svg
+                          className="w-3 h-3"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
                         Clear all
                       </button>
+                    )}
+                  </div>
+
+                  {/* Filter Content with Custom Scrollbar */}
+                  <div className="divide-y divide-gray-100 max-h-[calc(100vh-120px)] no-scrollbar overflow-y-auto custom-scrollbar">
+                    {/* Categories Section */}
+                    <div className="p-4">
+                      <div className="flex items-center gap-2 mb-3 text-gray-700 font-semibold text-sm">
+                        <svg
+                          className="w-4 h-4 text-orange-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                          />
+                        </svg>
+                        Categories
+                      </div>
+                      <div className="space-y-1">
+                        <button
+                          onClick={() => setSelectedCategory(null)}
+                          className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 flex justify-between items-center group ${
+                            selectedCategory === null
+                              ? "bg-orange-50 text-orange-600 font-medium ring-1 ring-orange-200"
+                              : "hover:bg-gray-50 text-gray-600"
+                          }`}
+                        >
+                          <span className="flex items-center gap-2">
+                            <span className="text-base">🍽️</span>
+                            <span>All Items</span>
+                          </span>
+                          <span className="text-xs bg-gray-100 px-2 py-0.5 rounded-full group-hover:bg-gray-200">
+                            {allProducts.length}
+                          </span>
+                        </button>
+                        {categories.map((category) => (
+                          <button
+                            key={category.categoryId}
+                            onClick={() =>
+                              setSelectedCategory(category.categoryId)
+                            }
+                            className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 flex justify-between items-center group ${
+                              selectedCategory === category.categoryId
+                                ? "bg-orange-50 text-orange-600 font-medium ring-1 ring-orange-200"
+                                : "hover:bg-gray-50 text-gray-600"
+                            }`}
+                          >
+                            <span className="truncate">
+                              {category.categoryName}
+                            </span>
+                            <span className="text-xs bg-gray-100 px-2 py-0.5 rounded-full group-hover:bg-gray-200">
+                              {category.products.length}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedCategory && (
-                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-white rounded-lg text-xs text-gray-600">
+
+                    {/* Food Type Section */}
+                    <div className="p-4">
+                      <div className="flex items-center gap-2 mb-3 text-gray-700 font-semibold text-sm">
+                        <svg
+                          className="w-4 h-4 text-green-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                          />
+                        </svg>
+                        Food Type
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[
                           {
-                            categories.find(
-                              (c) => c.categoryId === selectedCategory,
-                            )?.categoryName
-                          }
+                            id: "all",
+                            name: "All",
+                            icon: "🍽️",
+                            count: allProducts.length,
+                          },
+                          {
+                            id: "veg",
+                            name: "Veg",
+                            icon: "🥬",
+                            count: allProducts.filter((p) => p.isVeg).length,
+                          },
+                          {
+                            id: "nonveg",
+                            name: "Non-Veg",
+                            icon: "🍗",
+                            count: allProducts.filter((p) => !p.isVeg).length,
+                          },
+                        ].map((type) => (
                           <button
-                            onClick={() => setSelectedCategory(null)}
-                            className="ml-1 hover:text-red-500"
+                            key={type.id}
+                            onClick={() => setFoodType(type.id)}
+                            className={`flex flex-col items-center gap-1 p-2 rounded-lg text-sm transition-all duration-200 ${
+                              foodType === type.id
+                                ? "bg-green-50 text-green-600 font-medium ring-1 ring-green-200"
+                                : "hover:bg-gray-50 text-gray-600"
+                            }`}
                           >
-                            ✕
+                            <span className="text-xl">{type.icon}</span>
+                            <span className="text-xs font-medium">
+                              {type.name}
+                            </span>
+                            <span className="text-xs text-gray-400">
+                              {type.count}
+                            </span>
                           </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Price Range Section */}
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2 text-gray-700 font-semibold text-sm">
+                          <svg
+                            className="w-4 h-4 text-blue-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          Price Range
+                        </div>
+                        <span className="text-sm font-semibold text-blue-600">
+                          ₹{priceRange}
                         </span>
-                      )}
-                      {foodType !== "all" && (
-                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-white rounded-lg text-xs text-gray-600">
-                          {foodType === "veg" ? "🥬 Veg" : "🍗 Non Veg"}
+                      </div>
+                      <PriceRangeSlider
+                        min={0}
+                        max={maxPrice}
+                        value={priceRange}
+                        onChange={setPriceRange}
+                      />
+                    </div>
+
+                    {/* Rating Section */}
+                    <div className="p-4">
+                      <div className="flex items-center gap-2 mb-3 text-gray-700 font-semibold text-sm">
+                        <svg
+                          className="w-4 h-4 text-yellow-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                          />
+                        </svg>
+                        Rating
+                      </div>
+                      <div className="space-y-2">
+                        {[4, 3].map((rating) => (
                           <button
-                            onClick={() => setFoodType("all")}
-                            className="ml-1 hover:text-red-500"
+                            key={rating}
+                            onClick={() =>
+                              setSelectedRating(
+                                selectedRating === rating ? null : rating,
+                              )
+                            }
+                            className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-all duration-200 ${
+                              selectedRating === rating
+                                ? "bg-yellow-50 text-yellow-600 ring-1 ring-yellow-200"
+                                : "hover:bg-gray-50 text-gray-600"
+                            }`}
                           >
-                            ✕
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-0.5">
+                                {[...Array(5)].map((_, i) => (
+                                  <svg
+                                    key={i}
+                                    className={`w-4 h-4 ${i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                  </svg>
+                                ))}
+                              </div>
+                              <span className="text-sm font-medium">
+                                {rating}+ Stars
+                              </span>
+                            </div>
+                            <div
+                              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                                selectedRating === rating
+                                  ? "border-yellow-500 bg-yellow-500"
+                                  : "border-gray-300"
+                              }`}
+                            >
+                              {selectedRating === rating && (
+                                <svg
+                                  className="w-3 h-3 text-white"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={3}
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </svg>
+                              )}
+                            </div>
                           </button>
-                        </span>
-                      )}
-                      {priceRange < maxPrice && (
-                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-white rounded-lg text-xs text-gray-600">
-                          Up to ₹{priceRange}
-                          <button
-                            onClick={() => setPriceRange(maxPrice)}
-                            className="ml-1 hover:text-red-500"
-                          >
-                            ✕
-                          </button>
-                        </span>
-                      )}
-                      {selectedRating && (
-                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-white rounded-lg text-xs text-gray-600">
-                          {selectedRating}+ Stars
-                          <button
-                            onClick={() => setSelectedRating(null)}
-                            className="ml-1 hover:text-red-500"
-                          >
-                            ✕
-                          </button>
-                        </span>
-                      )}
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Active Filters Summary */}
+                    {activeFiltersCount > 0 && (
+                      <div className="p-4 bg-orange-50/50 border-t border-orange-100">
+                        <div className="flex flex-wrap gap-2">
+                          {selectedCategory && (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-white rounded-lg text-xs text-gray-700 shadow-sm ring-1 ring-gray-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+                              {
+                                categories.find(
+                                  (c) => c.categoryId === selectedCategory,
+                                )?.categoryName
+                              }
+                              <button
+                                onClick={() => setSelectedCategory(null)}
+                                className="ml-1 hover:text-red-500 transition-colors"
+                              >
+                                ✕
+                              </button>
+                            </span>
+                          )}
+                          {foodType !== "all" && (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-white rounded-lg text-xs text-gray-700 shadow-sm ring-1 ring-gray-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                              {foodType === "veg" ? "🥬 Veg" : "🍗 Non Veg"}
+                              <button
+                                onClick={() => setFoodType("all")}
+                                className="ml-1 hover:text-red-500 transition-colors"
+                              >
+                                ✕
+                              </button>
+                            </span>
+                          )}
+                          {priceRange < maxPrice && (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-white rounded-lg text-xs text-gray-700 shadow-sm ring-1 ring-gray-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                              ₹{priceRange} max
+                              <button
+                                onClick={() => setPriceRange(maxPrice)}
+                                className="ml-1 hover:text-red-500 transition-colors"
+                              >
+                                ✕
+                              </button>
+                            </span>
+                          )}
+                          {selectedRating && (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-white rounded-lg text-xs text-gray-700 shadow-sm ring-1 ring-gray-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
+                              {selectedRating}+ ★
+                              <button
+                                onClick={() => setSelectedRating(null)}
+                                className="ml-1 hover:text-red-500 transition-colors"
+                              >
+                                ✕
+                              </button>
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Results Count */}
+                    <div className="p-4 bg-gray-50 text-center text-sm text-gray-500 font-medium">
+                      Showing {filteredProducts.length} of {allProducts.length}{" "}
+                      items
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             </aside>
 
@@ -901,7 +1082,7 @@ export default function RestaurantShopPage() {
                 <>
                   {/* Trending Section */}
                   {trendingProducts.length > 0 && (
-                    <div className="mb-10">
+                    <div className="mb-10 ">
                       <div className="flex items-center gap-2 mb-4">
                         <div className="w-1 h-6 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></div>
                         <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
