@@ -60,7 +60,7 @@ const getMinimumAllowedTime = (targetDate) => {
 const getDestinationKey = (item) =>
   item?.id || item?.destination || item?.name || "";
 
-export default function Step1SelectTowards({ selDest, onSelectDest, onNext }) {
+export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onClose }) {
   const dispatch = useDispatch();
   const routeSearch = useSelector(selectRouteSearch);
   const towardsLocation = useSelector(selectTowardsLocation);
@@ -614,16 +614,27 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext }) {
             formattedTime={formattedTime}
           />
 
-          {onNext && (
-            <button
-              type="button"
-              onClick={onNext}
-              disabled={!selDest}
-              className="mt-4 w-full rounded-xl bg-[#ff581b] px-5 py-3 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#e04d16] disabled:bg-orange-200 disabled:cursor-not-allowed md:hidden"
-            >
-              Next →
-            </button>
-          )}
+          <div className="flex gap-3 mt-4 md:hidden">
+            {onClose && (
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 rounded-xl border border-gray-200 px-5 py-3 text-sm font-semibold text-gray-600 transition-all duration-150 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+            )}
+            {onNext && (
+              <button
+                type="button"
+                onClick={onNext}
+                disabled={!selDest}
+                className="flex-1 rounded-xl bg-[#ff581b] px-5 py-3 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#e04d16] disabled:bg-orange-200 disabled:cursor-not-allowed"
+              >
+                Next →
+              </button>
+            )}
+          </div>
         </div>
 
         <style>{`

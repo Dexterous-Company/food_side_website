@@ -18,6 +18,9 @@ import UserProfile from "./UserProfile";
 import PaymentMethods from "./PaymentMethods";
 import OrderSummary from "./OrderSummary";
 import BillSummary from "./BillSummary";
+import { FaArrowLeft } from "react-icons/fa";
+import Link from "next/link";
+import { FaBagShopping } from "react-icons/fa6";
 
 const FREE_DELIVERY_THRESHOLD = 500;
 const DELIVERY_FEE = 40;
@@ -380,6 +383,7 @@ const CheckOutPage = () => {
     }
 
     setIsProcessing(true);
+    let navigationCompleted = false;
 
     try {
       const orderData = prepareOrderData();
@@ -431,14 +435,6 @@ const CheckOutPage = () => {
           console.log("COD payment processed successfully");
         }
 
-        // Clear cart
-        await clearCart();
-        console.log("Cart cleared");
-
-        // Clear delivery data from localStorage
-        localStorage.removeItem("deliverySelection");
-        sessionStorage.removeItem("deliverySelection");
-
         // Store order data in sessionStorage to pass to success page
         const successData = {
           orderNumber: createdOrder.orderNumber,
@@ -457,9 +453,18 @@ const CheckOutPage = () => {
           `Order placed successfully! Order ID: ${createdOrder.orderNumber}`,
         );
         localStorage.setItem("currentOrder", JSON.stringify(orderData));
-        router.push("/order_success");
-        // Navigate to order success page
-        // router.push(`/order_success?orderId=${createdOrder._id}&orderNumber=${createdOrder.orderNumber}`);
+
+        // Navigate first, then clear cart after navigation to avoid flashing empty cart
+        await router.push("/order_success");
+        navigationCompleted = true;
+
+        await clearCart();
+        console.log("Cart cleared");
+
+        // Clear delivery data from localStorage after navigation
+        localStorage.removeItem("deliverySelection");
+        sessionStorage.removeItem("deliverySelection");
+
         return;
       }
 
@@ -503,7 +508,9 @@ const CheckOutPage = () => {
       // Navigate to failed page instead of showing inline
       router.push(`/order_failed?error=${encodeURIComponent(errorMessage)}`);
     } finally {
-      setIsProcessing(false);
+      if (!navigationCompleted) {
+        setIsProcessing(false);
+      }
     }
   };
 
@@ -544,9 +551,26 @@ const CheckOutPage = () => {
 
   return (
     <div
-      className="min-h-screen pt-19 md:pt-5 pb-20 md:pb-0"
+      className="min-h-screen md:pt-5 pb-20 md:pb-0"
       style={{ backgroundColor: "#f5f5f5" }}
     >
+      <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2 ">
+        <div className="h-12 px-3 flex items-center justify-between ">
+          <button
+            onClick={() => router.back()}
+            className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+          >
+            <FaArrowLeft className="text-gray-700 text-xs" />
+          </button>
+          <h1 className="text-lg font-black text-gray-900">Checkout</h1>
+          <Link href="/">
+            <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+              <FaBagShopping className="text-gray-700 text-xs" />
+            </button>
+          </Link>
+        </div>
+      </div>
+
       {toastMessage && (
         <div
           className={`fixed top-4 right-4 z-50 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg ${
@@ -575,7 +599,7 @@ const CheckOutPage = () => {
                 isDesktop={true}
                 isUserAuth={isUserAuth}
                 userData={userData}
-                onLogin={() => router.push("/login")}
+                // onLogin={() => router.push("/login")}
               />
             ) : (
               <>

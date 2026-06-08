@@ -54,14 +54,13 @@ const Page = () => {
     setOpen(true);
   };
 
- 
-
 
   return (
     <div>
       <div className="relative">
         <HeroSection />
       </div>
+      
 
       <DeliverySelectionModal
         isOpen={open}
@@ -76,7 +75,7 @@ const Page = () => {
         New Booking
       </button>
       
-      <div className="-mt-30 relative z-[999999] lg:z-[20]">
+      <div className="-mt-30 relative z-[20] lg:z-[20]">
         <SelectionProcess />
       </div>
       <RestaurantsMainPage />
