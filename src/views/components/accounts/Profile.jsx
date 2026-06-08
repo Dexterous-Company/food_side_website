@@ -31,7 +31,7 @@ export default function Profile() {
     name: name || "User" ,
     phone: phone || "8982471422",
     email: email|| "demo@gmail.com",
-    profileImage:   profileImage|| "https://res.cloudinary.com/dssdvnei1/image/upload/v1779258906/user_profiles/ew3xtccbogfye57wxhj1.jpg",
+    profileImage:   profileImage|| "",
   });
 
   const handleNameChange = (e) => {
