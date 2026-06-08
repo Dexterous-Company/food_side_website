@@ -201,7 +201,56 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext }) {
     query,
   ]);
 
-  const fetchCurrentLocation = () => {
+  const reverseGeocode = async (lat, lng) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
+        {
+          headers: {
+            'Accept': 'application/json',
+          },
+        }
+      );
+      
+      if (!response.ok) throw new Error('Reverse geocoding failed');
+      
+      const data = await response.json();
+      
+      const address = data.address || {};
+      const road = address.road || address.street || '';
+      const suburb = address.suburb || address.neighbourhood || address.village || '';
+      const city = address.city || address.town || address.village || address.municipality || '';
+      const state = address.state || '';
+      const postcode = address.postcode || '';
+      const country = address.country || '';
+      
+      // Build a readable address
+      const addressParts = [road, suburb, city, state, postcode].filter(Boolean);
+      const formattedAddress = addressParts.join(', ') || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+      
+      return {
+        fromLocation: city || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
+        fromLocationDetailed: formattedAddress,
+        city: city,
+        state: state,
+        pincode: postcode,
+        landmark: road,
+      };
+    } catch (error) {
+      console.error('Reverse geocoding error:', error);
+      const fallback = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+      return {
+        fromLocation: fallback,
+        fromLocationDetailed: fallback,
+        city: '',
+        state: '',
+        pincode: '',
+        landmark: '',
+      };
+    }
+  };
+
+  const fetchCurrentLocation = async () => {
     setLocationError("");
 
     if (!navigator?.geolocation) {
@@ -211,17 +260,25 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext }) {
 
     setLocationLoading(true);
     navigator.geolocation.getCurrentPosition(
-      (position) => {
+      async (position) => {
         const coords = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
-        const fallback = `${coords.lat.toFixed(4)}, ${coords.lng.toFixed(4)}`;
 
         setPickupCoordinates(coords);
-        setFromLocation(fallback);
-        setFromLocationDetailed(fallback);
-        setPickupAddressMeta((prev) => ({ ...prev, city: "" }));
+
+        // Reverse geocode to get actual address
+        const addressData = await reverseGeocode(coords.lat, coords.lng);
+        
+        setFromLocation(addressData.fromLocation);
+        setFromLocationDetailed(addressData.fromLocationDetailed);
+        setPickupAddressMeta({
+          city: addressData.city,
+          state: addressData.state,
+          pincode: addressData.pincode,
+          landmark: addressData.landmark,
+        });
         setLocationLoading(false);
       },
       (error) => {
