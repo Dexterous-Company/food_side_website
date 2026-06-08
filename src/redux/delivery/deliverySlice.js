@@ -90,6 +90,9 @@ const initialState = {
   isDestinationSet: false,
   isRouteSelected: false,
   isDeliveryPointSelected: false,
+  
+  // Modal State
+  isDeliveryModalOpen: false,
 };
 
 const deliverySlice = createSlice({
@@ -390,6 +393,11 @@ const deliverySlice = createSlice({
     setDeliveryPointSelectedStatus: (state, action) => {
       state.isDeliveryPointSelected = action.payload;
     },
+    
+    // ========== Modal State ==========
+    setDeliveryModalOpen: (state, action) => {
+      state.isDeliveryModalOpen = action.payload;
+    },
   },
 });
 
@@ -426,6 +434,7 @@ export const {
   setDestinationStatus,
   setRouteSelectedStatus,
   setDeliveryPointSelectedStatus,
+  setDeliveryModalOpen,
 } = deliverySlice.actions;
 
 // ========== Selectors ==========
@@ -444,6 +453,7 @@ export const selectIsPickupSet = state => state.delivery.isPickupSet;
 export const selectIsDestinationSet = state => state.delivery.isDestinationSet;
 export const selectIsRouteSelected = state => state.delivery.isRouteSelected;
 export const selectIsDeliveryPointSelected = state => state.delivery.isDeliveryPointSelected;
+export const selectIsDeliveryModalOpen = state => state.delivery.isDeliveryModalOpen;
 
 export const selectCompleteDeliveryData = createSelector(
   [

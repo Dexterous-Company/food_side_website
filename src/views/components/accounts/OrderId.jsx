@@ -28,6 +28,7 @@ import {
   FiLoader,
   FiXCircle,
   FiNavigation,
+  FiExternalLink,
 } from "react-icons/fi";
 import { getOrderDetails, cancel_order, clearOrderState } from "@/redux/Order/OrderSlice";
 
@@ -293,6 +294,23 @@ export default function OrderId() {
   const { currentOrder, currentOrderLoading, orderActionLoading } = useSelector((state) => state.order);
   const { isUserAuth, userData } = useSelector((state) => state.Authentication);
 
+  // Dynamic contact information
+  const contactInfo = {
+    phoneNumbers: [
+      { number: "+91 8688043861", label: "Support Hotline", type: "call" }
+    ],
+    emails: [
+      { email: "info@foodside.co.in", label: "Info Support", type: "email" },
+      { email: "admin@foodside.co.in", label: "Admin Support", type: "email" }
+    ],
+    whatsapp: {
+      number: "+91 8688043861",
+      message: "Hello, I need help with my order"
+    },
+    workingHours: "Mon-Sat: 9am - 10pm",
+    faqUrl: "/faq"
+  };
+
   // Get user's current location
   const getCurrentLocation = useCallback(() => {
     if (!navigator.geolocation) {
@@ -394,6 +412,29 @@ export default function OrderId() {
     }
     
     window.open(url, '_blank');
+  };
+
+  // Handle phone call
+  const handleCall = (phoneNumber) => {
+    window.location.href = `tel:${phoneNumber.replace(/\s/g, '')}`;
+  };
+
+  // Handle email
+  const handleEmail = (email, subject = "") => {
+    const subjectParam = subject ? `?subject=${encodeURIComponent(subject)}` : "";
+    window.location.href = `mailto:${email}${subjectParam}`;
+  };
+
+  // Handle WhatsApp
+  const handleWhatsApp = () => {
+    const message = encodeURIComponent(contactInfo.whatsapp.message);
+    const phoneNumber = contactInfo.whatsapp.number.replace(/\s/g, '');
+    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+  };
+
+  // Handle FAQ navigation
+  const handleFaq = () => {
+    router.push(contactInfo.faqUrl);
   };
 
   // Transform order to match UI format
@@ -557,7 +598,9 @@ export default function OrderId() {
                 <FiHeadphones className="text-[#FF581B] text-2xl" />
                 <h3 className="text-xl font-bold text-gray-800">Contact Support</h3>
               </div>
-              <button onClick={() => setShowSupport(false)} className="text-gray-400 hover:text-gray-600">✕</button>
+              <button onClick={() => setShowSupport(false)} className="text-gray-400 hover:text-gray-600">
+                <FiXCircle size={24} />
+              </button>
             </div>
           </div>
           <div className="p-6 space-y-4">
@@ -568,21 +611,42 @@ export default function OrderId() {
               </div>
               <p className="text-sm text-gray-600">We're here to help! Choose your preferred contact method:</p>
             </div>
-            <button className="w-full p-4 border border-orange-200 rounded-xl hover:bg-orange-50 transition-colors text-left">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                  <FiPhone className="text-green-600" />
+
+            {/* Working Hours Info */}
+            <div className="bg-gray-50 rounded-xl p-3 text-center">
+              <p className="text-xs text-gray-600">
+                <FiClock className="inline mr-1 text-[#FF581B]" size={12} />
+                Support Hours: {contactInfo.workingHours}
+              </p>
+            </div>
+
+            {/* Call Support Buttons */}
+            {contactInfo.phoneNumbers.map((phone, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleCall(phone.number)}
+                className="w-full p-4 border border-orange-200 rounded-xl hover:bg-orange-50 transition-colors text-left group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                    <FiPhone className="text-green-600" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold text-gray-800">{phone.label}</p>
+                    <p className="text-sm text-gray-500">{phone.number}</p>
+                  </div>
+                  <FiChevronRight className="text-gray-400" />
                 </div>
-                <div className="flex-1">
-                  <p className="font-semibold text-gray-800">Call Support</p>
-                  <p className="text-sm text-gray-500">Talk to our customer care executive</p>
-                </div>
-                <FiChevronRight className="text-gray-400" />
-              </div>
-            </button>
-            <button className="w-full p-4 border border-orange-200 rounded-xl hover:bg-orange-50 transition-colors text-left">
+              </button>
+            ))}
+
+            {/* WhatsApp Chat */}
+            <button
+              onClick={handleWhatsApp}
+              className="w-full p-4 border border-orange-200 rounded-xl hover:bg-orange-50 transition-colors text-left group"
+            >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-200 transition-colors">
                   <FiMessageCircle className="text-green-600" />
                 </div>
                 <div className="flex-1">
@@ -592,28 +656,41 @@ export default function OrderId() {
                 <FiChevronRight className="text-gray-400" />
               </div>
             </button>
-            <button className="w-full p-4 border border-orange-200 rounded-xl hover:bg-orange-50 transition-colors text-left">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                  <FiMail className="text-blue-600" />
+
+            {/* Email Support Buttons */}
+            {contactInfo.emails.map((email, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleEmail(email.email, `Order Support: ${order?.orderNumber}`)}
+                className="w-full p-4 border border-orange-200 rounded-xl hover:bg-orange-50 transition-colors text-left group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <FiMail className="text-blue-600" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold text-gray-800">{email.label}</p>
+                    <p className="text-sm text-gray-500">{email.email}</p>
+                  </div>
+                  <FiChevronRight className="text-gray-400" />
                 </div>
-                <div className="flex-1">
-                  <p className="font-semibold text-gray-800">Email Support</p>
-                  <p className="text-sm text-gray-500">support@restaurant.com</p>
-                </div>
-                <FiChevronRight className="text-gray-400" />
-              </div>
-            </button>
-            <button className="w-full p-4 border border-orange-200 rounded-xl hover:bg-orange-50 transition-colors text-left">
+              </button>
+            ))}
+
+            {/* FAQs */}
+            <button
+              onClick={handleFaq}
+              className="w-full p-4 border border-orange-200 rounded-xl hover:bg-orange-50 transition-colors text-left group"
+            >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
                   <FiHelpCircle className="text-purple-600" />
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold text-gray-800">FAQs</p>
                   <p className="text-sm text-gray-500">Find answers to common questions</p>
                 </div>
-                <FiChevronRight className="text-gray-400" />
+                <FiExternalLink className="text-gray-400" size={16} />
               </div>
             </button>
           </div>
@@ -668,7 +745,7 @@ export default function OrderId() {
             <FiArrowLeft size={18} className="text-[#FF581B]" />
           </button>
           <h1 className="font-semibold text-lg text-[#FF581B]">Order Details</h1>
-          <button className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center hover:bg-orange-100 transition-colors relative">
+          <button onClick={() => router.push("/cart")} className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center hover:bg-orange-100 transition-colors relative">
             <FiShoppingCart size={18} className="text-[#FF581B]" />
           </button>
         </div>
@@ -766,8 +843,17 @@ export default function OrderId() {
                       <div className="mt-3">
                         <label className="text-sm font-medium text-gray-700 mb-2 block">Enter OTP to confirm delivery</label>
                         <div className="flex gap-2">
-                          <input type="text" maxLength={6} value={enteredOtp} onChange={(e) => setEnteredOtp(e.target.value)} placeholder="Enter 6-digit OTP" className="flex-1 px-3 py-2 border border-orange-200 rounded-lg focus:outline-none focus:border-[#FF581B] focus:ring-2 focus:ring-[#FF581B]/20" />
-                          <button onClick={handleVerifyOtp} className="px-4 py-2 bg-[#FF581B] text-white rounded-lg font-medium hover:bg-[#E04A10] transition-colors">Verify</button>
+                          <input 
+                            type="text" 
+                            maxLength={6} 
+                            value={enteredOtp} 
+                            onChange={(e) => setEnteredOtp(e.target.value)} 
+                            placeholder="Enter 6-digit OTP" 
+                            className="flex-1 px-3 py-2 border border-orange-200 rounded-lg focus:outline-none focus:border-[#FF581B] focus:ring-2 focus:ring-[#FF581B]/20" 
+                          />
+                          <button onClick={handleVerifyOtp} className="px-4 py-2 bg-[#FF581B] text-white rounded-lg font-medium hover:bg-[#E04A10] transition-colors">
+                            Verify
+                          </button>
                         </div>
                       </div>
                     )}

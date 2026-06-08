@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { formatRouteName } from "../selectRoutes/formate";
 import {
   HiOutlineLocationMarker,
@@ -19,6 +19,8 @@ export default function Step4CompleteDetails({
   details,
   onDetailsChange,
   onBack,
+  showTimeUpdatedToast = false,
+  updatedTime = "",
 }) {
   const destinationName =
     selDest?.primaryText || selDest?.destination || selDest?.name || "";
@@ -26,6 +28,7 @@ export default function Step4CompleteDetails({
   const deliveryPointName = selDP?.name || "";
   const routeDistance = selRoute?.distanceKm || selRoute?.totalDistance || 0;
   const routeDuration = selRoute?.durationMinutes || selRoute?.totalTime || 0;
+  const [toast, setToast] = useState(null);
 
   const formatDuration = (minutes) => {
     if (!minutes) return "0h 0m";
@@ -34,8 +37,37 @@ export default function Step4CompleteDetails({
     return `${hours}h ${mins}m`;
   };
 
+  useEffect(() => {
+    if (!showTimeUpdatedToast) return undefined;
+
+    setToast(
+      updatedTime
+        ? `Your delivery time was updated to ${updatedTime} to keep it at least 1 hour from now.`
+        : "Your delivery time was updated to keep it at least 1 hour from now.",
+    );
+
+    const timeout = setTimeout(() => setToast(null), 4000);
+    return () => clearTimeout(timeout);
+  }, [showTimeUpdatedToast, updatedTime]);
+
   return (
     <div className="flex flex-col h-full">
+      {toast && (
+        <div className="fixed top-4 right-4 z-[1000000] rounded-lg bg-amber-500 px-4 py-3 text-sm font-medium text-white shadow-lg">
+          <div className="flex items-center gap-2">
+            <span>!</span>
+            <span>{toast}</span>
+            <button
+              type="button"
+              onClick={() => setToast(null)}
+              className="ml-2 text-white/80 hover:text-white"
+            >
+              x
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Banner Section with Back Button */}
       <div className="relative w-full h-39 sm:h-40 md:h-48 rounded-b-2xl overflow-hidden flex-shrink-0">
         <img
@@ -68,7 +100,7 @@ export default function Step4CompleteDetails({
               </button>
             </div>
 
-            <div className="hidden sm:block">
+            {/* <div className="hidden sm:block">
               <button
                 onClick={onBack}
                 aria-label="Back"
@@ -88,7 +120,7 @@ export default function Step4CompleteDetails({
                   />
                 </svg>
               </button>
-            </div>
+            </div> */}
           </>
         )}
       </div>
@@ -193,6 +225,17 @@ export default function Step4CompleteDetails({
             </div>
 
             <div className="space-y-3 mt-1">
+              <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 flex items-start gap-2">
+                <HiOutlineClock
+                  size={16}
+                  className="text-amber-600 flex-shrink-0 mt-0.5"
+                />
+                <p className="text-[11px] leading-4 text-amber-800">
+                  Please choose a delivery time at least 1 hour from now so the
+                  restaurant has enough time to prepare your order.
+                </p>
+              </div>
+
               {/* Destination Card */}
               <div className="bg-white rounded-2xl border border-gray-200 p-3">
                 <div className="flex gap-2">

@@ -234,7 +234,7 @@ const SelectionProcess = () => {
       {/* Modal for Mobile View Details */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-end lg:items-center justify-center bg-black/50 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white rounded-t-2xl lg:rounded-2xl w-full lg:max-w-2xl max-h-[90vh] overflow-y-auto animate-slideUp">
+          <div className="bg-white sm:pb-0 pb-14  rounded-t-2xl lg:rounded-2xl w-full lg:max-w-2xl max-h-[90vh] overflow-y-auto animate-slideUp">
             {/* Modal Header */}
             <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
