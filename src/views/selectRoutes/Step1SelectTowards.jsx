@@ -203,26 +203,58 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext }) {
 
   const reverseGeocode = async (lat, lng) => {
     try {
+      // Use Google Maps Geocoding API for accurate results
+      const GOOGLE_API_KEY = process.env.Next_GOOGLE_API_KEY || 'AIzaSyDfjw4P4PnfI08-B-ljZDhEeQxnBqNv3hQ';
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
-        {
-          headers: {
-            'Accept': 'application/json',
-          },
-        }
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`
       );
       
       if (!response.ok) throw new Error('Reverse geocoding failed');
       
       const data = await response.json();
       
-      const address = data.address || {};
-      const road = address.road || address.street || '';
-      const suburb = address.suburb || address.neighbourhood || address.village || '';
-      const city = address.city || address.town || address.village || address.municipality || '';
-      const state = address.state || '';
-      const postcode = address.postcode || '';
-      const country = address.country || '';
+      if (data.status !== 'OK' || !data.results || data.results.length === 0) {
+        throw new Error('No results found');
+      }
+      
+      const result = data.results[0];
+      const addressComponents = result.address_components || [];
+      
+      // Extract components
+      let road = '';
+      let suburb = '';
+      let city = '';
+      let state = '';
+      let postcode = '';
+      
+      for (const component of addressComponents) {
+        const types = component.types || [];
+        
+        if (types.includes('route') || types.includes('street_address')) {
+          road = component.long_name;
+        }
+        
+        if (types.includes('neighborhood') || types.includes('sublocality') || types.includes('sublocality_level_1')) {
+          if (!suburb) suburb = component.long_name;
+        }
+        
+        if (types.includes('locality') || types.includes('postal_town')) {
+          city = component.long_name;
+        }
+        
+        if (types.includes('administrative_area_level_1')) {
+          state = component.long_name;
+        }
+        
+        if (types.includes('postal_code')) {
+          postcode = component.long_name;
+        }
+      }
+      
+      // Clean up pincode - remove spaces and extra characters
+      if (postcode) {
+        postcode = postcode.replace(/\s+/g, '').replace(/[^0-9]/g, '');
+      }
       
       // Build a readable address
       const addressParts = [road, suburb, city, state, postcode].filter(Boolean);
