@@ -30,7 +30,6 @@ const HeaderPage = () => {
   const [scrolled, setScrolled] = useState(false);
   const [showAuthDropdown, setShowAuthDropdown] = useState(false);
   const [isDeliveryModalOpen, setIsDeliveryModalOpen] = useState(false);
-
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -205,7 +204,8 @@ const HeaderPage = () => {
     <>
       {/* MAIN HEADER - Transparent on scroll */}
       <header
-        className={`fixed w-full top-0 z-[1000] transition-all duration-300 ${
+        id="main-header"
+        className={`fixed w-full top-0 z-50 transition-all duration-300 ${
           scrolled
             ? "bg-white shadow-lg"
             : isHomePage

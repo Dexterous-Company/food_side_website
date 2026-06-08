@@ -8,6 +8,7 @@ import DateTimePill from "./DateTimePill";
 import { BANNERS } from "./constants";
 import {
   selectRouteSearch,
+  selectTowardsLocation,
   setJourneyDate,
   setJourneyTime,
   setPickupLocation,
@@ -62,6 +63,7 @@ const getDestinationKey = (item) =>
 export default function Step1SelectTowards({ selDest, onSelectDest, onNext }) {
   const dispatch = useDispatch();
   const routeSearch = useSelector(selectRouteSearch);
+  const towardsLocation = useSelector(selectTowardsLocation);
   const [query, setQuery] = useState("");
   const [fromLocation, setFromLocation] = useState("Hyderabad, Telangana");
   const [fromLocationDetailed, setFromLocationDetailed] = useState(
@@ -288,6 +290,13 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext }) {
       setIsDropdownOpen(false);
     }
   };
+
+  // Sync query with towardsLocation from Redux when modal opens
+  useEffect(() => {
+    if (towardsLocation && towardsLocation !== "") {
+      setQuery(towardsLocation);
+    }
+  }, [towardsLocation]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

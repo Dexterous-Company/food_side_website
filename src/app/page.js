@@ -54,21 +54,8 @@ const Page = () => {
     setOpen(true);
   };
 
-  // Don't render modal until client-side to avoid hydration issues
-  if (!isClient) {
-    return (
-      <div>
-        <div className="relative">
-          <HeroSection />
-        </div>
-        <div className="-mt-30 relative" style={{zIndex:99}}>
-          <SelectionProcess />
-        </div>
-        <RestaurantsMainPage />
-        <About />
-      </div>
-    );
-  }
+ 
+
 
   return (
     <div>
@@ -89,7 +76,7 @@ const Page = () => {
         New Booking
       </button>
       
-      <div className="-mt-30 relative" style={{zIndex:99}}>
+      <div className="-mt-30 relative z-[999999] lg:z-[20]">
         <SelectionProcess />
       </div>
       <RestaurantsMainPage />
