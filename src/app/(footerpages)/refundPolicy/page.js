@@ -1,4 +1,4 @@
-import RefundPolicies from '@/pages/footer_pages/RefundPolicies';
+import RefundPolicies from '@/views/footer_pages/RefundPolicies';
 import React from 'react';
 
 const page = () => {

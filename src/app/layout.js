@@ -1,24 +1,13 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Footer from "@/pages/components/Footer";
-import Header from "@/pages/components/Header";
-import ReduxLayoutProviders from "@/pages/Mainlayout/ReduxLayoutProviders";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
+import ReduxLayoutProviders from "@/views/Mainlayout/ReduxLayoutProviders";
+import ClientLayout from "@/views/Mainlayout/ClientLayout";
+export const viewport = {
+  themeColor: "#FF581B",
+};
 export const metadata = {
   title: "FoodSide | Highway Food Delivery Platform by Bollineni Ventures",
   description:
     "FoodSide helps travelers order fresh food from trusted highway restaurants across India. Pre-order meals and enjoy seamless highway dining experience.",
-
   keywords: [
     "FoodSide",
     "Bollineni Ventures",
@@ -27,9 +16,7 @@ export const metadata = {
     "road trip food",
     "highway restaurants",
   ],
-
   metadataBase: new URL("https://foodside.co.in"),
-  // ✅ CANONICAL URL
   alternates: {
     canonical: "https://foodside.co.in",
   },
@@ -56,20 +43,18 @@ export const metadata = {
       "Order fresh food from trusted highway restaurants across India.",
     images: ["https://foodside.co.in/main_log_fd.png"],
   },
-
   icons: {
     icon: [{ url: "/logo_foodeside.png", type: "image/png" }],
   },
+  
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="min-h-screen flex flex-col">
+    <html lang="en">
+      <body className="min-h-screen">
         <ReduxLayoutProviders>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <ClientLayout>{children}</ClientLayout>
         </ReduxLayoutProviders>
       </body>
     </html>
