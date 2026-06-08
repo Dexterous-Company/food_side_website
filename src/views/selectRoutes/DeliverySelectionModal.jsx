@@ -252,9 +252,6 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     
     // Save to Redux
     dispatch(setTowardsLocation(destObject.name));
-    
-    // Auto-advance to next step
-    setStep(2);
   };
 
   const handleSelectRoute = (route) => {

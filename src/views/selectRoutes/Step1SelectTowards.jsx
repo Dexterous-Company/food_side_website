@@ -65,15 +65,17 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext }) {
   const routeSearch = useSelector(selectRouteSearch);
   const towardsLocation = useSelector(selectTowardsLocation);
   const [query, setQuery] = useState("");
-  const [fromLocation, setFromLocation] = useState("Fetching your location...");
-  const [fromLocationDetailed, setFromLocationDetailed] = useState("");
+  const [fromLocation, setFromLocation] = useState("Hyderabad, Telangana");
+  const [fromLocationDetailed, setFromLocationDetailed] = useState(
+    "H.No 12-4, Ameerpet, Hyderabad - 500016",
+  );
   const [pickupCoordinates, setPickupCoordinates] = useState({
     lat: null,
     lng: null,
   });
   const [pickupAddressMeta, setPickupAddressMeta] = useState({
-    city: "",
-    state: "",
+    city: "Hyderabad",
+    state: "Telangana",
     pincode: "",
     landmark: "",
   });
@@ -384,12 +386,6 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext }) {
       setQuery(towardsLocation);
     }
   }, [towardsLocation]);
-
-  // Auto-fetch current location on component mount
-  useEffect(() => {
-    fetchCurrentLocation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

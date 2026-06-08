@@ -41,7 +41,7 @@ export default function ClientLayout({ children }) {
 
   // Mobile control
   const hideHeaderMobileRoutes = ["/cart"];
-  const hideFooterMobileRoutes = [];
+  const hideFooterMobileRoutes = ["/login", "/sign-up", "/register"];
 
   const hideHeaderMobile = hideHeaderMobileRoutes.includes(pathname);
   const hideFooterMobile = hideFooterMobileRoutes.includes(pathname);
@@ -62,7 +62,7 @@ export default function ClientLayout({ children }) {
         </div>
       )}
 
-      {!hideHeaderMobile && (
+      {hideHeaderMobile && (
         <div className="block sm:hidden">
           <Header />
         </div>
