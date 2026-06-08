@@ -4,7 +4,7 @@ const initialState = {
   cart_Item: [],
   total_Amount: 0,
   total_net_payable: 0,
-  delivery_Charge: 50,
+  delivery_Charge: 40,
   platformFee: 1,
   gst_percentage: 5,
   gst_amount: 0,

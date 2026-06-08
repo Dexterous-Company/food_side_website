@@ -355,7 +355,7 @@
 //             </div>
 //             <div className="mt-10">
 //               <a 
-//                 href="/contact" 
+//                 href="/contact_us" 
 //                 className="btn-default bg-[#ff581b] text-white rounded-full py-4 px-8 inline-flex items-center gap-2 hover:bg-[#e04e12] transition-all"
 //               >
 //                 Report an Issue

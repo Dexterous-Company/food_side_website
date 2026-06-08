@@ -32,7 +32,7 @@ const OrderSummary = ({
     return sum + (price * qty);
   }, 0);
 
-  const calculatedDeliveryFee = totals?.deliveryFee ?? 50;
+  const calculatedDeliveryFee = totals?.deliveryFee ?? 40;
   const calculatedFinalTotal = totals?.finalTotal || calculatedSubtotal + calculatedDeliveryFee;
   const calculatedItemCount = totals?.itemCount || cartItems.length;
 

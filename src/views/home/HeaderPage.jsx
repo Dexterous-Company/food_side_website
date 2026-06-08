@@ -142,23 +142,10 @@ const HeaderPage = () => {
       link: "/",
     },
     {
-      name: "Menu",
+      name: "Faq",
       isDropdown: false,
-      link: "/menu",
-      dropdownItems: [
-        {
-          name: "Menu",
-          link: "/menu",
-          icon: "📄",
-          desc: "Browse our full food collection in a classic style",
-        },
-        {
-          name: "Menu Detail",
-          link: "/menu-detail",
-          icon: "📋",
-          desc: "Experience our dishes with immersive visuals",
-        },
-      ],
+      link: "/faq",
+
     },
     { name: "About", link: "/about_us", isDropdown: false },
     {
