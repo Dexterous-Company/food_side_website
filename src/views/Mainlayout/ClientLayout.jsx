@@ -172,6 +172,7 @@ export default function ClientLayout({ children }) {
     "/accounts/profile",
     "/accounts/orders",
     "/accounts/orders/:id",
+    "/order_success"
   ];
   const hideFooterMobileRoutes = [
     "/login",
@@ -179,6 +180,7 @@ export default function ClientLayout({ children }) {
     "/register",
     "/cart",
     "/checkout",
+    "/order_success"
   ];
 
   const hideHeaderMobile = hideHeaderMobileRoutes.includes(pathname) || isDeliveryModalOpen;

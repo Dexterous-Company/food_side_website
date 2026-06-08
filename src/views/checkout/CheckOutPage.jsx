@@ -52,12 +52,19 @@ const CheckOutPage = () => {
   const [toastMessage, setToastMessage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [validationErrors, setValidationErrors] = useState([]);
+  const [updatedTime, setUpdatedTime] = useState(null);
 
   const isLoading = orderLoading || paymentLoading || isProcessing;
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  // Show toast notification
+  const showToast = (message, isError = false) => {
+    setToastMessage({ message, isError });
+    setTimeout(() => setToastMessage(null), 5000);
+  };
 
   // Debug logging
   useEffect(() => {
@@ -93,6 +100,60 @@ const CheckOutPage = () => {
     }
     return {};
   }, [deliveryData]);
+
+  // Check and update order time if it's less than 1 hour from now
+  useEffect(() => {
+    const journeyDate = routeParams?.journey?.date;
+    const journeyTime = routeParams?.journey?.time;
+    
+    if (!journeyDate || !journeyTime) return;
+    
+    // Create a date object from the journey date and time
+    let selectedDateTime;
+    try {
+      // Handle different date formats
+      let dateStr = journeyDate;
+      if (typeof journeyDate === 'object' && journeyDate instanceof Date) {
+        dateStr = journeyDate.toISOString();
+      }
+      
+      // Parse time string (assuming format like "02:30 PM")
+      const timeStr = journeyTime;
+      const [timePart, period] = timeStr.split(' ');
+      let [hours, minutes] = timePart.split(':').map(Number);
+      
+      if (period === 'PM' && hours !== 12) hours += 12;
+      if (period === 'AM' && hours === 12) hours = 0;
+      
+      // Create date object
+      const dateObj = new Date(dateStr);
+      dateObj.setHours(hours, minutes || 0, 0, 0);
+      selectedDateTime = dateObj;
+    } catch (e) {
+      console.error('Error parsing journey date/time:', e);
+      return;
+    }
+    
+    const now = new Date();
+    const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+    
+    // If selected time is less than 1 hour from now, update it
+    if (selectedDateTime < oneHourFromNow) {
+      const newTime = oneHourFromNow;
+      const formattedTime = newTime.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+      
+      // Store the updated time in state
+      setUpdatedTime(formattedTime);
+      
+      // Show toast notification
+      showToast(`Order time updated to ${formattedTime} (minimum 1 hour advance order required)`);
+      
+      console.log(`Time updated from ${journeyTime} to ${formattedTime}`);
+    }
+  }, [routeParams]);
 
   // Format cart items with better validation
   const cartItems = useMemo(() => {
@@ -174,6 +235,7 @@ const CheckOutPage = () => {
         routeParams?.date ||
         new Date().toLocaleDateString(),
       timeLabel:
+        updatedTime || 
         routeParams?.journey?.formattedTime ||
         routeParams?.time ||
         new Date().toLocaleTimeString(),
@@ -184,12 +246,7 @@ const CheckOutPage = () => {
         routeParams?.durationMinutes ||
         30,
     };
-  }, [routeParams]);
-
-  const showToast = (message, isError = false) => {
-    setToastMessage({ message, isError });
-    setTimeout(() => setToastMessage(null), 5000);
-  };
+  }, [routeParams, updatedTime]);
 
   // Validate order before placing
   const validateOrder = useCallback(() => {

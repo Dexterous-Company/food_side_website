@@ -48,7 +48,7 @@ const SelectionProcess = () => {
       const coords = `${pickupCoordinates.lat.toFixed(4)}, ${pickupCoordinates.lng.toFixed(4)}`;
       // If we have a city from GPS, show city + coordinates
       if (pickupAddressDetails?.city) {
-        return `${pickupAddressDetails.city} (${coords})`;
+        return `${pickupAddressDetails.city}`;
       }
       return coords;
     }
