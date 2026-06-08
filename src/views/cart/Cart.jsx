@@ -170,24 +170,42 @@ const Cart = () => {
 
   if (!hasItems) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <FaBagShopping className="text-6xl text-gray-300 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-900 mb-2">
-            Your cart is empty
-          </h2>
-          <p className="text-gray-500 text-sm mb-6">
-            Add items from any restaurant and they will appear here.
-          </p>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 bg-[#ff581b] text-white px-6 py-3 rounded-full font-bold hover:bg-[#e84d15] transition-colors"
-          >
-            Browse Menu
-            <FaChevronRight className="text-xs" />
-          </Link>
+      <>
+        <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2 ">
+          <div className="h-12 px-3 flex items-center justify-between ">
+            <button
+              onClick={() => router.back()}
+              className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+            >
+              <FaArrowLeft className="text-gray-700 text-xs" />
+            </button>
+            <h1 className="text-lg font-black text-gray-900">My Cart</h1>
+            <Link href="/">
+              <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                <FaBagShopping className="text-gray-700 text-xs" />
+              </button>
+            </Link>
+          </div>
         </div>
-      </div>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <div className="text-center">
+            <FaBagShopping className="text-6xl text-gray-300 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-gray-900 mb-2">
+              Your cart is empty
+            </h2>
+            <p className="text-gray-500 text-sm mb-6">
+              Add items from any restaurant and they will appear here.
+            </p>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 bg-[#ff581b] text-white px-6 py-3 rounded-full font-bold hover:bg-[#e84d15] transition-colors"
+            >
+              Browse Menu
+              <FaChevronRight className="text-xs" />
+            </Link>
+          </div>
+        </div>
+      </>
     );
   }
 

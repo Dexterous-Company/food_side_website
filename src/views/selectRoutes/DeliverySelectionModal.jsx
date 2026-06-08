@@ -338,6 +338,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
                 selDest={selDest}
                 onSelectDest={handleSelectDestination}
                 onNext={handleNext}
+                onClose={onClose}
               />
             )}
             {step === 2 && (
