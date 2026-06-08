@@ -107,7 +107,7 @@ export default function ProductCard({
       setShowBottomSheet(true);
     } else {
       // On desktop: navigate to product details page
-      router.push(`/restaurant-page/${restaurantId}/product/${item.id}`);
+      router.push(`/restaurant-page/${restaurantId}/${item.id}`);
     }
   };
 
