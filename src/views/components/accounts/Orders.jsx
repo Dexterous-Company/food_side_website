@@ -260,7 +260,7 @@ export default function Orders() {
         </div>
 
         {/* Tabs */}
-        <div className="mb-2 overflow-x-auto">
+        <div className="mb-2 overflow-x-auto no-scrollbar">
           <div className="flex gap-2 min-w-max pb-1">
             {tabs.map((tab) => (
               <button

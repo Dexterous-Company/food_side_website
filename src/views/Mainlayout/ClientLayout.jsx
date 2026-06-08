@@ -40,8 +40,24 @@ export default function ClientLayout({ children }) {
   const hideFooter = hideFooterRoutes.includes(pathname);
 
   // Mobile control
-  const hideHeaderMobileRoutes = ["/cart"];
-  const hideFooterMobileRoutes = ["/login", "/sign-up", "/register"];
+  const hideHeaderMobileRoutes = [
+    "/login",
+    "/sign-up",
+    "/register",
+    "/cart",
+    "/checkout",
+    "/accounts",
+    "/accounts/profile",
+    "/accounts/orders",
+    "/accounts/orders/:id",
+  ];
+  const hideFooterMobileRoutes = [
+    "/login",
+    "/sign-up",
+    "/register",
+    "/cart",
+    "/checkout",
+  ];
 
   const hideHeaderMobile = hideHeaderMobileRoutes.includes(pathname);
   const hideFooterMobile = hideFooterMobileRoutes.includes(pathname);
@@ -62,13 +78,17 @@ export default function ClientLayout({ children }) {
         </div>
       )}
 
-      {hideHeaderMobile && (
+      {!hideHeaderMobile && (
         <div className="block sm:hidden">
           <Header />
         </div>
       )}
 
-      <main className={`flex-1 ${!hideHeader ? "pt-15 md:pt-15" : ""} `}>{children}</main>
+      <main
+        className={`flex-1 ${!hideHeader ? "md:pt-15" : ""} ${!hideHeaderMobile ? "pt-15 sm:pt-0" : ""}`}
+      >
+        {children}
+      </main>
 
       {showCartBanner && (
         <div className="block md:hidden">
