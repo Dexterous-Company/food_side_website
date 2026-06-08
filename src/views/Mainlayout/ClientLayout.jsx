@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Header from "@/views/components/Header";
 import Footer from "@/views/components/Footer";
 import FloatingCartBanner from "../cart/FloatingCartBanner";
+import SwitchRestaurantModal from "@/views/components/SwitchRestaurantModal";
 import { useCart } from "../../context/CartContext";
 import MobileFooter from "../home/MobileFooter";
 import { useEffect, useState } from "react";
@@ -55,22 +56,19 @@ export default function ClientLayout({ children }) {
 
   return (
     <>
-      {/* Desktop Header */}
       {!hideHeader && (
         <div className="hidden sm:block">
           <Header />
         </div>
       )}
 
-      {/* Mobile Header */}
       {!hideHeaderMobile && (
         <div className="block sm:hidden">
           <Header />
         </div>
       )}
 
-      {/* Main */}
-      <main className="flex-1 pt-2 md:pt-15">{children}</main>
+      <main className={`flex-1 ${!hideHeader ? "pt-15 md:pt-15" : ""} `}>{children}</main>
 
       {showCartBanner && (
         <div className="block md:hidden">
@@ -92,13 +90,13 @@ export default function ClientLayout({ children }) {
         </div>
       )}
 
-      {/* Desktop Footer */}
       <div className="hidden sm:block">{!hideFooter && <Footer />}</div>
 
-      {/* Mobile Footer */}
       <div className="block sm:hidden">
         {!hideFooterMobile && <MobileFooter />}
       </div>
+
+      <SwitchRestaurantModal />
     </>
   );
 }

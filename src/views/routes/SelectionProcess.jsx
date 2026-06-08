@@ -21,9 +21,11 @@ import {
   selectSelectedRoute,
   selectSelectedDeliveryPoint,
 } from "../../redux/delivery/deliverySlice";
+import DeliverySelectionModal from "../selectRoutes/DeliverySelectionModal";
 
 const SelectionProcess = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showDeliveryModal, setShowDeliveryModal] = useState(false);
   
   const fromLocationFull = useSelector(selectFromLocationDetailed);
   const toLocation = useSelector(selectTowardsLocation);
@@ -62,8 +64,17 @@ const SelectionProcess = () => {
   };
 
   const handleChangeRoute = () => {
-    console.log("Changing route...");
     setShowModal(false);
+    setShowDeliveryModal(true);
+  };
+
+  const handleDeliveryModalClose = () => {
+    setShowDeliveryModal(false);
+  };
+
+  const handleDeliveryModalFinish = (data) => {
+    console.log("Route updated:", data);
+    setShowDeliveryModal(false);
   };
 
   const InfoRow = ({ icon: Icon, iconColor, label, value, subtitle }) => (
@@ -327,18 +338,18 @@ const SelectionProcess = () => {
         </div>
       )}
 
+      {/* Delivery Selection Modal for Change Route */}
+      <DeliverySelectionModal 
+        isOpen={showDeliveryModal}
+        onClose={handleDeliveryModalClose}
+        onFinish={handleDeliveryModalFinish}
+      />
+
       <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
         }
-        
-        @keyframes slideUp {
-          from { transform: translateY(100%); }
-          to { transform: translateY(0); }
-        }
-        
-        .animate-fadeIn {
           animation: fadeIn 0.3s ease-out;
         }
         
