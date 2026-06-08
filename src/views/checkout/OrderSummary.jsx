@@ -1,4 +1,3 @@
-
 "use client";
 import React from "react";
 import {
@@ -32,7 +31,12 @@ const OrderSummary = ({
     return sum + (price * qty);
   }, 0);
 
-  const calculatedDeliveryFee = totals?.deliveryFee ?? 40;
+  // Apply free delivery for orders ₹500 and above
+  const FREE_DELIVERY_THRESHOLD = 500;
+  const baseDeliveryFee = 40;
+  const calculatedDeliveryFee = totals?.deliveryFee ?? 
+    (calculatedSubtotal >= FREE_DELIVERY_THRESHOLD ? 0 : baseDeliveryFee);
+  
   const calculatedFinalTotal = totals?.finalTotal || calculatedSubtotal + calculatedDeliveryFee;
   const calculatedItemCount = totals?.itemCount || cartItems.length;
 
@@ -40,6 +44,9 @@ const OrderSummary = ({
   const finalTotal = calculatedFinalTotal;
   const subtotal = calculatedSubtotal;
   const itemCount = calculatedItemCount;
+
+  // Calculate amount needed for free delivery
+  const amountNeededForFreeDelivery = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
 
   return (
     <div className="lg:sticky lg:top-24">
@@ -186,10 +193,10 @@ const OrderSummary = ({
               </div>
 
               {/* Free Delivery Message */}
-              {deliveryFee > 0 && (
+              {deliveryFee > 0 && amountNeededForFreeDelivery > 0 && (
                 <div className="mt-2 pt-2 border-t border-dashed border-emerald-200">
                   <p className="text-[9px] text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg inline-flex items-center gap-1">
-                    ✨ Add {RUPEE}{(50 - subtotal).toFixed(2)} more for free delivery
+                    ✨ Add {RUPEE}{amountNeededForFreeDelivery.toFixed(2)} more for free delivery
                   </p>
                 </div>
               )}
@@ -197,15 +204,15 @@ const OrderSummary = ({
                 <div className="mt-2 pt-2 border-t border-dashed border-emerald-200">
                   <p className="text-[9px] text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg inline-flex items-center gap-1">
                     <FaCheckCircle className="text-emerald-600 text-[8px]" />
-                    Free delivery unlocked!
+                    Free delivery unlocked! (Orders ₹500+)
                   </p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Payment Method Selection */}
-          {/* <div className="px-4 py-3 border-t border-gray-100">
+          {/* Payment Method Selection - Uncommented for COD functionality */}
+          <div className="px-4 py-3 border-t border-gray-100">
             <h3 className="text-xs font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
               <FaLock className="text-[9px] text-gray-400" />
               Payment Method
@@ -272,10 +279,10 @@ const OrderSummary = ({
                 </div>
               </div>
             </div>
-          </div> */}
+          </div>
 
           {/* Accepted Cards */}
-          {/* <div className="px-4 py-3 border-t border-gray-100 flex items-center justify-between flex-wrap gap-2">
+          <div className="px-4 py-3 border-t border-gray-100 flex items-center justify-between flex-wrap gap-2">
             <span className="text-[8px] font-bold tracking-[1px] uppercase text-gray-400">
               Secure payments
             </span>
@@ -296,15 +303,15 @@ const OrderSummary = ({
                 <FaGooglePay />
               </div>
             </div>
-          </div> */}
+          </div>
 
           {/* Security Message */}
-          {/* <div className="px-4 py-2 bg-gray-50 border-t border-gray-100">
+          <div className="px-4 py-2 bg-gray-50 border-t border-gray-100">
             <p className="text-[8px] text-gray-400 text-center flex items-center justify-center gap-1">
               <FaLock className="text-[8px]" />
               Your payment information is secure with us
             </p>
-          </div> */}
+          </div>
 
           {/* Place Order Button */}
           {onPlaceOrder && (
