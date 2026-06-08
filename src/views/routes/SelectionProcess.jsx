@@ -1,3 +1,4 @@
+
 // SelectionProcess.jsx - Mobile Optimized with Modal View
 "use client";
 import React, { useState } from "react";
@@ -20,6 +21,9 @@ import {
   selectFormattedTime,
   selectSelectedRoute,
   selectSelectedDeliveryPoint,
+  selectPickupCoordinates,
+  selectPickupAddressDetails,
+  BselectFromLocation,
 } from "../../redux/delivery/deliverySlice";
 import DeliverySelectionModal from "../selectRoutes/DeliverySelectionModal";
 
@@ -28,11 +32,33 @@ const SelectionProcess = () => {
   const [showDeliveryModal, setShowDeliveryModal] = useState(false);
   
   const fromLocationFull = useSelector(selectFromLocationDetailed);
+  const fromLocationShort = useSelector(BselectFromLocation);
   const toLocation = useSelector(selectTowardsLocation);
   const selectedDate = useSelector(selectFormattedDate);
   const selectedTime = useSelector(selectFormattedTime);
   const selectedRoute = useSelector(selectSelectedRoute);
   const selectedDeliveryPoint = useSelector(selectSelectedDeliveryPoint);
+  const pickupCoordinates = useSelector(selectPickupCoordinates);
+  const pickupAddressDetails = useSelector(selectPickupAddressDetails);
+
+  // Get actual GPS location display - prioritize GPS-detected location
+  const getActualLocation = () => {
+    // If we have GPS coordinates, show them
+    if (pickupCoordinates?.lat !== null && pickupCoordinates?.lng !== null) {
+      const coords = `${pickupCoordinates.lat.toFixed(4)}, ${pickupCoordinates.lng.toFixed(4)}`;
+      // If we have a city from GPS, show city + coordinates
+      if (pickupAddressDetails?.city) {
+        return `${pickupAddressDetails.city} (${coords})`;
+      }
+      return coords;
+    }
+    // Fall back to stored location
+    if (fromLocationShort) return fromLocationShort;
+    if (fromLocationFull) return getLocationShort(fromLocationFull);
+    return "Origin";
+  };
+
+  const actualLocation = getActualLocation();
 
   // Helper function to safely get string value from location
   const getLocationString = (location) => {
@@ -106,7 +132,7 @@ const SelectionProcess = () => {
                     <div>
                       <p className="text-gray-400 text-[9px] uppercase tracking-wider">From</p>
                       <p className="text-gray-900 text-sm font-semibold truncate max-w-[120px]">
-                        {getLocationShort(fromLocationFull)}
+                        {actualLocation}
                       </p>
                     </div>
                   </div>
@@ -161,7 +187,7 @@ const SelectionProcess = () => {
                     icon={MdLocationOn}
                     iconColor="text-amber-500"
                     label="From"
-                    value={getLocationShort(fromLocationFull)}
+                    value={actualLocation}
                     subtitle={getLocationLong(fromLocationFull)}
                   />
                   

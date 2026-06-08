@@ -72,7 +72,7 @@ export default function Step4CompleteDetails({
       <div className="relative w-full h-39 sm:h-40 md:h-48 rounded-b-2xl overflow-hidden flex-shrink-0">
         <img
           src="/car_food.png"
-          alt="Banner"
+          alt="Banner"s
           className="object-cover rounded-b-2xl w-full h-full"
         />
 
