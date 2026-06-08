@@ -1,5 +1,5 @@
 import React from "react";
-import ProductDetailsPage from "@/pages/components/ProductDetailsPage";
+import ProductDetailsPage from "@/views/components/ProductDetailsPage";
 const Page = () => {
     return (
         <div>

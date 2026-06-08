@@ -1,7 +1,7 @@
-// components/ProductBottomSheet.jsx
 "use client";
 import { useState } from "react";
 import { FoodMark } from "./FoodMark";
+
 
 export function ProductBottomSheet({ item, onClose }) {
   const [qty, setQty] = useState(1);
@@ -14,15 +14,11 @@ export function ProductBottomSheet({ item, onClose }) {
 
   return (
     <>
-      {/* Backdrop */}
       <div
         onClick={onClose}
         className="fixed inset-0 z-[100] bg-black/55 animate-[fadeIn_0.22s_ease]"
       />
-
-      {/* Sheet */}
       <div className="fixed bottom-0 left-0 right-0 z-[101] bg-white rounded-t-2xl max-h-[88vh] overflow-y-auto animate-[slideUp_0.3s_cubic-bezier(0.32,0.72,0,1)]">
-        {/* Hero image */}
         <div className="relative h-[220px] bg-black overflow-hidden">
           <img src={item.img} alt={item.name} className="w-full h-full object-cover block" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-transparent" />
@@ -42,7 +38,6 @@ export function ProductBottomSheet({ item, onClose }) {
           </button>
         </div>
 
-        {/* Content */}
         <div className="p-[18px_16px_32px]">
           <div className="flex items-start justify-between gap-3 mb-2.5">
             <div className="flex items-start gap-2 flex-1">
@@ -109,3 +104,10 @@ export function ProductBottomSheet({ item, onClose }) {
     </>
   );
 }
+
+// Add default export for Next.js page requirement
+const ProductBottomSheetPage = () => {
+  return <div>ProductBottomSheet Component - This is not a page</div>;
+};
+
+export default ProductBottomSheetPage;

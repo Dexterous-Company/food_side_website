@@ -18,12 +18,17 @@ import { RiWhatsappLine } from "react-icons/ri";
 const Share = () => {
   const router = useRouter();
   const [copied, setCopied] = React.useState(false);
+  const [siteUrl, setSiteUrl] = React.useState("");
+
+  React.useEffect(() => {
+    setSiteUrl(window.location.origin);
+  }, []);
 
   const handleShare = async () => {
     const shareData = {
       title: "My Website",
       text: "Check out this website!",
-      url: window.location.origin,
+      url: siteUrl,
     };
 
     try {
@@ -44,31 +49,31 @@ const Share = () => {
       icon: RiWhatsappLine,
       name: "WhatsApp",
       color: "bg-green-500",
-      link: `https://wa.me/?text=${encodeURIComponent(window?.location?.origin || "")}`,
+      link: `https://wa.me/?text=${encodeURIComponent(siteUrl)}`,
     },
     {
       icon: FiTwitter,
       name: "Twitter",
       color: "bg-black",
-      link: `https://twitter.com/intent/tweet?url=${encodeURIComponent(window?.location?.origin || "")}`,
+      link: `https://twitter.com/intent/tweet?url=${encodeURIComponent(siteUrl)}`,
     },
     {
       icon: FiFacebook,
       name: "Facebook",
       color: "bg-blue-600",
-      link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window?.location?.origin || "")}`,
+      link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(siteUrl)}`,
     },
     {
       icon: FiLinkedin,
       name: "LinkedIn",
       color: "bg-blue-700",
-      link: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window?.location?.origin || "")}`,
+      link: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(siteUrl)}`,
     },
     {
       icon: FiMail,
       name: "Email",
       color: "bg-gray-600",
-      link: `mailto:?subject=Check this out&body=${encodeURIComponent(window?.location?.origin || "")}`,
+      link: `mailto:?subject=Check this out&body=${encodeURIComponent(siteUrl)}`,
     },
   ];
 
@@ -154,14 +159,12 @@ const Share = () => {
                 <input
                   type="text"
                   readOnly
-                  value={
-                    typeof window !== "undefined" ? window.location.origin : ""
-                  }
+                  value={siteUrl}
                   className="flex-1 px-3 py-2 text-xs border border-orange-200 rounded-lg bg-gray-50 text-gray-600"
                 />
                 <button
                   onClick={async () => {
-                    await navigator.clipboard.writeText(window.location.origin);
+                    await navigator.clipboard.writeText(siteUrl);
                     setCopied(true);
                     setTimeout(() => setCopied(false), 2000);
                   }}

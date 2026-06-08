@@ -1,4 +1,4 @@
-// components/Icons.jsx
+// pages/restaurant_pages/Icons.jsx
 export const Icon = {
   Search: () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4">
@@ -65,3 +65,10 @@ export const Icon = {
     </svg>
   ),
 };
+
+// Add default export for Next.js page requirement
+const IconsPage = () => {
+  return <div>Icons Component - This is not a page</div>;
+};
+
+export default IconsPage;

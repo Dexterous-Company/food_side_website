@@ -6,7 +6,7 @@ import Image from "next/image";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../../context/CartContext";
-import { ProductBottomSheet } from "@/pages/restaurant_pages/ProductBottomSheet";
+import { ProductBottomSheet } from "@/views/restaurant_pages/ProductBottomSheet";
 
 const FoodTypeIcon = ({ type }) => {
   return type === "veg" ? (
@@ -107,7 +107,7 @@ export default function ProductCard({
       setShowBottomSheet(true);
     } else {
       // On desktop: navigate to product details page
-      router.push(`/restaurant-page/${restaurantId}/product/${item.id}`);
+      router.push(`/restaurant-page/${restaurantId}/${item.id}`);
     }
   };
 

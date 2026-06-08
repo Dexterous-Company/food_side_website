@@ -1,4 +1,4 @@
-// Dummy Data
+// pages/selectRoutes/constants.js
 export const BANNERS = [
   "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=900",
   "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=900",
@@ -55,7 +55,6 @@ export const DUMMY_DELIVERY_POINTS = [
 
 export const STEPS = ["Select Towards", "Select Route", "Select Delivery Point", "Complete Details"];
 
-// Helpers
 export function formatDuration(minutes) {
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
@@ -68,4 +67,9 @@ export function formatDate(date) {
 
 export function formatTime(date) {
   return date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+}
+
+// Add default export for Next.js page requirement
+export default function ConstantsPage() {
+  return null;
 }

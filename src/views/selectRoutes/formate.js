@@ -1,4 +1,4 @@
-
+// pages/selectRoutes/formate.js
 const formatDisplayText = value =>
   String(value || '')
     .replace(/[-_]+/g, ' ')
@@ -12,3 +12,10 @@ export const formatRouteName = value => {
   }
   return routeName.charAt(0).toUpperCase() + routeName.slice(1);
 };
+
+// Add default export for Next.js page requirement
+const FormatePage = () => {
+    return null;
+};
+
+export default FormatePage;

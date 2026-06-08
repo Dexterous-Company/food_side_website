@@ -1,4 +1,4 @@
-import RestaurantsMainPage from "@/pages/home/RestaurantsMainPage";
+import RestaurantsMainPage from "@/views/home/RestaurantsMainPage";
 import React from "react";
 
 const page = () => {

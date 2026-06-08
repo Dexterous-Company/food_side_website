@@ -1,4 +1,4 @@
-import RegisterPageNew from '@/pages/AuthenticationPages/RegisterPageNew';
+import RegisterPageNew from '@/views/AuthenticationPages/RegisterPageNew';
 import React from 'react';
 
 const page = () => {
