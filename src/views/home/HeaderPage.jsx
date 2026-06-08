@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -23,6 +23,7 @@ import {
 } from "react-icons/fa";
 import { logout } from "@/redux/Authentication/AuthenticationSlice";
 import DeliverySelectionModal from "../selectRoutes/DeliverySelectionModal";
+import { useCart } from "@/context/CartContext";
 
 const HeaderPage = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -43,6 +44,19 @@ const HeaderPage = () => {
     userData?.fullName ||
     userData?.email?.split("@")[0] ||
     "User";
+
+  // Get cart count from CartContext
+  const { cartList } = useCart();
+  const cartCount = useMemo(() => {
+    if (!cartList || cartList.length === 0) return 0;
+    return cartList.reduce((sum, item) => sum + (item.qty || item.quantity || 1), 0);
+  }, [cartList]);
+
+  // Check if delivery/booking data exists
+  const isDestinationSet = useSelector((state) => state.delivery.isDestinationSet);
+  const isRouteSelected = useSelector((state) => state.delivery.isRouteSelected);
+  const isDeliveryPointSelected = useSelector((state) => state.delivery.isDeliveryPointSelected);
+  const hasDeliveryData = isDestinationSet || isRouteSelected || isDeliveryPointSelected;
 
   // Handle scroll effect for header background
   useEffect(() => {
@@ -427,7 +441,7 @@ const HeaderPage = () => {
                   href="/cart"
                   className="flex-1 bg-gray-200 text-[#121212] font-bold py-3 px-4 rounded-full flex items-center justify-center gap-2 hover:bg-[#ff581b] hover:text-white transition-colors"
                 >
-                  <FaShoppingCart size={14} /> Cart (3)
+                  <FaShoppingCart size={14} /> Cart ({cartCount})
                 </a>
               </div>
               {!isLoggedIn ? (
@@ -465,7 +479,7 @@ const HeaderPage = () => {
                 onClick={handleNewBookingClick}
                 className="block w-full bg-black text-white font-bold py-2 px-4 rounded-full text-center hover:bg-[#ff581b] transition-colors mt-3"
               >
-                Book A Table
+                {hasDeliveryData ? 'Edit Booking' : 'New Booking'}
               </button>
             </div>
           </div>
@@ -590,21 +604,22 @@ const HeaderPage = () => {
             <div className="flex items-center gap-4 lg:gap-5">
               <a
                 href="/cart"
-                className={`relative w-10 h-10 lg:w-11 lg:h-11 rounded-full transition-all duration-300 group overflow-hidden cursor-pointer ${
+                className={`relative w-10 h-10 lg:w-15 lg:h-11 rounded-full transition-all duration-300 group overflow-hidden cursor-pointer flex items-center justify-center ${
                   scrolled || !isHomePage
-                    ? "text-[#ff581b] hover:text-white"
-                    : "text-white hover:text-white"
+                    ? "text-[#ff581b] bg-white hover:bg-[#ff581b] hover:text-white"
+                    : "text-white hover:bg-[#ff581b] hover:text-white"
                 }`}
               >
-                <div className="absolute inset-0 bg-[#ff581b] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full"></div>
-                <FaShoppingCart className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg group-hover:text-white z-10 transition-colors" />
-                <span
-                  className={`absolute -top-1 -right-1 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center z-20 ${
-                    scrolled || !isHomePage ? "bg-black" : "bg-[#ff581b]"
-                  }`}
-                >
-                  3
-                </span>
+                <FaShoppingCart className="text-lg transition-colors" />
+                {cartCount > 0 && (
+                  <span
+                    className={`absolute top-1 right-1 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center z-20 ${
+                      scrolled || !isHomePage ? "bg-black" : "bg-[#ff581b]"
+                    }`}
+                  >
+                    {cartCount}
+                  </span>
+                )}
               </a>
 
               {/* Auth Dropdown - Desktop */}
@@ -749,13 +764,13 @@ const HeaderPage = () => {
 
               <button
                 onClick={handleNewBookingClick}
-                className={`font-bold px-5 py-1.5 lg:px-6 rounded-full relative overflow-hidden transition-all duration-300 shadow-md hover:shadow-lg group z-10 ${
+                className={`font-bold px-5 py-[0.8rem] lg:px-6 rounded-full relative overflow-hidden transition-all duration-300 shadow-md hover:shadow-lg group z-10 ${
                   scrolled || !isHomePage
                     ? "bg-[#ff581b] text-white hover:bg-black"
                     : "bg-white text-[#ff581b] hover:bg-[#ff581b] hover:text-white"
                 }`}
               >
-                <span className="relative z-10 text-sm">New Booking</span>
+                <span className="relative z-10 text-[16px]">{hasDeliveryData ? 'Edit Booking' : 'New Booking'}</span>
               </button>
             </div>
           </div>
