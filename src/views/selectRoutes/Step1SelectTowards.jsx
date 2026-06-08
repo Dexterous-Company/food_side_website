@@ -60,32 +60,38 @@ const getMinimumAllowedTime = (targetDate) => {
 const getDestinationKey = (item) =>
   item?.id || item?.destination || item?.name || "";
 
-export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onClose }) {
+export default function Step1SelectTowards({
+  selDest,
+  onSelectDest,
+  onNext,
+  onClose,
+  onTimeAutoUpdated,
+}) {
   const dispatch = useDispatch();
   const routeSearch = useSelector(selectRouteSearch);
   const towardsLocation = useSelector(selectTowardsLocation);
   const [query, setQuery] = useState("");
-  const [fromLocation, setFromLocation] = useState("Hyderabad, Telangana");
-  const [fromLocationDetailed, setFromLocationDetailed] = useState(
-    "H.No 12-4, Ameerpet, Hyderabad - 500016",
-  );
+  const [fromLocation, setFromLocation] = useState("");
+  const [fromLocationDetailed, setFromLocationDetailed] = useState("");
   const [pickupCoordinates, setPickupCoordinates] = useState({
     lat: null,
     lng: null,
   });
   const [pickupAddressMeta, setPickupAddressMeta] = useState({
-    city: "Hyderabad",
-    state: "Telangana",
+    city: "",
+    state: "",
     pincode: "",
     landmark: "",
   });
-  const [locationLoading, setLocationLoading] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(true);
   const [locationError, setLocationError] = useState("");
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [selectedTime, setSelectedTime] = useState(() =>
     getMinimumAllowedTime(new Date()),
   );
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [toast, setToast] = useState(null);
+  const hasAutoDetectedLocation = useRef(false);
   const searchContainerRef = useRef(null);
 
   const formattedDate = formatDate(selectedDate);
@@ -139,6 +145,12 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
     pickupAddressMeta.state,
     pickupCoordinates,
   ]);
+
+  useEffect(() => {
+    if (!toast) return undefined;
+    const timeout = setTimeout(() => setToast(null), 3000);
+    return () => clearTimeout(timeout);
+  }, [toast]);
 
   useEffect(() => {
     dispatch(setJourneyDate({ date: selectedDate, formattedDate }));
@@ -204,7 +216,10 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
   const reverseGeocode = async (lat, lng) => {
     try {
       // Use Google Maps Geocoding API for accurate results
-      const GOOGLE_API_KEY = process.env.Next_GOOGLE_API_KEY || 'AIzaSyDfjw4P4PnfI08-B-ljZDhEeQxnBqNv3hQ';
+      const GOOGLE_API_KEY =
+        process.env.NEXT_PUBLIC_GOOGLE_API_KEY ||
+        process.env.Next_GOOGLE_API_KEY ||
+        'AIzaSyDfjw4P4PnfI08-B-ljZDhEeQxnBqNv3hQ';
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`
       );
@@ -217,8 +232,21 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
         throw new Error('No results found');
       }
       
-      const result = data.results[0];
+      const result = data.results.find((item) =>
+        item.address_components?.some((component) =>
+          component.types?.includes("postal_code"),
+        ),
+      ) || data.results[0];
+      const allAddressComponents = data.results.flatMap(
+        (item) => item.address_components || [],
+      );
       const addressComponents = result.address_components || [];
+      const findComponent = (typesToFind, preferResult = true) => {
+        const source = preferResult ? addressComponents : allAddressComponents;
+        return source.find((component) =>
+          typesToFind.some((type) => component.types?.includes(type)),
+        )?.long_name;
+      };
       
       // Extract components
       let road = '';
@@ -227,29 +255,25 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
       let state = '';
       let postcode = '';
       
-      for (const component of addressComponents) {
-        const types = component.types || [];
-        
-        if (types.includes('route') || types.includes('street_address')) {
-          road = component.long_name;
-        }
-        
-        if (types.includes('neighborhood') || types.includes('sublocality') || types.includes('sublocality_level_1')) {
-          if (!suburb) suburb = component.long_name;
-        }
-        
-        if (types.includes('locality') || types.includes('postal_town')) {
-          city = component.long_name;
-        }
-        
-        if (types.includes('administrative_area_level_1')) {
-          state = component.long_name;
-        }
-        
-        if (types.includes('postal_code')) {
-          postcode = component.long_name;
-        }
-      }
+      road = findComponent(["route", "street_address"]) || "";
+      suburb = findComponent([
+        "neighborhood",
+        "sublocality",
+        "sublocality_level_1",
+        "sublocality_level_2",
+      ]) || "";
+      city =
+        findComponent(["locality", "postal_town", "administrative_area_level_3"]) ||
+        findComponent(["locality", "postal_town", "administrative_area_level_3"], false) ||
+        "";
+      state =
+        findComponent(["administrative_area_level_1"]) ||
+        findComponent(["administrative_area_level_1"], false) ||
+        "";
+      postcode =
+        findComponent(["postal_code"]) ||
+        findComponent(["postal_code"], false) ||
+        "";
       
       // Clean up pincode - remove spaces and extra characters
       if (postcode) {
@@ -258,7 +282,10 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
       
       // Build a readable address
       const addressParts = [road, suburb, city, state, postcode].filter(Boolean);
-      const formattedAddress = addressParts.join(', ') || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+      const formattedAddress =
+        result.formatted_address ||
+        addressParts.join(', ') ||
+        `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
       
       return {
         fromLocation: city || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
@@ -287,6 +314,7 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
 
     if (!navigator?.geolocation) {
       setLocationError("Geolocation is not supported by your browser.");
+      setLocationLoading(false);
       return;
     }
 
@@ -297,8 +325,17 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
+        const coordinateLocation = `${coords.lat.toFixed(4)}, ${coords.lng.toFixed(4)}`;
 
         setPickupCoordinates(coords);
+        setFromLocation("Current Location");
+        setFromLocationDetailed(coordinateLocation);
+        setPickupAddressMeta({
+          city: "",
+          state: "",
+          pincode: "",
+          landmark: "",
+        });
 
         // Reverse geocode to get actual address
         const addressData = await reverseGeocode(coords.lat, coords.lng);
@@ -329,6 +366,18 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
     );
   };
 
+  useEffect(() => {
+    if (hasAutoDetectedLocation.current) return undefined;
+
+    const timeout = window.setTimeout(() => {
+      hasAutoDetectedLocation.current = true;
+      fetchCurrentLocation();
+    }, 0);
+
+    return () => window.clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleSelectDestination = (destination) => {
     const selectedName =
       destination.primaryText ||
@@ -351,18 +400,43 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    const minimumTime = getMinimumAllowedTime(date);
-    const timeForDate = new Date(date);
-    timeForDate.setHours(
-      selectedTime.getHours(),
-      selectedTime.getMinutes(),
-      0,
-      0,
-    );
+    if (selectedTime) {
+      const minimumTime = getMinimumAllowedTime(date);
+      const timeForDate = new Date(date);
+      timeForDate.setHours(
+        selectedTime.getHours(),
+        selectedTime.getMinutes(),
+        0,
+        0,
+      );
 
-    if (timeForDate < minimumTime) {
-      setSelectedTime(minimumTime);
+      if (timeForDate < minimumTime) {
+        setSelectedTime(minimumTime);
+        onTimeAutoUpdated?.(minimumTime);
+        showToast(
+          `Selected time is too early. We updated it to ${formatTime(minimumTime)} so it is at least 1 hour from now.`,
+          true,
+        );
+      }
     }
+  };
+
+  const showToast = (message, isError = false) => {
+    setToast({ message, isError });
+  };
+
+  const handleTimeChange = (time) => {
+    setSelectedTime(time);
+  };
+
+  const handleInvalidTime = () => {
+    const minimumTime = getMinimumAllowedTime(selectedDate || new Date());
+    setSelectedTime(minimumTime);
+    onTimeAutoUpdated?.(minimumTime);
+    showToast(
+      `Selected time is too early. We updated it to ${formatTime(minimumTime)} so it is at least 1 hour from now.`,
+      true,
+    );
   };
 
   const handleInputFocus = () => {
@@ -416,8 +490,10 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
                 <span className="text-[#F57C00]">Side</span>
               </h1>
 
-              <p className="text-[12px] text-gray-400 mt-1">
-                Detecting your location...
+              <p className="text-[12px] text-gray-400 mt-1 truncate max-w-[190px]">
+                {locationLoading
+                  ? "Detecting your location..."
+                  : fromLocation || "Location unavailable"}
               </p>
             </div>
           </div>
@@ -447,11 +523,21 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
             </svg>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-gray-800 leading-tight break-words">
-                {locationLoading ? "Detecting your location..." : fromLocation}
+                {locationLoading
+                  ? "Detecting your location..."
+                  : fromLocation || "Location unavailable"}
               </p>
-              <p className="text-xs text-gray-400 mt-0.5 truncate">
-                {fromLocationDetailed}
+              <p className="text-xs text-gray-400 mt-0.5 break-words">
+                {fromLocationDetailed ||
+                  "Allow location access to detect your current location."}
               </p>
+              {(pickupAddressMeta.city || pickupAddressMeta.state || pickupAddressMeta.pincode) && (
+                <p className="text-[11px] text-gray-500 mt-1 break-words">
+                  {[pickupAddressMeta.city, pickupAddressMeta.state, pickupAddressMeta.pincode]
+                    .filter(Boolean)
+                    .join(" - ")}
+                </p>
+              )}
             </div>
             <button
               type="button"
@@ -608,8 +694,10 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
 
           <DateTimePill
             date={selectedDate}
+            time={selectedTime}
             onDateChange={handleDateChange}
-            onTimeChange={setSelectedTime}
+            onTimeChange={handleTimeChange}
+            onInvalidTime={handleInvalidTime}
             formattedDate={formattedDate}
             formattedTime={formattedTime}
           />
@@ -628,7 +716,7 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
               <button
                 type="button"
                 onClick={onNext}
-                disabled={!selDest}
+                disabled={!selDest || !selectedDate || !selectedTime}
                 className="flex-1 rounded-xl bg-[#ff581b] px-5 py-3 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#e04d16] disabled:bg-orange-200 disabled:cursor-not-allowed"
               >
                 Next →
@@ -699,6 +787,25 @@ export default function Step1SelectTowards({ selDest, onSelectDest, onNext, onCl
         }
       `}</style>
       </div>
+      {toast && (
+        <div
+          className={`fixed top-4 right-4 z-[1000000] rounded-lg px-4 py-3 text-sm font-medium text-white shadow-lg ${
+            toast.isError ? "bg-red-500" : "bg-green-500"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <span>{toast.isError ? "!" : "OK"}</span>
+            <span>{toast.message}</span>
+            <button
+              type="button"
+              onClick={() => setToast(null)}
+              className="ml-2 text-white/80 hover:text-white"
+            >
+              x
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

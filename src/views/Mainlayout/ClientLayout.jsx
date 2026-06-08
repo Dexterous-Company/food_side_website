@@ -8,6 +8,8 @@ import SwitchRestaurantModal from "@/views/components/SwitchRestaurantModal";
 import { useCart } from "../../context/CartContext";
 import MobileFooter from "../home/MobileFooter";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { selectIsDeliveryModalOpen } from "@/redux/delivery/deliverySlice";
 
 const BANNER_ENABLED_ROUTES = [
   "/",
@@ -36,8 +38,9 @@ export default function ClientLayout({ children }) {
   const hideHeaderRoutes = ["/login", "/sign-up", "/register"];
   const hideFooterRoutes = ["/login", "/sign-up", "/register"];
 
-  const hideHeader = hideHeaderRoutes.includes(pathname);
-  const hideFooter = hideFooterRoutes.includes(pathname);
+  const isDeliveryModalOpen = useSelector(selectIsDeliveryModalOpen);
+  const hideHeader = hideHeaderRoutes.includes(pathname) || isDeliveryModalOpen;
+  const hideFooter = hideFooterRoutes.includes(pathname) || isDeliveryModalOpen;
 
   // Mobile control
   const hideHeaderMobileRoutes = [
@@ -59,8 +62,8 @@ export default function ClientLayout({ children }) {
     "/checkout",
   ];
 
-  const hideHeaderMobile = hideHeaderMobileRoutes.includes(pathname);
-  const hideFooterMobile = hideFooterMobileRoutes.includes(pathname);
+  const hideHeaderMobile = hideHeaderMobileRoutes.includes(pathname) || isDeliveryModalOpen;
+  const hideFooterMobile = hideFooterMobileRoutes.includes(pathname) || isDeliveryModalOpen;
 
   // Banner
   const shouldShowBanner = BANNER_ENABLED_ROUTES.includes(pathname);
@@ -72,14 +75,14 @@ export default function ClientLayout({ children }) {
 
   return (
     <>
-      {!hideHeader && (
-        <div className="hidden sm:block">
+      {!hideHeaderRoutes.includes(pathname) && (
+        <div className={`hidden sm:block ${hideHeader ? "invisible pointer-events-none" : ""}`}>
           <Header />
         </div>
       )}
 
-      {!hideHeaderMobile && (
-        <div className="block sm:hidden">
+      {!hideHeaderMobileRoutes.includes(pathname) && (
+        <div className={`block sm:hidden ${hideHeaderMobile ? "invisible pointer-events-none" : ""}`}>
           <Header />
         </div>
       )}
@@ -110,11 +113,17 @@ export default function ClientLayout({ children }) {
         </div>
       )}
 
-      <div className="hidden sm:block">{!hideFooter && <Footer />}</div>
+      {!hideFooterRoutes.includes(pathname) && (
+        <div className={`hidden sm:block ${hideFooter ? "invisible pointer-events-none" : ""}`}>
+          <Footer />
+        </div>
+      )}
 
-      <div className="block sm:hidden">
-        {!hideFooterMobile && <MobileFooter />}
-      </div>
+      {!hideFooterMobileRoutes.includes(pathname) && (
+        <div className={`block sm:hidden ${hideFooterMobile ? "invisible pointer-events-none" : ""}`}>
+          <MobileFooter />
+        </div>
+      )}
 
       <SwitchRestaurantModal />
     </>

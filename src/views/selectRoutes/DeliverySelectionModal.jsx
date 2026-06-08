@@ -12,10 +12,13 @@ import Step4CompleteDetails from "./Step4CompleteDetails";
 import { STEPS } from "./constants";
 import {
   generateBookingSummary,
+  selectFormattedDate,
+  selectFormattedTime,
   selectRouteSearch,
   selectSelectedRoute,
   selectSelectedDeliveryPoint,
   selectTowardsLocation,
+  setDeliveryModalOpen,
   setSelectedDeliveryPoint,
   setSelectedRoute,
   setTowardsLocation,
@@ -111,6 +114,8 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
   const savedRoute = useSelector(selectSelectedRoute);
   const savedDeliveryPoint = useSelector(selectSelectedDeliveryPoint);
   const savedTowardsLocation = useSelector(selectTowardsLocation);
+  const formattedDate = useSelector(selectFormattedDate);
+  const formattedTime = useSelector(selectFormattedTime);
   
   const [step, setStep] = useState(1);
   const [selDest, setSelDest] = useState(null);
@@ -120,6 +125,10 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
   const [deliveryPointLoading, setDeliveryPointLoading] = useState(false);
   const [deliveryPointError, setDeliveryPointError] = useState("");
   const [isInitializing, setIsInitializing] = useState(true);
+  const [timeAutoUpdate, setTimeAutoUpdate] = useState({
+    didUpdate: false,
+    formattedTime: "",
+  });
   const [details, setDetails] = useState({
     name: "",
     phone: "",
@@ -128,6 +137,28 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     city: "",
     pincode: "",
   });
+
+  // Sync modal open state to Redux for layout visibility
+  useEffect(() => {
+    dispatch(setDeliveryModalOpen(isOpen));
+
+    return () => {
+      if (isOpen) {
+        dispatch(setDeliveryModalOpen(false));
+      }
+    };
+  }, [dispatch, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
 
   // Initialize state from Redux when modal opens - only run when isOpen changes
   useEffect(() => {
@@ -163,6 +194,10 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
       
       // Always start from step 1 when opening the modal to show all steps for editing
       setStep(1);
+      setTimeAutoUpdate({
+        didUpdate: false,
+        formattedTime: "",
+      });
       
       setIsInitializing(false);
       setDeliveryPointError("");
@@ -172,6 +207,13 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]); // Only depend on isOpen, not on Redux state changes
+
+  const handleSelectDeliveryPoint = useCallback((point) => {
+    setSelDP(point);
+    dispatch(setSelectedDeliveryPoint(point));
+    dispatch(generateBookingSummary());
+    setStep(4);
+  }, [dispatch]);
 
   // Load delivery points when route is selected
   useEffect(() => {
@@ -224,14 +266,21 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     return () => {
       isMounted = false;
     };
-  }, [routeSearch?.matchedDeliveryPoints, selRoute, step, isInitializing, selDP]);
+  }, [
+    handleSelectDeliveryPoint,
+    routeSearch?.matchedDeliveryPoints,
+    selRoute,
+    step,
+    isInitializing,
+    selDP,
+  ]);
 
   const canNext = useCallback(() => {
-    if (step === 1) return !!selDest && selDest.name;
+    if (step === 1) return !!selDest && selDest.name && !!formattedDate && !!formattedTime;
     if (step === 2) return !!selRoute && selRoute._id;
     if (step === 3) return !!selDP && selDP._id;
     return true;
-  }, [step, selDest, selRoute, selDP]);
+  }, [formattedDate, formattedTime, step, selDest, selRoute, selDP]);
 
   const handleSelectDestination = (destination) => {
     const destObject = {
@@ -262,11 +311,18 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     setStep(3);
   };
 
-  const handleSelectDeliveryPoint = (point) => {
-    setSelDP(point);
-    dispatch(setSelectedDeliveryPoint(point));
-    dispatch(generateBookingSummary());
-    setStep(4);
+  const handleTimeAutoUpdated = (updatedTime) => {
+    const formattedUpdatedTime = updatedTime
+      ? updatedTime.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "";
+
+    setTimeAutoUpdate({
+      didUpdate: true,
+      formattedTime: formattedUpdatedTime,
+    });
   };
 
   const handleNext = () => {
@@ -292,9 +348,9 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
   const handleDetailsChange = (key, value) =>
     setDetails((prev) => ({ ...prev, [key]: value }));
 
-  if (!isOpen) return null;
+  if (!isOpen || typeof document === "undefined") return null;
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 flex sm:items-end sm:justify-center bg-black/40 backdrop-blur-sm p-0 sm:p-4"
       onClick={(e) => e.target === e.currentTarget && onClose?.()}
@@ -339,6 +395,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
                 onSelectDest={handleSelectDestination}
                 onNext={handleNext}
                 onClose={onClose}
+                onTimeAutoUpdated={handleTimeAutoUpdated}
               />
             )}
             {step === 2 && (
@@ -369,6 +426,8 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
                 details={details}
                 onDetailsChange={handleDetailsChange}
                 onBack={handlePrev}
+                showTimeUpdatedToast={timeAutoUpdate.didUpdate}
+                updatedTime={timeAutoUpdate.formattedTime || formattedTime}
               />
             )}
           </div>
@@ -414,6 +473,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
