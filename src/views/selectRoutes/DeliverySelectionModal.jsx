@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import StepSidebar from "./StepSidebar";
 import Step1SelectTowards from "./Step1SelectTowards";
@@ -128,7 +129,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     pincode: "",
   });
 
-  // Initialize state from Redux when modal opens
+  // Initialize state from Redux when modal opens - only run when isOpen changes
   useEffect(() => {
     if (isOpen) {
       setIsInitializing(true);
@@ -160,16 +161,8 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
         setSelDP(null);
       }
       
-      // Calculate which step to start from
-      if (savedDeliveryPoint && savedDeliveryPoint._id) {
-        setStep(4);
-      } else if (savedRoute && savedRoute._id) {
-        setStep(3);
-      } else if (savedTowardsLocation && savedTowardsLocation !== "") {
-        setStep(2);
-      } else {
-        setStep(1);
-      }
+      // Always start from step 1 when opening the modal to show all steps for editing
+      setStep(1);
       
       setIsInitializing(false);
       setDeliveryPointError("");
@@ -177,7 +170,8 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
       // Reset initialization flag when modal closes
       setIsInitializing(true);
     }
-  }, [isOpen, savedTowardsLocation, savedRoute, savedDeliveryPoint]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]); // Only depend on isOpen, not on Redux state changes
 
   // Load delivery points when route is selected
   useEffect(() => {
@@ -307,9 +301,9 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
     <div
       className="fixed inset-0 flex sm:items-end sm:justify-center bg-black/40 backdrop-blur-sm p-0 sm:p-4"
       onClick={(e) => e.target === e.currentTarget && onClose?.()}
-      style={{ zIndex: 9999 }}
+      style={{ zIndex: 999999 }}
     >
-      <div className="bg-white w-full max-w-none sm:max-w-3xl sm:rounded-2xl shadow-2xl shadow-black/10 flex overflow-hidden h-full sm:h-[min(92dvh,720px)] max-h-none sm:max-h-[calc(100dvh-1rem)]">
+      <div className="bg-white w-full relative max-w-none sm:max-w-3xl sm:rounded-2xl shadow-2xl shadow-black/10 flex overflow-hidden h-full sm:h-[min(92dvh,720px)] max-h-none sm:max-h-[calc(100dvh-1rem)]">
         <div className="hidden md:flex">
           <StepSidebar currentStep={step} />
         </div>
@@ -416,7 +410,7 @@ export default function DeliverySelectionModal({ isOpen, onClose, onFinish }) {
                   }
                 `}
               >
-                {step === 4 ? "Finish ✓" : "Next →"}
+                {step === 4 ? "Update ✓" : "Next →"}
               </button>
             </div>
           </div>
