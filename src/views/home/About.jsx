@@ -123,15 +123,14 @@ const About = () => {
               </div>
             </div>
             
-            <div className="group bg-[#ff581b] text-white rounded-full py-4 px-8 font-bold relative overflow-hidden transition-all w-55">
+            {/* <div className="group bg-[#ff581b] text-white rounded-full py-4 px-8 font-bold relative overflow-hidden transition-all w-55">
               <span className="relative z-10 flex items-center gap-2">
                 Explore Our Menu
                 <svg className="w-4 h-4 transition-transform group-hover:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </span>
-              {/* <div className="absolute inset-0 bg-black transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300" /> */}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

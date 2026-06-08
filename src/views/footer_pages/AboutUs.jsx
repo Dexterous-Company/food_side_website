@@ -403,7 +403,7 @@
 //                   <div className="text-[#ff581b] text-xs font-bold uppercase tracking-wider">Our Commitment</div>
 //                   <div className="text-xl md:text-2xl font-black">Building a smarter travel ecosystem where great food is always within reach.</div>
 //                 </div>
-//                 <a href="/contact" className="bg-[#ff581b] text-white rounded-full py-3 px-6 hover:bg-white hover:text-[#ff581b] transition-all inline-flex items-center gap-2 mt-4 md:mt-0">
+//                 <a href="/contact_us" className="bg-[#ff581b] text-white rounded-full py-3 px-6 hover:bg-white hover:text-[#ff581b] transition-all inline-flex items-center gap-2 mt-4 md:mt-0">
 //                   Partner With Us
 //                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -429,7 +429,7 @@
 //               At Bollineni Ventures, we are dedicated to building a smarter travel ecosystem where great food is always within reach. Through continuous innovation and customer-focused solutions, we aim to transform highway dining and make every journey a delicious experience.
 //             </p>
 //             <div className="flex flex-wrap gap-4 justify-center">
-//               <a href="/contact" className="bg-[#ff581b] text-white rounded-full py-4 px-8 inline-flex items-center gap-2 hover:bg-[#e04e12] transition-all">
+//               <a href="/contact_us" className="bg-[#ff581b] text-white rounded-full py-4 px-8 inline-flex items-center gap-2 hover:bg-[#e04e12] transition-all">
 //                 Become a Partner
 //                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 //                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -645,26 +645,7 @@ const AboutUs = () => {
               <p className="text-white/80 max-w-lg text-base md:text-lg leading-relaxed">
                 Redefining highway food delivery — connecting travelers with trusted restaurants along major highways, making quality meals accessible wherever the journey takes them.
               </p>
-              <div className="flex gap-4 flex-wrap">
-                <a 
-                  href="#story" 
-                  className="bg-[#ff581b] text-white rounded-full py-3 px-6 md:py-4 md:px-8 relative overflow-hidden group inline-flex items-center gap-2 transition-all hover:bg-[#ff581b]/90"
-                >
-                  Our Story
-                  <svg className="w-4 h-4 transition-transform group-hover:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </a>
-                <a 
-                  href="#values" 
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-full py-3 px-6 md:py-4 md:px-8 hover:bg-[#ff581b] hover:border-[#ff581b] transition-all inline-flex items-center gap-2"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  Our Values
-                </a>
-              </div>
+        
             </div>
           </div>
         </div>
@@ -959,7 +940,7 @@ const AboutUs = () => {
                   <div className="text-[#ff581b] text-xs font-bold uppercase tracking-wider">Our Commitment</div>
                   <div className="text-xl md:text-2xl font-black">Building a smarter travel ecosystem where great food is always within reach.</div>
                 </div>
-                <a href="/contact" className="bg-[#ff581b] text-white rounded-full py-3 px-6 hover:bg-white hover:text-[#ff581b] transition-all inline-flex items-center gap-2 mt-4 md:mt-0">
+                <a href="/contact_us" className="bg-[#ff581b] text-white rounded-full py-3 px-6 hover:bg-white hover:text-[#ff581b] transition-all inline-flex items-center gap-2 mt-4 md:mt-0">
                   Partner With Us
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -985,7 +966,7 @@ const AboutUs = () => {
               At Bollineni Ventures, we are dedicated to building a smarter travel ecosystem where great food is always within reach. Through continuous innovation and customer-focused solutions, we aim to transform highway dining and make every journey a delicious experience.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <a href="/contact" className="bg-[#ff581b] text-white rounded-full py-4 px-8 inline-flex items-center gap-2 hover:bg-[#e04e12] transition-all">
+              <a href="/contact_us" className="bg-[#ff581b] text-white rounded-full py-4 px-8 inline-flex items-center gap-2 hover:bg-[#e04e12] transition-all">
                 Become a Partner
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
