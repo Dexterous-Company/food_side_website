@@ -426,12 +426,12 @@ const FooterPage = () => {
         </div>
 
         {/* Scroll to Top Button */}
-        <button
+        <div
           onClick={scrollToTop}
           className={`footer-scroll-top fixed bottom-5 lg:bottom-10 right-5 lg:right-10 w-11 h-11 lg:w-14 lg:h-14 bg-[#ff581b] text-white rounded-full cursor-pointer flex items-center justify-center text-base lg:text-xl z-[1000] transition-all duration-300 shadow-[0_10px_35px_rgba(255,107,53,0.4)] hover:-translate-y-2 hover:scale-110 hover:shadow-[0_15px_45px_rgba(255,107,53,0.5)] ${showScrollTop ? "opacity-100 visible animate-[popIn_0.4s_ease-out]" : "opacity-0 invisible"}`}
         >
           <FaChevronUp />
-        </button>
+        </div>
       </footer>
 
       {/* Custom Animations */}
