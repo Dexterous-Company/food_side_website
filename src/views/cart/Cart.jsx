@@ -649,12 +649,12 @@ const Cart = () => {
                   {cartItems.length === 1 ? "product" : "products"} in your cart
                 </div>
               </div>
-              <button
+              <div
                 onClick={clearCart}
                 className="text-[10px] font-bold text-white/70 hover:text-red-600 flex items-center gap-1 transition-colors"
               >
                 <FaTrashCan className="text-[10px]" /> Clear Cart
-              </button>
+              </div>
             </div>
 
             {/* Cart Items List */}
@@ -867,12 +867,12 @@ const Cart = () => {
                         className="w-full py-2 sm:py-2.5 pl-9 pr-3 border border-gray-200 rounded-lg sm:rounded-xl bg-white text-gray-900 text-xs outline-none focus:border-[#ff581b] focus:ring-1 focus:ring-[#ff581b]"
                       />
                     </div>
-                    <button
+                    <div
                       onClick={applyPromo}
                       className="px-4 sm:px-5 py-2 sm:py-2.5 bg-gray-900 text-white rounded-lg sm:rounded-xl font-bold text-xs hover:bg-[#ff581b] transition-colors"
                     >
                       Apply
-                    </button>
+                    </div>
                   </div>
                   {appliedPromo && (
                     <div className="flex items-center gap-2 mt-2 bg-emerald-50 border border-emerald-200 rounded-lg sm:rounded-xl px-3 py-2">
