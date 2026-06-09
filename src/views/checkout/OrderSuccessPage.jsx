@@ -367,7 +367,7 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
                       <div className="w-3 h-3 rounded-full bg-red-500"></div>
                     </div>
                     <div className="flex-1">
-                      <div className="mb-5">
+                      {/* <div className="mb-5">
                         <p className="text-xs text-green-600 font-semibold">
                           Current LOCATION
                         </p>
@@ -378,7 +378,7 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
                         <p className="text-xs text-gray-500 mt-0.5">
                           {restaurantAddress}
                         </p>
-                      </div>
+                      </div> */}
                       <div>
                         <p className="text-xs text-red-500 font-semibold">
                           DELIVERY LOCATION
@@ -430,13 +430,13 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
                   )}
 
                   {/* ETA */}
-                  {eta && (
+                  {/* {eta && (
                     <div className="mb-4 p-3 bg-blue-50 rounded-lg text-center">
                       <p className="text-xs sm:text-sm text-blue-600 font-medium">
                         🚚 Estimated Delivery by {eta}
                       </p>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
 
@@ -464,7 +464,7 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
                             />
                           )}
                           <p className="text-sm text-gray-700 flex-1">
-                            {item.name}
+                            {item.name}( x{item.qty})
                           </p>
                         </div>
                         <div className="text-right">

@@ -2,7 +2,8 @@ import "./globals.css";
 import ReduxLayoutProviders from "@/views/Mainlayout/ReduxLayoutProviders";
 import ClientLayout from "@/views/Mainlayout/ClientLayout";
 export const viewport = {
-  themeColor: "#FF581B",
+  // themeColor: "#FF581B",
+  themeColor: "#f2f2f2",
 };
 export const metadata = {
   title: "FoodSide | Highway Food Delivery Platform by Bollineni Ventures",
