@@ -120,8 +120,21 @@ const CheckOutPage = () => {
     if (!journeyDate) return null;
     
     try {
-      if (journeyTime && journeyTime.includes('T')) {
+      // Handle ISO string or full datetime strings
+      if (journeyTime && typeof journeyTime === "string" && journeyTime.includes('T')) {
         return new Date(journeyTime);
+      }
+
+      // If journeyTime is already a Date object (can happen from in-memory state), merge with journeyDate
+      if (journeyTime instanceof Date) {
+        const baseDate =
+          journeyDate && journeyDate instanceof Date
+            ? new Date(journeyDate)
+            : journeyDate && typeof journeyDate === 'string' && journeyDate.includes('T')
+            ? new Date(journeyDate)
+            : new Date();
+        baseDate.setHours(journeyTime.getHours(), journeyTime.getMinutes(), 0, 0);
+        return baseDate;
       }
       
       if (journeyDate.includes('T')) {
@@ -136,14 +149,19 @@ const CheckOutPage = () => {
       let hours = 0, minutes = 0;
       
       if (journeyTime) {
-        if (journeyTime.includes('AM') || journeyTime.includes('PM')) {
+        // Normalize when journeyTime is an object-like (e.g., firebase timestamp) with toDate
+        if (typeof journeyTime === 'object' && typeof journeyTime.toDate === 'function') {
+          const dt = journeyTime.toDate();
+          hours = dt.getHours();
+          minutes = dt.getMinutes();
+        } else if (typeof journeyTime === 'string' && (journeyTime.includes('AM') || journeyTime.includes('PM'))) {
           const [timePart, period] = journeyTime.split(" ");
           let [hourPart, minutePart] = timePart.split(":").map(Number);
           hours = hourPart;
           minutes = minutePart || 0;
           if (period === "PM" && hours !== 12) hours += 12;
           if (period === "AM" && hours === 12) hours = 0;
-        } else if (journeyTime.includes(':')) {
+        } else if (typeof journeyTime === 'string' && journeyTime.includes(':')) {
           const [hourPart, minutePart] = journeyTime.split(":").map(Number);
           hours = hourPart;
           minutes = minutePart || 0;

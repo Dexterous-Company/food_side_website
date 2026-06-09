@@ -528,13 +528,13 @@ const LoginPrompt = ({ isDesktop, isUserAuth, userData, onLogin }) => {
             />
           </div>
         </div>
-        <button
+        <div
           onClick={handleSendOtp}
           disabled={mobileNumber.length !== 10 || isAuthLoading}
-          className="w-full rounded-lg bg-[#ff581b] py-2 text-xs font-semibold text-white transition hover:bg-gray-900 disabled:opacity-50"
+          className="w-full rounded-lg bg-[#ff581b] py-2 text-xs text-center font-semibold text-white transition hover:bg-gray-900 disabled:opacity-50"
         >
           {isAuthLoading ? "Sending OTP..." : "Send OTP"}
-        </button>
+        </div>
       </div>
       <div className="mt-4">
         <p className="text-center text-[10px] text-gray-500">
