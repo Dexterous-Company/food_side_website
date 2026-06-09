@@ -64,13 +64,12 @@ const CheckOutPage = () => {
   }, []);
 
   // ✅ Memoize showToast to prevent unnecessary re-renders
-  const showToast = useCallback((message, isError = false) => {
-    // Clear existing timeout
+  const showToast = useCallback((message, type = "success") => {
     if (toastTimeoutRef.current) {
       clearTimeout(toastTimeoutRef.current);
     }
     
-    setToastMessage({ message, isError });
+    setToastMessage({ message, type });
     toastTimeoutRef.current = setTimeout(() => setToastMessage(null), 5000);
   }, []);
 
@@ -114,61 +113,70 @@ const CheckOutPage = () => {
 
   // Helper function to extract date and time from journey object
   const getJourneyDateTime = useCallback(() => {
-    const journeyDate = routeParams?.journey?.date;
-    const journeyTime = routeParams?.journey?.time;
+    const journeyDate =
+      routeParams?.journey?.date ?? routeParams?.selectedDate ?? routeParams?.date;
+    const journeyTime =
+      routeParams?.journey?.time ?? routeParams?.selectedTime ?? routeParams?.time;
     
     if (!journeyDate) return null;
     
     try {
-      // Handle ISO string or full datetime strings
-      if (journeyTime && typeof journeyTime === "string" && journeyTime.includes('T')) {
+      const parseDateString = (value) => {
+        if (!value) return null;
+        if (value instanceof Date) return new Date(value);
+        if (typeof value === 'number') return new Date(value);
+        if (typeof value === 'string') {
+          if (value.includes('T')) return new Date(value);
+          if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return new Date(value);
+          if (/^\d{2}-\d{2}-\d{4}$/.test(value)) {
+            const [day, month, year] = value.split('-').map(Number);
+            return new Date(year, month - 1, day);
+          }
+          const parsed = Date.parse(value);
+          return isNaN(parsed) ? null : new Date(parsed);
+        }
+        return null;
+      };
+
+      const parsedJourneyDate = parseDateString(journeyDate);
+      if (!parsedJourneyDate) return null;
+
+      if (journeyTime && typeof journeyTime === 'string' && journeyTime.includes('T')) {
         return new Date(journeyTime);
       }
 
-      // If journeyTime is already a Date object (can happen from in-memory state), merge with journeyDate
       if (journeyTime instanceof Date) {
-        const baseDate =
-          journeyDate && journeyDate instanceof Date
-            ? new Date(journeyDate)
-            : journeyDate && typeof journeyDate === 'string' && journeyDate.includes('T')
-            ? new Date(journeyDate)
-            : new Date();
+        const baseDate = new Date(parsedJourneyDate);
         baseDate.setHours(journeyTime.getHours(), journeyTime.getMinutes(), 0, 0);
         return baseDate;
       }
-      
-      if (journeyDate.includes('T')) {
-        return new Date(journeyDate);
-      }
-      
-      let dateStr = journeyDate;
-      if (typeof journeyDate === "object" && journeyDate instanceof Date) {
-        dateStr = journeyDate.toISOString();
-      }
-      
-      let hours = 0, minutes = 0;
+
+      let hours = 0,
+        minutes = 0;
       
       if (journeyTime) {
-        // Normalize when journeyTime is an object-like (e.g., firebase timestamp) with toDate
         if (typeof journeyTime === 'object' && typeof journeyTime.toDate === 'function') {
           const dt = journeyTime.toDate();
           hours = dt.getHours();
           minutes = dt.getMinutes();
+        } else if (journeyTime instanceof Date) {
+          hours = journeyTime.getHours();
+          minutes = journeyTime.getMinutes();
         } else if (typeof journeyTime === 'string' && (journeyTime.includes('AM') || journeyTime.includes('PM'))) {
-          const [timePart, period] = journeyTime.split(" ");
-          let [hourPart, minutePart] = timePart.split(":").map(Number);
+          const [timePart, period] = journeyTime.split(' ');
+          let [hourPart, minutePart] = timePart.split(':').map(Number);
           hours = hourPart;
           minutes = minutePart || 0;
-          if (period === "PM" && hours !== 12) hours += 12;
-          if (period === "AM" && hours === 12) hours = 0;
+          if (period === 'PM' && hours !== 12) hours += 12;
+          if (period === 'AM' && hours === 12) hours = 0;
         } else if (typeof journeyTime === 'string' && journeyTime.includes(':')) {
-          const [hourPart, minutePart] = journeyTime.split(":").map(Number);
+          const [hourPart, minutePart] = journeyTime.split(':').map(Number);
           hours = hourPart;
           minutes = minutePart || 0;
         }
       }
       
-      const dateObj = new Date(dateStr);
+      const dateObj = new Date(parsedJourneyDate);
       dateObj.setHours(hours, minutes, 0, 0);
       return dateObj;
     } catch (error) {
@@ -258,7 +266,7 @@ const CheckOutPage = () => {
         
         showToast(
           `⚠️ Delivery time must be at least 1 hour from now. Please select time after ${formattedMinTime} (${minutesDiff} minutes remaining)`,
-          true
+          "warning"
         );
       }
     }
@@ -437,7 +445,9 @@ const CheckOutPage = () => {
     setValidationErrors(errors);
 
     if (errors.length > 0) {
-      errors.forEach((error) => showToast(error, true));
+      const firstError = errors[0];
+      const toastType = firstError.includes("time must be at least 1 hour") ? "warning" : "error";
+      showToast(firstError, toastType);
       return false;
     }
 
@@ -681,7 +691,7 @@ const CheckOutPage = () => {
         errorMessage = "Restaurant information is missing. Please try again.";
       }
 
-      showToast(errorMessage, true);
+      showToast(errorMessage, "error");
       router.push(`/order_failed?error=${encodeURIComponent(errorMessage)}`);
     } finally {
       if (!navigationCompleted) {
@@ -697,7 +707,7 @@ const CheckOutPage = () => {
     console.log("=== Time Validation Test ===");
     console.log("Selected DateTime:", selectedDateTime);
     console.log("Is Valid:", isValid);
-    showToast(`Time validation: ${isValid ? "✅ Valid" : "❌ Invalid"}`, !isValid);
+    showToast(`Time validation: ${isValid ? "✅ Valid" : "❌ Invalid"}`, isValid ? "success" : "error");
   };
 
   // Don't render checkout content until the client cart/storage state is ready.
@@ -772,10 +782,20 @@ const CheckOutPage = () => {
       {toastMessage && (
         <div
           className={`fixed top-4 right-4 z-50 flex items-center gap-2 rounded-lg px-4 py-3 shadow-lg ${
-            toastMessage.isError ? "bg-red-500" : "bg-green-500"
-          } text-white animate-slide-in`}
+            toastMessage.type === "error"
+              ? "bg-red-500 text-white"
+              : toastMessage.type === "warning"
+              ? "bg-yellow-300 text-black"
+              : "bg-green-500 text-white"
+          } animate-slide-in`}
         >
-          <span>{toastMessage.isError ? "❌" : "✓"}</span>
+          <span>
+            {toastMessage.type === "error"
+              ? "❌"
+              : toastMessage.type === "warning"
+              ? "⚠️"
+              : "✓"}
+          </span>
           <span className="text-sm">{toastMessage.message}</span>
         </div>
       )}
