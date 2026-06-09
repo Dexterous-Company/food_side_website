@@ -491,7 +491,7 @@ const LoginPrompt = ({ isDesktop, isUserAuth, userData, onLogin }) => {
         </p>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-3 ">
         <div>
           <label className="mb-1 block text-xs font-semibold text-gray-700">
             Mobile Number
@@ -511,7 +511,6 @@ const LoginPrompt = ({ isDesktop, isUserAuth, userData, onLogin }) => {
             />
           </div>
         </div>
-
         <button
           onClick={handleSendOtp}
           disabled={mobileNumber.length !== 10 || isAuthLoading}
@@ -519,7 +518,8 @@ const LoginPrompt = ({ isDesktop, isUserAuth, userData, onLogin }) => {
         >
           {isAuthLoading ? "Sending OTP..." : "Send OTP"}
         </button>
-
+      </div>
+      <div className="mt-4">
         <p className="text-center text-[10px] text-gray-500">
           By continuing, you agree to our Terms & Privacy Policy
         </p>

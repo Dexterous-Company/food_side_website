@@ -29,11 +29,14 @@ import {
   setTowardsLocation,
   setSelectedDeliveryPoint as reduxSetSelectedDeliveryPoint,
   setSelectedRoute as reduxSetSelectedRoute,
+  setMapViewModalOpen,
 } from "@/redux/delivery/deliverySlice";
 import {
   normalizeErrorMessage,
   searchRouteDestinations,
 } from "../../../utils/deliveryApi";
+
+import MapViewModal from "./MapViewModal";
 
 import "antd/dist/reset.css";
 
@@ -276,6 +279,16 @@ export default function BusSearch() {
   const [selectedDeliveryPoint, setSelectedDeliveryPoint] = useState(null);
   const [showDeliveryDropdown, setShowDeliveryDropdown] = useState(false);
   const [showMapView, setShowMapView] = useState(false);
+  const [mapRoutes, setMapRoutes] = useState([]);
+  const [mapLoading, setMapLoading] = useState(false);
+  const mapRef = useRef(null);
+  const directionsServiceRef = useRef(null);
+  const directionsRendererRef = useRef(null);
+
+  // Dispatch modal state to Redux when showMapView changes
+  useEffect(() => {
+    dispatch(setMapViewModalOpen(showMapView));
+  }, [showMapView, dispatch]);
 
   // Toast state
   const [toast, setToast] = useState(null);
@@ -1105,37 +1118,31 @@ export default function BusSearch() {
               <div className="relative flex rounded-xl border border-gray-200">
                 {/* Select Route - Dynamic */}
                 <div className="flex-1 border-r border-gray-200 bg-gray-50 px-3 py-2">
-                  {selectedRoute ? (
-                    <div
-                      onClick={() => setShowMapView(true)}
-                      className="mb-1 text-[10px] cursor-pointer font-semibold text-gray-500 flex items-center gap-2"
-                    >
-                      Select Route
-                      <Map size={14} className="text-[#ff581b]" />
-                      click to View on map
-                    </div>
-                  ) : (
-                    <div className="mb-1 text-[10px] font-semibold text-gray-500 flex items-center gap-2">
-                      Select Route
-                      <Map size={14} className="text-[#ff581b]" />
-                    </div>
-                  )}
-                  <AutoComplete
-                    value={selectedRoute?.name || ""}
-                    options={routes.map((route) => ({
-                      value: route.name,
-                      key: getRouteKey(route),
-                    }))}
-                    onChange={(value) => {
-                      const route = routes.find((r) => r.name === value);
-                      if (route) {
-                        handleSelectRoute(route);
-                      }
-                    }}
-                    placeholder="Choose a route"
-                    className="w-full"
-                    disabled={routes.length === 0}
-                  />
+                   <div
+                     onClick={() => setShowMapView(true)}
+                     className="mb-1 text-[10px] cursor-pointer font-semibold text-gray-500 flex items-center gap-2"
+                   >
+                     Select Route
+                     <Map size={14} className="text-[#ff581b]" />
+                     {selectedRoute ? "Click to change on map" : "Click to view on map"}
+                   </div>
+                   <AutoComplete
+                     value={selectedRoute?.name || ""}
+                    //  options={routes.map((route) => ({
+                    //    value: route.name,
+                    //    key: getRouteKey(route),
+                    //  }))}
+                     onFocus={() => setShowMapView(true)}
+                     onChange={(value) => {
+                       const route = routes.find((r) => r.name === value);
+                       if (route) {
+                         handleSelectRoute(route);
+                       }
+                     }}
+                     placeholder="Choose a route or click to view map"
+                     className="w-full"
+                     disabled={routes.length === 0}
+                   />
                 </div>
 
                 {/* Select Delivery Point - Dynamic based on selected route */}
@@ -1221,7 +1228,15 @@ export default function BusSearch() {
                   className="w-full"
                   disabled={routes.length === 0}
                 />
-                {selectedRoute && (
+                {selectedRoute ? (
+                  <button
+                    onClick={() => setShowMapView(true)}
+                    className="mt-1 text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                  >
+                    <Map size={12} />
+                    Change on Map
+                  </button>
+                ) : (
                   <button
                     onClick={() => setShowMapView(true)}
                     className="mt-1 text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1"
@@ -1273,62 +1288,21 @@ export default function BusSearch() {
 
             {/* Map View Modal */}
             {showMapView && (
-              <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/50">
-                <div className="w-full max-w-4xl max-h-[90vh] overflow-auto bg-white rounded-xl shadow-2xl">
-                  {/* Map Header */}
-                  <div className="flex justify-between items-center p-3 bg-gray-50 border-b border-gray-200 rounded-t-xl">
-                    <h3 className="text-base font-semibold text-gray-800">
-                      Route Map
-                    </h3>
-                    <button
-                      onClick={() => setShowMapView(false)}
-                      className="p-1 hover:bg-gray-200 rounded-full transition-colors"
-                    >
-                      <X size={18} className="text-gray-600" />
-                    </button>
-                  </div>
-
-                  {/* Map Container */}
-                  <div className="relative h-[400px]">
-                    <iframe
-                      src={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyDfjw4P4PnfI08-B-ljZDhEeQxnBqNv3hQ&origin=${encodeURIComponent(from || "Hyderabad")}&destination=${encodeURIComponent(to || "Bengaluru")}&mode=driving`}
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      className="absolute inset-0"
-                      title="Route Map"
-                    />
-                  </div>
-
-                  {/* Route Info */}
-                  {selectedRoute && (
-                    <div className="p-3 border-t border-gray-200 bg-white">
-                      <div className="flex items-center gap-2 text-sm">
-                        <span className="font-semibold text-gray-700">
-                          {from || "Source"}
-                        </span>
-                        <ArrowRight size={14} className="text-[#ff581b]" />
-                        <span className="font-semibold text-gray-700">
-                          {to || "Destination"}
-                        </span>
-                      </div>
-                      <div className="mt-2 text-xs text-gray-500">
-                        <span className="font-medium text-gray-700">
-                          Selected Route:
-                        </span>{" "}
-                        {selectedRoute.name} • {selectedRoute.distanceKm || 0}{" "}
-                        km •{" "}
-                        {selectedRoute.durationMinutes
-                          ? `${Math.floor(selectedRoute.durationMinutes / 60)}h ${selectedRoute.durationMinutes % 60}m`
-                          : ""}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+              <MapViewModal
+                from={from}
+                to={to}
+                selectedRoute={selectedRoute}
+                routes={routes}
+                onClose={() => {
+                  setShowMapView(false);
+                  dispatch(setMapViewModalOpen(false));
+                }}
+                onSelectRoute={(route) => {
+                  handleSelectRoute(route);
+                  setShowMapView(false);
+                  dispatch(setMapViewModalOpen(false));
+                }}
+              />
             )}
 
             <div className="mt-2 flex items-center justify-between rounded-xl bg-gradient-to-r from-red-50 via-white to-gray-50 px-3 py-2">

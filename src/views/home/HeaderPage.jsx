@@ -48,14 +48,24 @@ const HeaderPage = () => {
   const { cartList } = useCart();
   const cartCount = useMemo(() => {
     if (!cartList || cartList.length === 0) return 0;
-    return cartList.reduce((sum, item) => sum + (item.qty || item.quantity || 1), 0);
+    return cartList.reduce(
+      (sum, item) => sum + (item.qty || item.quantity || 1),
+      0,
+    );
   }, [cartList]);
 
   // Check if delivery/booking data exists
-  const isDestinationSet = useSelector((state) => state.delivery.isDestinationSet);
-  const isRouteSelected = useSelector((state) => state.delivery.isRouteSelected);
-  const isDeliveryPointSelected = useSelector((state) => state.delivery.isDeliveryPointSelected);
-  const hasDeliveryData = isDestinationSet || isRouteSelected || isDeliveryPointSelected;
+  const isDestinationSet = useSelector(
+    (state) => state.delivery.isDestinationSet,
+  );
+  const isRouteSelected = useSelector(
+    (state) => state.delivery.isRouteSelected,
+  );
+  const isDeliveryPointSelected = useSelector(
+    (state) => state.delivery.isDeliveryPointSelected,
+  );
+  const hasDeliveryData =
+    isDestinationSet || isRouteSelected || isDeliveryPointSelected;
 
   // Handle scroll effect for header background
   useEffect(() => {
@@ -144,11 +154,10 @@ const HeaderPage = () => {
       name: "Faq",
       isDropdown: false,
       link: "/faq",
-
     },
     { name: "About", link: "/about_us", isDropdown: false },
     {
-      name: "Pages",
+      name: "Quick Menu",
       isDropdown: true,
       dropdownItems: [
         {
@@ -194,12 +203,16 @@ const HeaderPage = () => {
     return "text-[#121212] hover:text-[#ff581b]";
   };
 
+  // const getDropdownButtonColor = () => {
+  //   if (scrolled) return "text-[#121212] hover:text-[#ff581b]";
+  //   if (isHomePage) return "text-white hover:text-[#ff581b]";
+  //   return "text-[#121212] hover:text-[#ff581b]";
+  // };
   const getDropdownButtonColor = () => {
     if (scrolled) return "text-[#121212] hover:text-[#ff581b]";
     if (isHomePage) return "text-white hover:text-[#ff581b]";
     return "text-[#121212] hover:text-[#ff581b]";
   };
-
   return (
     <>
       {/* MAIN HEADER - Transparent on scroll */}
@@ -461,12 +474,6 @@ const HeaderPage = () => {
                   </button>
                 </div>
               )}
-              <button
-                onClick={handleNewBookingClick}
-                className="block w-full bg-black text-white font-bold py-2 px-4 rounded-full text-center hover:bg-[#ff581b] transition-colors mt-3"
-              >
-                {hasDeliveryData ? 'Edit Booking' : 'New Booking'}
-              </button>
             </div>
           </div>
 
@@ -478,7 +485,7 @@ const HeaderPage = () => {
                   {item.isDropdown ? (
                     <>
                       <button
-                        className={`flex items-center gap-1 font-semibold py-2.5 px-3 transition-colors duration-300 cursor-pointer group ${getDropdownButtonColor()}`}
+                        className={`flex items-center gap-1 font-semibold py-2.5 px-3 transition-colors duration-300 cursor-pointer group ${getNavLinkColor()}`}
                       >
                         {item.name}
                         <FaAngleDown className="text-xs transition-transform duration-300 group-hover:rotate-180" />
@@ -747,17 +754,6 @@ const HeaderPage = () => {
                   )}
                 </div>
               )}
-
-              <button
-                onClick={handleNewBookingClick}
-                className={`font-bold px-5 py-[0.8rem] lg:px-6 rounded-full relative overflow-hidden transition-all duration-300 shadow-md hover:shadow-lg group z-10 ${
-                  scrolled || !isHomePage
-                    ? "bg-[#ff581b] text-white hover:bg-black"
-                    : "bg-white text-[#ff581b] hover:bg-[#ff581b] hover:text-white"
-                }`}
-              >
-                <span className="relative z-10 text-[16px]">{hasDeliveryData ? 'Edit Booking' : 'New Booking'}</span>
-              </button>
             </div>
           </div>
         </nav>
