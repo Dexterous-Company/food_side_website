@@ -53,12 +53,23 @@ const normalizeProduct = (product, index) => ({
   id: product?.id || product?._id || `product-${index}`,
   name: product?.name || product?.title || `Product ${index + 1}`,
   price: normalizePrice(product?.price),
-  oldPrice: normalizePrice(product?.discount_price ?? product?.discountPrice ?? product?.price),
-  save: normalizePrice(product?.price) - normalizePrice(product?.discount_price ?? product?.price),
-  offer: product?.offer || product?.discount_percent ? `${product?.discount_percent}% OFF` : '',
-  type: (product?.isVeg || product?.foodType === 'veg') ? 'veg' : 'non-veg',
-  image: product?.image || product?.images?.[0] || product?.productImage || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1200&auto=format&fit=crop',
-  description: product?.description || '',
+  oldPrice: normalizePrice(
+    product?.discount_price ?? product?.discountPrice ?? product?.price,
+  ),
+  save:
+    normalizePrice(product?.price) -
+    normalizePrice(product?.discount_price ?? product?.price),
+  offer:
+    product?.offer || product?.discount_percent
+      ? `${product?.discount_percent}% OFF`
+      : "",
+  type: product?.isVeg || product?.foodType === "veg" ? "veg" : "non-veg",
+  image:
+    product?.image ||
+    product?.images?.[0] ||
+    product?.productImage ||
+    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1200&auto=format&fit=crop",
+  description: product?.description || "",
   rating: product?.rating ?? 4,
   stock: Number(product?.stock ?? product?.quantity ?? 10),
   outOfStock: product?.outOfStock === true || Number(product?.stock ?? 1) <= 0,
@@ -214,6 +225,8 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
 
   // Fetch restaurants based on delivery point
   const fetchRestaurants = useCallback(async () => {
+    console.log("fetchRestaurants called, deliveryPointId:", deliveryPointId);
+    console.log("selectedDeliveryPoint from Redux:", selectedDeliveryPoint);
     setLoading(true);
     setError("");
 
@@ -222,11 +235,15 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
       if (deliveryPointId) {
         // API endpoint (same as app)
         const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/delivery/restaurants-with-products/by-delivery-point/${deliveryPointId}`;
+        console.log("Fetching restaurants from:", apiUrl);
         response = await axios.get(apiUrl);
+        console.log("API response:", response?.data);
         const rawRestaurants = extractRestaurantList(response?.data);
+        console.log("Raw restaurants:", rawRestaurants);
         const normalizedRestaurants = rawRestaurants
           .map(normalizeRestaurant)
           .filter((restaurant) => restaurant.items.length > 0);
+        console.log("Normalized restaurants:", normalizedRestaurants);
 
         if (!normalizedRestaurants.length) {
           setError("No restaurants available for this delivery point.");
@@ -236,6 +253,7 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
         }
       } else {
         // No delivery point selected - show empty or use fallback
+        console.log("No deliveryPointId, showing empty state");
         setRestaurants([]);
         setError("Please select a delivery point to see restaurants.");
       }
@@ -287,7 +305,15 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
 
   // Show restaurants
   return (
-    <div className="space-y-6">
+    <div id="restaurants-main" className="space-y-3">
+      <div className="max-w-7xl mx-auto text-4xl sm:text-5xl font-extrabold text-black leading-[1.1] mb-5 tracking-[-1px]">
+        Discover{" "}
+        <span className="hero-highlight text-[#ff581b] font-['Yesteryear',cursive] inline-block">
+          Nearby{" "}{" "}
+        </span>
+         {" "}Restaurants
+      </div>
+
       {restaurants.map((restaurant) => (
         <motion.section
           key={restaurant.id}

@@ -350,23 +350,6 @@ export default function BusSearch() {
     );
   }, [departureDate, departureTime]);
 
-  // Sync date and time to Redux whenever they change
-  useEffect(() => {
-    const combinedDateTime = dayjs(departureDate)
-      .hour(departureTime.hour())
-      .minute(departureTime.minute())
-      .second(0);
-    
-    const formattedDate = departureDate.format('DD MMM YYYY');
-    const formattedTime = combinedDateTime.format('hh:mm A');
-    
-    console.log('Dispatching date to Redux:', { date: departureDate.toDate(), formattedDate });
-    console.log('Dispatching time to Redux:', { time: combinedDateTime.toDate(), formattedTime });
-    
-    dispatch(setJourneyDate({ date: departureDate.toDate(), formattedDate }));
-    dispatch(setJourneyTime({ time: combinedDateTime.toDate(), formattedTime }));
-  }, [departureDate, departureTime, dispatch]);
-
   const validateAndShowWarning = useCallback(() => {
     if (!isTimeValid()) {
       showToast("Departure time must be at least 1 hour from now", true);

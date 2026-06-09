@@ -22,6 +22,7 @@ import {
   checkEmailExists,
 } from "@/redux/Authentication/AuthenticationSlice";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -239,87 +240,152 @@ export default function ProfilePage() {
     }
   };
 
+  // const handleSave = async () => {
+  //   if (!editForm.name.trim()) {
+  //     alert("Please enter your name");
+  //     return;
+  //   }
+
+  //   const trimmedEmail = editForm.email.trim();
+  //   if (!trimmedEmail) {
+  //     alert("Please enter your email address");
+  //     return;
+  //   }
+
+  //   // Check format validation
+  //   const validationMessage = getEmailValidationMessage(trimmedEmail);
+  //   if (validationMessage) {
+  //     alert(validationMessage);
+  //     return;
+  //   }
+
+  //   // Check if email exists (only if email changed)
+  //   if (trimmedEmail.toLowerCase() !== user.email.toLowerCase()) {
+  //     const emailExists = await checkEmailExists(trimmedEmail);
+  //     if (emailExists) {
+  //       alert("This email is already registered. Please use a different email address.");
+  //       return;
+  //     }
+  //   }
+
+  //   if (!user._id) {
+  //     alert("User ID not found. Please login again.");
+  //     return;
+  //   }
+
+  //   setIsSaving(true);
+
+  //   try {
+  //     let uploadedProfileImageUrl = editForm.profileImage;
+
+  //     // Handle image upload if a new file was selected
+  //     if (profileImageFile) {
+  //       uploadedProfileImageUrl = await handleImageUpload(profileImageFile);
+  //     }
+
+  //     const payload = {
+  //       name: editForm.name.trim(),
+  //       email: trimmedEmail.toLowerCase(),
+  //       profileImage: uploadedProfileImageUrl,
+  //     };
+
+  //     const response = await axios.put(
+  //       `${BaseUrl}/api/v1/user/users/${user._id}`,
+  //       payload
+  //     );
+
+  //     const updatedUser = response?.data?.user;
+
+  //     if (!response?.data?.success || !updatedUser) {
+  //       throw new Error(response?.data?.message || "Unable to update profile.");
+  //     }
+
+  //     // Update Redux state
+  //     dispatch(
+  //       restaurant_auth({
+  //         ...(userData || {}),
+  //         ...updatedUser,
+  //         isUserAuth: true,
+  //       })
+  //     );
+
+  //     setEditForm((prev) => ({ ...prev, profileImage: uploadedProfileImageUrl }));
+  //     setProfileImageFile(null);
+  //     setIsEditing(false);
+  //     alert("Your profile has been updated successfully!");
+  //   } catch (error) {
+  //     console.error("Save error:", error);
+  //     alert(error?.response?.data?.message || error?.message || "Unable to update profile right now.");
+  //   } finally {
+  //     setIsSaving(false);
+  //   }
+  // };
+
+
   const handleSave = async () => {
-    if (!editForm.name.trim()) {
-      alert("Please enter your name");
-      return;
+  if (!editForm.name.trim()) return toast.error("Please enter your name");
+
+  const trimmedEmail = editForm.email.trim();
+  if (!trimmedEmail) return toast.error("Please enter your email");
+
+  const validationMessage = getEmailValidationMessage(trimmedEmail);
+  if (validationMessage) return toast.error(validationMessage);
+
+  if (trimmedEmail.toLowerCase() !== user.email.toLowerCase()) {
+    const emailExists = await checkEmailExists(trimmedEmail);
+    if (emailExists) return toast.error("Email already registered");
+  }
+
+  if (!user._id) return toast.error("User ID not found. Login again");
+
+  setIsSaving(true);
+
+  try {
+    let uploadedProfileImageUrl = editForm.profileImage;
+
+    if (profileImageFile) {
+      uploadedProfileImageUrl = await handleImageUpload(profileImageFile);
     }
 
-    const trimmedEmail = editForm.email.trim();
-    if (!trimmedEmail) {
-      alert("Please enter your email address");
-      return;
+    const payload = {
+      name: editForm.name.trim(),
+      email: trimmedEmail.toLowerCase(),
+      profileImage: uploadedProfileImageUrl,
+    };
+
+    const response = await axios.put(
+      `${BaseUrl}/api/v1/user/users/${user._id}`,
+      payload
+    );
+
+    const updatedUser = response?.data?.user;
+
+    if (!response?.data?.success || !updatedUser) {
+      throw new Error(response?.data?.message || "Update failed");
     }
 
-    // Check format validation
-    const validationMessage = getEmailValidationMessage(trimmedEmail);
-    if (validationMessage) {
-      alert(validationMessage);
-      return;
-    }
+    dispatch(
+      restaurant_auth({
+        ...(userData || {}),
+        ...updatedUser,
+        isUserAuth: true,
+      })
+    );
 
-    // Check if email exists (only if email changed)
-    if (trimmedEmail.toLowerCase() !== user.email.toLowerCase()) {
-      const emailExists = await checkEmailExists(trimmedEmail);
-      if (emailExists) {
-        alert("This email is already registered. Please use a different email address.");
-        return;
-      }
-    }
+    setEditForm((prev) => ({ ...prev, profileImage: uploadedProfileImageUrl }));
+    setProfileImageFile(null);
+    setIsEditing(false);
 
-    if (!user._id) {
-      alert("User ID not found. Please login again.");
-      return;
-    }
-
-    setIsSaving(true);
-
-    try {
-      let uploadedProfileImageUrl = editForm.profileImage;
-
-      // Handle image upload if a new file was selected
-      if (profileImageFile) {
-        uploadedProfileImageUrl = await handleImageUpload(profileImageFile);
-      }
-
-      const payload = {
-        name: editForm.name.trim(),
-        email: trimmedEmail.toLowerCase(),
-        profileImage: uploadedProfileImageUrl,
-      };
-
-      const response = await axios.put(
-        `${BaseUrl}/api/v1/user/users/${user._id}`,
-        payload
-      );
-
-      const updatedUser = response?.data?.user;
-
-      if (!response?.data?.success || !updatedUser) {
-        throw new Error(response?.data?.message || "Unable to update profile.");
-      }
-
-      // Update Redux state
-      dispatch(
-        restaurant_auth({
-          ...(userData || {}),
-          ...updatedUser,
-          isUserAuth: true,
-        })
-      );
-
-      setEditForm((prev) => ({ ...prev, profileImage: uploadedProfileImageUrl }));
-      setProfileImageFile(null);
-      setIsEditing(false);
-      alert("Your profile has been updated successfully!");
-    } catch (error) {
-      console.error("Save error:", error);
-      alert(error?.response?.data?.message || error?.message || "Unable to update profile right now.");
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
+    toast.success("Profile updated successfully");
+  } catch (error) {
+    console.error(error);
+    toast.error(
+      error?.response?.data?.message || error?.message || "Update failed"
+    );
+  } finally {
+    setIsSaving(false);
+  }
+};
   const handleImageSelect = (e) => {
     const file = e.target.files?.[0];
     if (file) {

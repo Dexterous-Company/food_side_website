@@ -157,7 +157,7 @@ const [email, setEmail] = useState("");
                         className="social-link w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-[#ff581b]/10 text-[#ff581b] flex items-center justify-center transition-all duration-300 hover:bg-[#ff581b] hover:text-white hover:-translate-y-2 hover:scale-110 hover:shadow-[0_15px_35px_rgba(255,107,53,0.4)] border-2 border-transparent hover:border-[#ff581b] relative overflow-hidden group"
                       >
                         <FaFacebookF className="text-base lg:text-lg relative z-10" />
-                        <span className="absolute inset-0 bg-[#ff581b] rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></span>
+                        <span className="absolute inset-0 bg-[#cc] rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></span>
                       </Link>
                       <Link
                         href="https://www.instagram.com/"

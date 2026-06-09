@@ -64,7 +64,6 @@ export default function Step1SelectTowards({
   selDest,
   onSelectDest,
   onNext,
-  onClose,
   onTimeAutoUpdated,
 }) {
   const dispatch = useDispatch();
@@ -219,24 +218,25 @@ export default function Step1SelectTowards({
       const GOOGLE_API_KEY =
         process.env.NEXT_PUBLIC_GOOGLE_API_KEY ||
         process.env.Next_GOOGLE_API_KEY ||
-        'AIzaSyDfjw4P4PnfI08-B-ljZDhEeQxnBqNv3hQ';
+        "AIzaSyDfjw4P4PnfI08-B-ljZDhEeQxnBqNv3hQ";
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`,
       );
-      
-      if (!response.ok) throw new Error('Reverse geocoding failed');
-      
+
+      if (!response.ok) throw new Error("Reverse geocoding failed");
+
       const data = await response.json();
-      
-      if (data.status !== 'OK' || !data.results || data.results.length === 0) {
-        throw new Error('No results found');
+
+      if (data.status !== "OK" || !data.results || data.results.length === 0) {
+        throw new Error("No results found");
       }
-      
-      const result = data.results.find((item) =>
-        item.address_components?.some((component) =>
-          component.types?.includes("postal_code"),
-        ),
-      ) || data.results[0];
+
+      const result =
+        data.results.find((item) =>
+          item.address_components?.some((component) =>
+            component.types?.includes("postal_code"),
+          ),
+        ) || data.results[0];
       const allAddressComponents = data.results.flatMap(
         (item) => item.address_components || [],
       );
@@ -247,24 +247,32 @@ export default function Step1SelectTowards({
           typesToFind.some((type) => component.types?.includes(type)),
         )?.long_name;
       };
-      
+
       // Extract components
-      let road = '';
-      let suburb = '';
-      let city = '';
-      let state = '';
-      let postcode = '';
-      
+      let road = "";
+      let suburb = "";
+      let city = "";
+      let state = "";
+      let postcode = "";
+
       road = findComponent(["route", "street_address"]) || "";
-      suburb = findComponent([
-        "neighborhood",
-        "sublocality",
-        "sublocality_level_1",
-        "sublocality_level_2",
-      ]) || "";
+      suburb =
+        findComponent([
+          "neighborhood",
+          "sublocality",
+          "sublocality_level_1",
+          "sublocality_level_2",
+        ]) || "";
       city =
-        findComponent(["locality", "postal_town", "administrative_area_level_3"]) ||
-        findComponent(["locality", "postal_town", "administrative_area_level_3"], false) ||
+        findComponent([
+          "locality",
+          "postal_town",
+          "administrative_area_level_3",
+        ]) ||
+        findComponent(
+          ["locality", "postal_town", "administrative_area_level_3"],
+          false,
+        ) ||
         "";
       state =
         findComponent(["administrative_area_level_1"]) ||
@@ -274,19 +282,21 @@ export default function Step1SelectTowards({
         findComponent(["postal_code"]) ||
         findComponent(["postal_code"], false) ||
         "";
-      
+
       // Clean up pincode - remove spaces and extra characters
       if (postcode) {
-        postcode = postcode.replace(/\s+/g, '').replace(/[^0-9]/g, '');
+        postcode = postcode.replace(/\s+/g, "").replace(/[^0-9]/g, "");
       }
-      
+
       // Build a readable address
-      const addressParts = [road, suburb, city, state, postcode].filter(Boolean);
+      const addressParts = [road, suburb, city, state, postcode].filter(
+        Boolean,
+      );
       const formattedAddress =
         result.formatted_address ||
-        addressParts.join(', ') ||
+        addressParts.join(", ") ||
         `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-      
+
       return {
         fromLocation: city || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
         fromLocationDetailed: formattedAddress,
@@ -296,15 +306,15 @@ export default function Step1SelectTowards({
         landmark: road,
       };
     } catch (error) {
-      console.error('Reverse geocoding error:', error);
+      console.error("Reverse geocoding error:", error);
       const fallback = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
       return {
         fromLocation: fallback,
         fromLocationDetailed: fallback,
-        city: '',
-        state: '',
-        pincode: '',
-        landmark: '',
+        city: "",
+        state: "",
+        pincode: "",
+        landmark: "",
       };
     }
   };
@@ -339,7 +349,7 @@ export default function Step1SelectTowards({
 
         // Reverse geocode to get actual address
         const addressData = await reverseGeocode(coords.lat, coords.lng);
-        
+
         setFromLocation(addressData.fromLocation);
         setFromLocationDetailed(addressData.fromLocationDetailed);
         setPickupAddressMeta({
@@ -510,8 +520,11 @@ export default function Step1SelectTowards({
           </div>
         </header>
       </div>
+
       <div className="flex flex-col gap-3 h-full min-h-0 sm:mt-0 mt-2 p-2">
-        <BannerCarousel banners={BANNERS} />
+        <div className="">
+          <BannerCarousel banners={BANNERS} />
+        </div>
         <div className="flex flex-col gap-3 md:mt-0 mt-2 sm:border-0 border border-gray-200 sm:p-0 p-4 rounded-xl">
           <div className="flex items-start gap-2.5 border border-gray-200 rounded-xl px-3 py-2.5 sm:px-3.5 sm:py-3 bg-white">
             <svg
@@ -531,9 +544,15 @@ export default function Step1SelectTowards({
                 {fromLocationDetailed ||
                   "Allow location access to detect your current location."}
               </p>
-              {(pickupAddressMeta.city || pickupAddressMeta.state || pickupAddressMeta.pincode) && (
+              {(pickupAddressMeta.city ||
+                pickupAddressMeta.state ||
+                pickupAddressMeta.pincode) && (
                 <p className="text-[11px] text-gray-500 mt-1 break-words">
-                  {[pickupAddressMeta.city, pickupAddressMeta.state, pickupAddressMeta.pincode]
+                  {[
+                    pickupAddressMeta.city,
+                    pickupAddressMeta.state,
+                    pickupAddressMeta.pincode,
+                  ]
                     .filter(Boolean)
                     .join(" - ")}
                 </p>
@@ -703,15 +722,6 @@ export default function Step1SelectTowards({
           />
 
           <div className="flex gap-3 mt-4 md:hidden">
-            {onClose && (
-              <button
-                type="button"
-                onClick={onClose}
-                className="flex-1 rounded-xl border border-gray-200 px-5 py-3 text-sm font-semibold text-gray-600 transition-all duration-150 hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-            )}
             {onNext && (
               <button
                 type="button"
