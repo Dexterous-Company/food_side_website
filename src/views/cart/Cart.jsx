@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "../../context/CartContext";
 import { useSelector } from "react-redux";
@@ -63,6 +63,97 @@ const RUPEE = "₹";
 const FREE_DELIVERY_THRESHOLD = 500;
 const DELIVERY_FEE = 40;
 
+// Skeleton Loader Component
+const CartSkeleton = () => {
+  const router = useRouter();
+  
+  return (
+    <>
+      <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2">
+        <div className="h-12 px-3 flex items-center justify-between">
+          <button
+            onClick={() => router.back()}
+            className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+          >
+            <FaArrowLeft className="text-gray-700 text-xs" />
+          </button>
+          <h1 className="text-lg font-black text-gray-900">My Cart</h1>
+          <Link href="/">
+            <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+              <FaBagShopping className="text-gray-700 text-xs" />
+            </button>
+          </Link>
+        </div>
+      </div>
+      <div className="container mx-auto px-4 max-w-[1480px] py-4 sm:py-6 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+          {/* Skeleton Delivery Info */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-4 animate-pulse">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
+                <div className="flex-1">
+                  <div className="h-5 bg-gray-200 rounded w-32 mb-1"></div>
+                  <div className="h-3 bg-gray-200 rounded w-40"></div>
+                </div>
+              </div>
+              <div className="space-y-3">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="h-20 bg-gray-100 rounded-lg"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Skeleton Cart Items */}
+          <div className="lg:col-span-1">
+            <div className="bg-white shadow-md rounded-2xl animate-pulse">
+              <div className="bg-gray-900 rounded-t-2xl p-3">
+                <div className="h-6 bg-gray-700 rounded w-24 mb-1"></div>
+                <div className="h-3 bg-gray-700 rounded w-32"></div>
+              </div>
+              <div className="p-3 space-y-3">
+                {[1, 2].map((i) => (
+                  <div key={i} className="flex gap-3 p-2">
+                    <div className="w-[80px] h-[80px] bg-gray-200 rounded-lg"></div>
+                    <div className="flex-1">
+                      <div className="h-4 bg-gray-200 rounded w-32 mb-2"></div>
+                      <div className="h-3 bg-gray-200 rounded w-24 mb-2"></div>
+                      <div className="h-6 bg-gray-200 rounded w-20"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Skeleton Bill Summary */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm overflow-hidden animate-pulse">
+              <div className="bg-gray-900 p-3 sm:p-4">
+                <div className="h-6 bg-gray-700 rounded w-28"></div>
+              </div>
+              <div className="p-3 sm:p-4 space-y-3">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex justify-between">
+                    <div className="h-4 bg-gray-200 rounded w-24"></div>
+                    <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  </div>
+                ))}
+                <div className="h-px bg-gray-200 my-2"></div>
+                <div className="flex justify-between">
+                  <div className="h-6 bg-gray-200 rounded w-20"></div>
+                  <div className="h-6 bg-gray-200 rounded w-24"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
 const Cart = () => {
   const {
     cartList,
@@ -71,11 +162,13 @@ const Cart = () => {
     decreaseItem,
     removeItem,
     hasItems,
+    isLoading,
   } = useCart();
 
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromo, setAppliedPromo] = useState(null);
   const [promoDiscount, setPromoDiscount] = useState(0);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   // Redux selectors for delivery information
   const completeDeliveryData = useSelector(selectCompleteDeliveryData);
@@ -89,16 +182,24 @@ const Cart = () => {
   // Get cart items from CartProvider
   const cartItems = useMemo(() => cartList ?? [], [cartList]);
 
+  // Show skeleton while loading initially
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Calculate totals
   const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.newPrice * item.qty,
+    (sum, item) => sum + (item.newPrice || item.price || 0) * item.qty,
     0,
   );
 
   const deliveryCharge = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
 
   const totalSavings = cartItems.reduce(
-    (sum, item) => sum + (item.oldPrice - item.newPrice) * item.qty,
+    (sum, item) => sum + ((item.oldPrice || item.price || 0) - (item.newPrice || item.price || 0)) * item.qty,
     0,
   );
 
@@ -261,8 +362,15 @@ const Cart = () => {
     </svg>
   );
 
-  // Show loading skeleton while checking cart items
-  if (!hasItems) {
+  // Show skeleton while loading
+  if (isInitialLoading || isLoading) {
+    return <CartSkeleton />;
+  }
+
+  // Check if cart is empty
+  const isEmpty = !cartItems || cartItems.length === 0;
+
+  if (isEmpty) {
     return (
       <>
         <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2">
@@ -281,21 +389,23 @@ const Cart = () => {
             </Link>
           </div>
         </div>
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="text-center p-6">
-            <div className="w-24 h-24 mx-auto mb-4 relative">
+        <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-gray-50">
+          <div className="text-center p-6 max-w-md mx-auto">
+            <div className="w-32 h-32 mx-auto mb-6 relative">
               <div className="absolute inset-0 bg-gradient-to-r from-[#ff581b] to-orange-500 rounded-full opacity-10 animate-pulse"></div>
-              <FaBagShopping className="text-6xl text-gray-300 mx-auto mt-4 relative z-10" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <FaBagShopping className="text-6xl text-gray-300" />
+              </div>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">
               Your cart is empty
             </h2>
-            <p className="text-gray-500 text-sm mb-6 max-w-xs mx-auto">
-              Add items from any restaurant and they will appear here.
+            <p className="text-gray-500 text-sm mb-8 max-w-xs mx-auto">
+              Looks like you haven't added anything to your cart yet. Add items from any restaurant and they will appear here.
             </p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 bg-[#ff581b] text-white px-6 py-3 rounded-full font-bold hover:bg-[#e84d15] transition-colors shadow-lg"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#ff581b] to-orange-500 text-white px-8 py-3.5 rounded-full font-bold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
             >
               Browse Menu
               <FaChevronRight className="text-xs" />
@@ -308,7 +418,7 @@ const Cart = () => {
 
   return (
     <div className="font-sans text-gray-600 bg-white pb-10 md:pb-0">
-      {/* Mobile Cart Header - visible only on small screens */}
+      {/* Mobile Cart Header */}
       <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2">
         <div className="h-12 px-3 flex items-center justify-between">
           <button
@@ -329,7 +439,7 @@ const Cart = () => {
       {/* Main Three Grid Layout */}
       <div className="container mx-auto px-4 max-w-[1480px] py-4 sm:py-6 lg:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-          {/* Grid 1: Delivery Information - Dynamic like OrderOverview */}
+          {/* Grid 1: Delivery Information */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 lg:sticky lg:top-24">
               <div className="p-3 sm:p-4">
@@ -365,8 +475,7 @@ const Cart = () => {
                     <div className="flex items-center gap-2">
                       <FaExclamationTriangle className="text-amber-500 text-sm" />
                       <p className="text-xs text-amber-800 font-medium">
-                        Please complete all delivery details (pickup, destination,
-                        route, and delivery point)
+                        Please complete all delivery details (pickup, destination, route, and delivery point)
                       </p>
                     </div>
                   </div>
@@ -381,10 +490,10 @@ const Cart = () => {
                   </div>
                 )}
 
-                {/* Delivery Cards Grid - Dynamic from Redux */}
+                {/* Delivery Cards Grid */}
                 <div className="grid grid-cols-1 gap-2 sm:gap-3">
                   {/* Pickup Location Card */}
-                  <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+                  <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                     <div className="flex items-start gap-2 p-3">
                       <div className="bg-emerald-100 p-1.5 rounded-md">
                         <HiMapPin className="text-emerald-600 text-base sm:text-lg" />
@@ -401,7 +510,7 @@ const Cart = () => {
                   </div>
 
                   {/* Route Card */}
-                  <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+                  <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                     <div className="flex items-start gap-2 p-3">
                       <div className="bg-blue-100 p-1.5 rounded-md">
                         <MdRoute className="text-blue-600 text-base sm:text-lg" />
@@ -432,7 +541,7 @@ const Cart = () => {
                   </div>
 
                   {/* Delivery Point Card */}
-                  <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+                  <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                     <div className="flex items-start gap-2 p-3">
                       <div className="bg-purple-100 p-1.5 rounded-md">
                         <MdDeliveryDining className="text-purple-600 text-base sm:text-lg" />
@@ -456,7 +565,7 @@ const Cart = () => {
                   </div>
 
                   {/* Date & Time Card */}
-                  <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+                  <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                     <div className="grid grid-cols-2 gap-2 p-3">
                       <div className="flex items-start gap-2">
                         <div className="bg-indigo-100 p-1.5 rounded-md">
@@ -521,7 +630,7 @@ const Cart = () => {
                 </div>
                 <div className="text-[10px] text-gray-500 font-medium">
                   <strong className="text-[#ff581b]">{cartItems.length}</strong>{" "}
-                  products in your cart
+                  {cartItems.length === 1 ? "product" : "products"} in your cart
                 </div>
               </div>
               <button
@@ -539,7 +648,6 @@ const Cart = () => {
                   key={item.id}
                   className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all"
                 >
-                  {/* Item Content - Responsive Layout */}
                   <div className="p-2 sm:p-3">
                     <div className="flex gap-2 sm:gap-3">
                       {/* Item Image */}
@@ -551,6 +659,9 @@ const Cart = () => {
                           }
                           alt={item.name}
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.src = "https://via.placeholder.com/100x100?text=No+Image";
+                          }}
                         />
                         {item.discount && (
                           <span className="absolute top-1 left-1 bg-[#ff581b] text-white font-bold text-[7px] sm:text-[8px] px-1.5 py-0.5 rounded-full">
@@ -564,10 +675,9 @@ const Cart = () => {
                         <div>
                           <div className="flex items-center gap-2 mb-1 flex-wrap">
                             <VegBadge isVeg={item.isVeg} />
-                            {/* Discount Badge */}
                             {item.oldPrice > item.newPrice && (
                               <span className="text-[8px] sm:text-[9px] font-bold bg-[#fff3ed] text-[#ff581b] px-1.5 py-0.5 rounded-full">
-                                ₹{item.oldPrice - item.newPrice} OFF
+                                ₹{(item.oldPrice - item.newPrice).toFixed(2)} OFF
                               </span>
                             )}
                           </div>
@@ -586,11 +696,11 @@ const Cart = () => {
                               <sup className="text-[8px] sm:text-[9px] text-[#ff581b]">
                                 ₹
                               </sup>
-                              {item.newPrice}
+                              {item.newPrice?.toFixed(2) || item.price?.toFixed(2)}
                             </div>
                             {item.oldPrice > item.newPrice && (
                               <div className="text-[8px] sm:text-[9px] text-gray-400 line-through">
-                                ₹{item.oldPrice}
+                                ₹{item.oldPrice?.toFixed(2)}
                               </div>
                             )}
                           </div>
@@ -614,13 +724,12 @@ const Cart = () => {
                           </div>
                         </div>
 
-                        {/* Remove Button - Always visible on all screens */}
+                        {/* Remove Button */}
                         <button
                           onClick={() => removeCartItem(item.id)}
                           className="flex items-center gap-1 text-[9px] sm:text-[10px] font-bold text-gray-400 hover:text-red-600 mt-1 transition-colors"
                         >
-                          <FaTrashCan className="text-[9px] sm:text-[10px]" />{" "}
-                          Remove
+                          <FaTrashCan className="text-[9px] sm:text-[10px]" /> Remove
                         </button>
                       </div>
                     </div>
@@ -635,9 +744,7 @@ const Cart = () => {
             <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm overflow-hidden lg:sticky lg:top-24">
               {/* Summary Header */}
               <div className="bg-gray-900 text-white p-3 sm:p-4">
-                <h3 className="text-base sm:text-lg font-black">
-                  Bill Summary
-                </h3>
+                <h3 className="text-base sm:text-lg font-black">Bill Summary</h3>
                 <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5 sm:mt-1">
                   Review your order details
                 </p>
@@ -646,7 +753,6 @@ const Cart = () => {
               <div className="p-3 sm:p-4">
                 {/* Bill Details */}
                 <div className="space-y-1.5 sm:space-y-2">
-                  {/* Items Total */}
                   <div className="flex items-center justify-between py-1.5 sm:py-2 border-b border-gray-100">
                     <div className="text-xs sm:text-sm font-semibold text-gray-500">
                       Items Total
@@ -667,7 +773,6 @@ const Cart = () => {
                     </div>
                   )}
 
-                  {/* Subtotal After Savings */}
                   <div className="flex items-center justify-between py-1.5 sm:py-2 border-b border-gray-100">
                     <div className="text-xs sm:text-sm font-semibold text-gray-500">
                       Subtotal
@@ -677,7 +782,6 @@ const Cart = () => {
                     </div>
                   </div>
 
-                  {/* Promo Discount */}
                   {promoDiscount > 0 && (
                     <div className="flex items-center justify-between py-1.5 sm:py-2 border-b border-gray-100">
                       <div className="text-xs sm:text-sm font-semibold text-gray-500">
@@ -689,7 +793,6 @@ const Cart = () => {
                     </div>
                   )}
 
-                  {/* Delivery Fee */}
                   <div className="flex items-center justify-between py-1.5 sm:py-2 border-b border-gray-100">
                     <div className="text-xs sm:text-sm font-semibold text-gray-500">
                       Delivery Fee
@@ -729,7 +832,7 @@ const Cart = () => {
                   </div>
                 </div>
 
-                {/* Promo Code Section - Moved Here */}
+                {/* Promo Code Section */}
                 <div className="mb-3 sm:mb-4">
                   <div className="flex gap-2 items-stretch">
                     <div className="flex-1 relative">
@@ -739,7 +842,7 @@ const Cart = () => {
                         value={promoCode}
                         onChange={(e) => setPromoCode(e.target.value)}
                         placeholder="Enter promo code…"
-                        className="w-full py-2 sm:py-2.5 pl-9 pr-3 border border-gray-200 rounded-lg sm:rounded-xl bg-white text-gray-900 text-xs outline-none focus:border-[#ff581b]"
+                        className="w-full py-2 sm:py-2.5 pl-9 pr-3 border border-gray-200 rounded-lg sm:rounded-xl bg-white text-gray-900 text-xs outline-none focus:border-[#ff581b] focus:ring-1 focus:ring-[#ff581b]"
                       />
                     </div>
                     <button
@@ -771,9 +874,9 @@ const Cart = () => {
                 </div>
 
                 {/* Free Delivery Message */}
-                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-2 sm:p-3 flex items-center gap-2 mb-3 sm:mb-4">
-                  <FaCircleCheck className="text-emerald-600 text-xs sm:text-sm flex-shrink-0" />
-                  <div className="text-[10px] sm:text-xs font-semibold text-emerald-600">
+                <div className={`rounded-lg p-2 sm:p-3 flex items-center gap-2 mb-3 sm:mb-4 ${deliveryCharge === 0 ? 'bg-emerald-50 border border-emerald-200' : 'bg-amber-50 border border-amber-200'}`}>
+                  <FaCircleCheck className={`${deliveryCharge === 0 ? 'text-emerald-600' : 'text-amber-600'} text-xs sm:text-sm flex-shrink-0`} />
+                  <div className={`text-[10px] sm:text-xs font-semibold ${deliveryCharge === 0 ? 'text-emerald-600' : 'text-amber-600'}`}>
                     {deliveryCharge === 0
                       ? "✨ Free delivery applied"
                       : `Add ₹${(500 - subtotal).toFixed(2)} more for free delivery`}
@@ -783,19 +886,19 @@ const Cart = () => {
                 {/* Checkout Button */}
                 <Link
                   href="/checkout"
-                  className="group relative inline-flex w-full items-center justify-center overflow-hidden rounded-full bg-[#ff581b] py-2.5 sm:py-3 px-4 sm:px-5 text-xs sm:text-sm font-bold uppercase text-white shadow-md transition-all hover:bg-[#e84d15]"
+                  className="group relative inline-flex w-full items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-[#ff581b] to-orange-500 py-2.5 sm:py-3 px-4 sm:px-5 text-xs sm:text-sm font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:scale-[1.02]"
                 >
                   Proceed to Checkout
-                  <FaChevronRight className="ml-2 text-[10px] sm:text-xs" />
+                  <FaChevronRight className="ml-2 text-[10px] sm:text-xs group-hover:translate-x-1 transition-transform" />
                 </Link>
 
                 {/* Payment Methods */}
-                <div className="flex items-center justify-center gap-2 sm:gap-3 mt-3 sm:mt-4">
-                  <FaCcVisa className="text-gray-400 text-base sm:text-lg" />
-                  <FaCcMastercard className="text-gray-400 text-base sm:text-lg" />
-                  <FaCcAmex className="text-gray-400 text-base sm:text-lg" />
-                  <FaApplePay className="text-gray-400 text-base sm:text-lg" />
-                  <FaGooglePay className="text-gray-400 text-base sm:text-lg" />
+                <div className="flex items-center justify-center gap-2 sm:gap-3 mt-3 sm:mt-4 pt-2">
+                  <FaCcVisa className="text-gray-400 text-base sm:text-lg hover:text-gray-600 transition-colors" />
+                  <FaCcMastercard className="text-gray-400 text-base sm:text-lg hover:text-gray-600 transition-colors" />
+                  <FaCcAmex className="text-gray-400 text-base sm:text-lg hover:text-gray-600 transition-colors" />
+                  <FaApplePay className="text-gray-400 text-base sm:text-lg hover:text-gray-600 transition-colors" />
+                  <FaGooglePay className="text-gray-400 text-base sm:text-lg hover:text-gray-600 transition-colors" />
                 </div>
               </div>
             </div>

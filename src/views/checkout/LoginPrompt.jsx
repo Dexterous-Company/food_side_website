@@ -342,7 +342,14 @@ const LoginPrompt = ({ isDesktop, isUserAuth, userData, onLogin }) => {
               Mobile Number
             </label>
             <div className="flex items-center gap-2 rounded-lg border-2 border-gray-200 bg-gray-100 px-4 py-2">
-              <FaPhone className="text-gray-400 text-sm" />
+              <div className="flex items-center gap-1.5 border-r border-gray-300 pr-2">
+                <img
+                  src="https://flagcdn.com/w320/in.png"
+                  alt="India Flag"
+                  className="w-5 h-4 object-cover rounded-sm"
+                />
+                <span className="text-xs font-semibold text-gray-700">+91</span>
+              </div>
               <input
                 type="tel"
                 value={verifiedMobileNumber}
@@ -402,7 +409,8 @@ const LoginPrompt = ({ isDesktop, isUserAuth, userData, onLogin }) => {
           </div>
           <h3 className="text-lg font-bold text-gray-900">Enter OTP</h3>
           <p className="mt-1 text-xs text-gray-500">
-            Enter the 6-digit code sent to {mobileNumber}
+            Enter the 6-digit code sent to{" "}
+            <span className="font-semibold">+91 {mobileNumber}</span>
           </p>
         </div>
 
@@ -490,12 +498,22 @@ const LoginPrompt = ({ isDesktop, isUserAuth, userData, onLogin }) => {
         </p>
       </div>
 
-      <div className="space-y-3 ">
+      <div className="space-y-3">
         <div>
           <label className="mb-1 block text-xs font-semibold text-gray-700">
             Mobile Number
           </label>
           <div className="flex items-center gap-2 rounded-lg border-2 border-gray-200 bg-white px-4 py-2 focus-within:border-[#ff581b]">
+            <div className="flex items-center gap-1.5 border-r border-gray-300 pr-2">
+              <img
+                src="https://flagcdn.com/w320/in.png"
+                alt="India Flag"
+                className="w-5 h-4 object-cover rounded-sm"
+              />
+              <span className="text-xs sm:text-sm font-semibold text-gray-700">
+                +91
+              </span>
+            </div>
             <FaPhone className="text-gray-400 text-sm" />
             <input
               type="tel"
