@@ -8,7 +8,7 @@ const page = () => {
       <div className="md:hidden block ">
         <SelectedRoute />
         <div>
-          <div className="mx-2 ms:pb-0 pb-[5rem]">
+          <div className="mx-2 ms:pb-0 pb-40">
             <RestaurantsMainPage />
           </div>
         </div>

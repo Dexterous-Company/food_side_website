@@ -606,7 +606,7 @@ export default function MapViewModal({
             <div style="width: 28px; height: 28px; border-radius: 50%; background: ${colorScheme.stroke}; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 13px;">
               ${index + 1}
             </div>
-            <strong style="font-size: 15px;">${route.name || `Route ${index + 1}`}</strong>
+            <strong style="font-size: 15px;">${route.name?.replace(/[^a-zA-Z0-9]+/g, ' ') || `Route ${index + 1}`}</strong>
           </div>
           <div style="display: flex; gap: 20px; margin-bottom: 10px;">
             <span style="font-size: 13px;">
@@ -616,7 +616,7 @@ export default function MapViewModal({
               <strong>⏱️</strong> ${route.durationMinutes ? `${Math.floor(route.durationMinutes / 60)}h ${route.durationMinutes % 60}m` : "N/A"}
             </span>
           </div>
-          ${route.summary ? `<div style="font-size: 12px; color: #666; margin-top: 5px;">🛣️ ${route.summary}</div>` : ""}
+          ${route.summary?.replace(/[^a-zA-Z0-9]+/g, ' ') ? `<div style="font-size: 12px; color: #666; margin-top: 5px;">🛣️ ${route.summary}</div>` : ""}
           <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #eee;">
             <button id="selectRouteBtn" style="width: 100%; padding: 8px; background: ${colorScheme.stroke}; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
               Select This Route
