@@ -796,7 +796,21 @@ export default function MapViewModal({
 
   // Load all routes when component mounts
   useEffect(() => {
-    if (!mapLoaded || !from || !to || !routes || routes.length === 0) return;
+    if (!mapLoaded || !from || !to || !routes || routes.length === 0) {
+      console.log("Map useEffect skipped:", {
+        mapLoaded,
+        from: !!from,
+        to: !!to,
+        routesLength: routes?.length || 0,
+      });
+      return;
+    }
+
+    console.log("Map useEffect triggered - Loading routes:", {
+      from,
+      to,
+      routesCount: routes.length,
+    });
 
     const loadRoutes = async () => {
       setRoutesLoading(true);

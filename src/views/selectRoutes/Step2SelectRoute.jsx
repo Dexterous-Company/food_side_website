@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { FiMapPin, FiClock, FiNavigation, FiX } from "react-icons/fi";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { BsMap } from "react-icons/bs";
@@ -35,10 +36,18 @@ const GOOGLE_MAPS_API_KEY = "AIzaSyDfjw4P4PnfI08-B-ljZDhEeQxnBqNv3hQ";
 
 // Map View Component - inline view, not a modal
 function MapView({ routes, selRoute, onSelectRoute, onClose, selDest }) {
+  console.log("MapView component rendered with:", {
+    routesCount: routes?.length || 0,
+    selRoute,
+    selDest,
+  });
+
   // Get origin and destination from selDest or routes
   const origin = selDest?.origin || selDest?.primaryText || "Hyderabad, India";
   const destination =
     selDest?.destination || selDest?.secondaryText || "Bengaluru, India";
+
+  console.log("MapView origin/destination:", { origin, destination });
 
   // Build the embedded map URL - simple directions
   const mapUrl = `https://www.google.com/maps/embed/v1/directions?key=${GOOGLE_MAPS_API_KEY}&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&mode=driving`;
@@ -137,10 +146,11 @@ export default function Step2SelectRoute({
     setShowMapView(true);
   };
 
-  // Get origin and destination from selDest
-  const from =
-    selDest?.origin || selDest?.secondaryText || selDest?.primaryText || "";
+  // Get origin from Redux store (pickup location) and destination from selDest
+  const from = useSelector((state) => state.delivery.fromLocation) || "";
   const to = selDest?.destination || selDest?.primaryText || "";
+
+  console.log("Step2SelectRoute from/to:", { from, to, selDest });
 
   // Handle route selection from map
   const handleRouteSelectFromMap = (route) => {
