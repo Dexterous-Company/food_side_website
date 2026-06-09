@@ -36,7 +36,7 @@ export default function SelectedRouteCard() {
 
           <button
             className="text-[12px] font-semibold text-[#F0A500] hover:text-[#d99200] transition-colors"
-            onClick={() => router.push("/deliveryselection")}
+            onClick={() => router.push("/")}
           >
             Change
           </button>
