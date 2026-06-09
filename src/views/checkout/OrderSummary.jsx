@@ -247,7 +247,7 @@ const OrderSummary = ({
           {/* Place Order Button */}
           {onPlaceOrder && (
             <div className="p-4 pt-2 border-t border-gray-100">
-              <button
+              <div
                 onClick={onPlaceOrder}
                 disabled={isProcessing || !isContactSubmitted || selectedPayment !== "cod" || cartItems.length === 0}
                 className="relative w-full overflow-hidden rounded-full bg-gradient-to-r from-[#ff581b] to-orange-500 py-2.5 px-4 text-xs font-bold uppercase text-white shadow-md transition-all duration-200 hover:shadow-lg hover:from-[#e84d15] hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-md"
@@ -265,7 +265,7 @@ const OrderSummary = ({
                     `Place Order • ${RUPEE}${finalTotal.toFixed(2)}`
                   )}
                 </span>
-              </button>
+              </div>
               
               {!isContactSubmitted && (
                 <p className="text-[8px] text-amber-600 text-center mt-2">
