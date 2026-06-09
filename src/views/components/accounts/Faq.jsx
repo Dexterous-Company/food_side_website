@@ -95,23 +95,23 @@ export default function FAQPage() {
     {
       icon: <FiPackage />,
       title: "Tracking Your Order",
-      link: "/account/orders",
+      link: "/accounts/orders",
     },
     {
       icon: <FiRefreshCw />,
       title: "Returns & Refunds",
-      link: "/account/orders",
+      link: "/refundPolicy",
     },
     {
       icon: <FiCreditCard />,
       title: "Payment Methods",
-      link: "/account/payments",
+      link: "/privacypolicy",
     },
-    { icon: <FiUser />, title: "Account Management", link: "/account/profile" },
+    { icon: <FiUser />, title: "Account Management", link: "/accounts/profile" },
     {
       icon: <FiClock />,
       title: "Delivery Information",
-      link: "/account/orders",
+      link: "/privacypolicy",
     },
   ];
 
