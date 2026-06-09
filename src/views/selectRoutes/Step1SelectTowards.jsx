@@ -725,7 +725,20 @@ export default function Step1SelectTowards({
             {onNext && (
               <button
                 type="button"
-                onClick={onNext}
+                onClick={() => {
+                  console.log("Next button clicked", {
+                    selDest,
+                    towardsLocation,
+                    query,
+                    selectedDate,
+                    selectedTime,
+                    fromLocation,
+                    fromLocationDetailed,
+                    pickupCoordinates,
+                    routeSearch,
+                  });
+                  onNext();
+                }}
                 disabled={!selDest || !selectedDate || !selectedTime}
                 className="flex-1 rounded-xl bg-[#ff581b] px-5 py-3 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#e04d16] disabled:bg-orange-200 disabled:cursor-not-allowed"
               >

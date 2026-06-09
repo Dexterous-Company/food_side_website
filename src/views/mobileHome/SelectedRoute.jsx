@@ -52,13 +52,13 @@ export default function SelectedRouteCard() {
           </div>
 
           <div className="min-w-0 flex-1">
-            <h4 className="truncate text-[14px] sm:text-[15px] font-semibold leading-tight text-[#222]">
+            <div className="truncate text-[14px] sm:text-[15px] font-semibold leading-tight text-[#222]">
               {deliveryPointName}
-            </h4>
+            </div>
 
-            <p className="mt-0.5 text-[11px] sm:text-[12px] text-[#8A8A8A]">
+            <div className="mt-1 text-[11px] sm:text-[12px] text-[#8A8A8A]">
               Towards {towards}
-            </p>
+            </div>
           </div>
         </div>
 
@@ -93,7 +93,7 @@ export default function SelectedRouteCard() {
             </div>
 
             <p className="truncate text-[11px] sm:text-[12px] font-semibold text-[#222]">
-              {routeName}
+              {routeName?.replace(/[^a-zA-Z0-9]+/g, ' ')}
             </p>
           </div>
 
