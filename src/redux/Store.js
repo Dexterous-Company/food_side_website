@@ -1,44 +1,55 @@
 // redux/store.js
-import { configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+import { configureStore } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import {
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 
-import AuthenticationReducer from './Authentication/AuthenticationSlice';
-import categoryReducer from './Category/CategorySlice';
-import restaurantReducer from './Restaurant/RestaurantSlice';
-import productReducer from './Product/ProductSlice';
-import orderReducer from './Order/OrderSlice';
-import cartReducer from './Cart/CartSlice';
-import deliveryReducer from './delivery/deliverySlice';
-import paymentReducer from './payment/paymentSlice';
+import AuthenticationReducer from "./Authentication/AuthenticationSlice";
+import categoryReducer from "./Category/CategorySlice";
+import restaurantReducer from "./Restaurant/RestaurantSlice";
+import productReducer from "./Product/ProductSlice";
+import orderReducer from "./Order/OrderSlice";
+import cartReducer from "./Cart/CartSlice";
+import deliveryReducer from "./delivery/deliverySlice";
+import paymentReducer from "./payment/paymentSlice";
+import contactReducer from "./contact/contactSlice";
 
 // Configure persistence for delivery slice
 const deliveryPersistConfig = {
-  key: 'delivery',
+  key: "delivery",
   storage,
   whitelist: [
-    'fromLocation',
-    'fromLocationDetailed',
-    'currentLocation',
-    'towardsLocation',
-    'selectedDate',
-    'selectedTime',
-    'formattedDate',
-    'formattedTime',
-    'pickupCoordinates',
-    'pickupAddressDetails',
-    'selectedRoute',
-    'selectedDeliveryPoint',
-    'bookingData',
-    'isPickupSet',
-    'isDestinationSet',
-    'isRouteSelected',
-    'isDeliveryPointSelected'
+    "fromLocation",
+    "fromLocationDetailed",
+    "currentLocation",
+    "towardsLocation",
+    "selectedDate",
+    "selectedTime",
+    "formattedDate",
+    "formattedTime",
+    "pickupCoordinates",
+    "pickupAddressDetails",
+    "selectedRoute",
+    "selectedDeliveryPoint",
+    "bookingData",
+    "isPickupSet",
+    "isDestinationSet",
+    "isRouteSelected",
+    "isDeliveryPointSelected",
   ],
 };
 
-const persistedDeliveryReducer = persistReducer(deliveryPersistConfig, deliveryReducer);
+const persistedDeliveryReducer = persistReducer(
+  deliveryPersistConfig,
+  deliveryReducer,
+);
 
 export const store = configureStore({
   reducer: {
@@ -50,23 +61,24 @@ export const store = configureStore({
     order: orderReducer,
     cart: cartReducer,
     payment: paymentReducer,
+    contact: contactReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         ignoredActionPaths: [
-          'payload.fullRouteObject',
-          'payload.fullPointObject',
-          'payload.route',
-          'payload.deliveryPoint'
+          "payload.fullRouteObject",
+          "payload.fullPointObject",
+          "payload.route",
+          "payload.deliveryPoint",
         ],
         ignoredPaths: [
-          'delivery.selectedRoute.fullRouteObject',
-          'delivery.selectedDeliveryPoint.fullPointObject',
-          'delivery.routeSearch.suggestions',
-          'delivery.routeSearch.matchedRoutes',
-          'delivery.routeSearch.matchedDeliveryPoints'
+          "delivery.selectedRoute.fullRouteObject",
+          "delivery.selectedDeliveryPoint.fullPointObject",
+          "delivery.routeSearch.suggestions",
+          "delivery.routeSearch.matchedRoutes",
+          "delivery.routeSearch.matchedDeliveryPoints",
         ],
       },
       immutableCheck: false,
