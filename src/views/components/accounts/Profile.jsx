@@ -13,6 +13,7 @@ import {
   FiCamera,
 } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 export default function Profile() {
   const router = useRouter();
@@ -72,18 +73,12 @@ export default function Profile() {
     }
   };
 
-  const handleSave = () => {
-    if (!user.name.trim()) {
-      alert("Please enter your name");
-      return;
-    }
-    if (!user.email.endsWith("@gmail.com")) {
-      alert("Only Gmail addresses are allowed");
-      return;
-    }
-    setIsEditing(false);
-    console.log("Updated User:", user);
-  };
+const handleSave = () => {
+  if (!user.name.trim()) return toast.error("Enter your name");
+  if (!user.email.endsWith("@gmail.com")) return toast.error("Only Gmail allowed");
+  toast.success("User updated");
+  setIsEditing(false);
+};
 
   const handleEditImage = () => {
     if (fileInputRef.current) {
@@ -195,21 +190,21 @@ export default function Profile() {
               Personal Information
             </h3>
             {isEditing ? (
-              <button
+              <div
                 onClick={handleSave}
                 className="h-8 sm:h-9 px-3 bg-[#F4B400] hover:bg-[#e0a500] text-white rounded-lg flex items-center gap-1 text-xs sm:text-sm font-medium transition-all cursor-pointer"
               >
                 <FiCheck size={12} />
                 Save
-              </button>
+              </div>
             ) : (
-              <button
+              <div
                 onClick={() => setIsEditing(true)}
                 className="h-8 sm:h-9 px-3 bg-[#FF581B] hover:bg-[#f04d12] text-white rounded-lg flex items-center gap-1 text-xs sm:text-sm font-medium transition-all cursor-pointer"
               >
                 <FiEdit2 size={12} />
                 Edit
-              </button>
+              </div>
             )}
           </div>
 
