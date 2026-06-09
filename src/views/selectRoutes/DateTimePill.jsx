@@ -1,17 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import dayjs from "dayjs";
 
 // Dynamically import to avoid SSR issues
 const ClientDatePicker = dynamic(
   () => import("antd").then((mod) => mod.DatePicker),
-  { ssr: false },
-);
-
-const ClientTimePicker = dynamic(
-  () => import("antd").then((mod) => mod.TimePicker),
   { ssr: false },
 );
 
@@ -25,18 +20,27 @@ export default function DateTimePill({
   formattedTime,
 }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [showTimeDropdown, setShowTimeDropdown] = useState(false);
   const popupHostRef = useRef(null);
+  const timeDropdownRef = useRef(null);
 
   const openPicker = (type) => {
     if (type === "date") {
       setShowDatePicker(true);
-      setShowTimePicker(false);
-    } else {
-      setShowTimePicker(true);
-      setShowDatePicker(false);
+      setShowTimeDropdown(false);
     }
   };
+
+  // Close time dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showTimeDropdown && timeDropdownRef.current && !timeDropdownRef.current.contains(event.target)) {
+        setShowTimeDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showTimeDropdown]);
 
   const getMinimumAllowedTime = (selectedDate) => {
     const selectedDateObj = selectedDate ? new Date(selectedDate) : new Date();
@@ -61,32 +65,52 @@ export default function DateTimePill({
     setShowDatePicker(false);
   };
 
-  const handleAntTimeChange = (timeValue) => {
-    if (timeValue) {
-      const selectedTime = timeValue.toDate();
-      const activeDate = date || new Date();
-      const minTime = getMinimumAllowedTime(activeDate);
-
-      const timeForDate = new Date(activeDate);
-      timeForDate.setHours(
-        selectedTime.getHours(),
-        selectedTime.getMinutes(),
-        0,
-        0,
-      );
-
-      if (timeForDate >= minTime) {
-        onTimeChange?.(selectedTime);
-      } else {
-        onInvalidTime?.("Please select a time at least 1 hour from now.");
-      }
+  const handleTimeSelect = (timeValue) => {
+    const [timeStr, period] = timeValue.split(" ");
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    let newHour = hours;
+    if (period === "PM" && hours !== 12) newHour = hours + 12;
+    if (period === "AM" && hours === 12) newHour = 0;
+    
+    const activeDate = date || new Date();
+    const minTime = getMinimumAllowedTime(activeDate);
+    
+    const selectedTime = new Date(activeDate);
+    selectedTime.setHours(newHour, minutes, 0, 0);
+    
+    if (selectedTime >= minTime) {
+      onTimeChange?.(selectedTime);
+    } else {
+      onInvalidTime?.("Please select a time at least 1 hour from now.");
     }
-    setShowTimePicker(false);
+    setShowTimeDropdown(false);
   };
 
   const disabledDate = (current) => {
     return current && current < dayjs().startOf("day");
   };
+
+  // Generate time options (15-minute intervals, 12-hour format)
+  const timeOptions = Array.from({ length: 24 }, (_, h) => h)
+    .flatMap((hour24) => {
+      const hour12 = hour24 % 12 || 12;
+      const period = hour24 >= 12 ? "PM" : "AM";
+      return ["00", "15", "30", "45"].map((min) => ({
+        value: `${hour12.toString().padStart(2, "0")}:${min} ${period}`,
+        label: `${hour12}:${min} ${period}`,
+        hour24: hour24,
+        minutes: parseInt(min),
+      }));
+    });
+
+  // Filter times that are at least 1 hour from now
+  const activeDate = date || new Date();
+  const minTime = getMinimumAllowedTime(activeDate);
+  const validTimeOptions = timeOptions.filter((opt) => {
+    const testTime = new Date(activeDate);
+    testTime.setHours(opt.hour24, opt.minutes, 0, 0);
+    return testTime >= minTime;
+  });
 
   const items = [
     {
@@ -128,7 +152,8 @@ export default function DateTimePill({
       ),
       label: "TIME",
       value: formattedTime || "Select time",
-      onClick: () => openPicker("time"),
+      isTimeSelect: true,
+      onClick: () => setShowTimeDropdown(!showTimeDropdown),
     },
   ];
 
@@ -136,27 +161,67 @@ export default function DateTimePill({
     <div ref={popupHostRef} className="relative">
       <div className="grid sm:grid-cols-2 grid-cols-1 gap-2">
         {items.map((item) => (
-          <button
+          <div
             key={item.label}
-            type="button"
-            onClick={item.onClick}
-            className="flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2.5 flex-1 bg-white hover:border-orange-200 transition-colors text-left"
+            className="flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2.5 flex-1 bg-white hover:border-orange-200 transition-colors"
           >
             {item.icon}
-            <div>
+            <div className="flex-1">
               <p className="text-[10px] font-bold text-gray-400 tracking-wide">
                 {item.label}
               </p>
-              <p className="text-sm font-semibold text-gray-800">
-                {item.value}
-              </p>
+              {item.isTimeSelect ? (
+                <div className="relative" ref={timeDropdownRef}>
+                  <button
+                    type="button"
+                    onClick={item.onClick}
+                    className="text-xs font-semibold text-gray-800 flex items-center gap-1 cursor-pointer"
+                  >
+                    {formattedTime || "Select time"}
+                    <svg
+                      className={`w-3 h-3 text-gray-500 transition-transform ${showTimeDropdown ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  
+                  {/* Custom Time Dropdown */}
+                  {showTimeDropdown && (
+                    <div className="absolute left-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto min-w-[120px]">
+                      {validTimeOptions.map((opt) => (
+                        <div
+                          key={opt.value}
+                          onClick={() => handleTimeSelect(opt.value)}
+                          className={`px-3 py-1.5 text-sm cursor-pointer hover:bg-orange-50 ${
+                            formattedTime === opt.label ? 'bg-orange-100 text-[#ff581b] font-semibold' : 'text-gray-700'
+                          }`}
+                        >
+                          {opt.label}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={item.onClick}
+                  className="text-xs font-semibold text-gray-800"
+                >
+                  {item.value}
+                </button>
+              )}
             </div>
-          </button>
+          </div>
         ))}
       </div>
 
+
+      {/* Date Picker - rendered inside this component, popup stays inside modal */}
       <div className="pointer-events-none absolute left-0 top-full h-0 w-full overflow-visible">
-        {/* Date Picker - rendered inside this component, popup stays inside modal */}
         <ClientDatePicker
           value={date ? dayjs(date) : null}
           onChange={handleAntDateChange}
@@ -177,30 +242,6 @@ export default function DateTimePill({
             pointerEvents: "none",
           }}
           key="date-picker"
-        />
-
-        {/* Time Picker - rendered inside this component, popup stays inside modal */}
-        <ClientTimePicker
-          value={time ? dayjs(time) : null}
-          onChange={handleAntTimeChange}
-          format="hh:mm A"
-          minuteStep={30}
-          placeholder="Select time"
-          open={showTimePicker}
-          onOpenChange={(open) => {
-            if (!open) setShowTimePicker(false);
-          }}
-          getPopupContainer={() => popupHostRef.current || document.body}
-          popupClassName="date-time-picker-popup date-time-picker-popup--inside"
-          placement="topLeft"
-          style={{
-            width: 0,
-            height: 0,
-            opacity: 0,
-            pointerEvents: "none",
-          }}
-          use12Hours
-          key="time-picker"
         />
       </div>
 
