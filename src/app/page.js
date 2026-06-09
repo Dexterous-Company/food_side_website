@@ -69,10 +69,10 @@ const Page = () => {
         />
       </div>
 
-      <div className="-mt-30 relative z-[20] lg:z-[20] md:block hidden">
+      <div className="-mt-120 relative z-[20] lg:z-[20] md:block hidden ">
         <SelectionProcess />
       </div>
-      <div className="md:block hidden">
+      <div className="md:block hidden md:mt-78">
         <RestaurantsMainPage />
         <About />
       </div>
