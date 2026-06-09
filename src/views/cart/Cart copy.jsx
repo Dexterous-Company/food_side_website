@@ -2,36 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { useCart } from "../../context/CartContext";
-import { useSelector } from "react-redux";
-import {
-  selectCompleteDeliveryData,
-  selectFormattedDate,
-  selectFormattedTime,
-  selectSelectedRoute,
-  selectSelectedDeliveryPoint,
-  selectFromLocationDetailed,
-  selectTowardsLocation,
-} from "@/redux/delivery/deliverySlice";
-import {
-  HiMapPin,
-  HiTruck,
-  HiCalendar,
-  HiClock,
-  HiBuildingStorefront,
-} from "react-icons/hi2";
-import {
-  MdLocationOn,
-  MdDeliveryDining,
-  MdRoute,
-  MdOutlineLocationCity,
-} from "react-icons/md";
-import {
-  FaBoxOpen,
-  FaRegCheckCircle,
-  FaExclamationTriangle,
-} from "react-icons/fa";
-import { GiPathDistance, GiDuration } from "react-icons/gi";
+import { useCart } from "../../context/CartContext"; // Adjust path as needed
 import {
   FaLock,
   FaSnowflake,
@@ -77,18 +48,10 @@ const Cart = () => {
   const [appliedPromo, setAppliedPromo] = useState(null);
   const [promoDiscount, setPromoDiscount] = useState(0);
 
-  // Redux selectors for delivery information
-  const completeDeliveryData = useSelector(selectCompleteDeliveryData);
-  const fromLocationDetailed = useSelector(selectFromLocationDetailed);
-  const towardsLocation = useSelector(selectTowardsLocation);
-  const selectedRoute = useSelector(selectSelectedRoute);
-  const selectedDeliveryPoint = useSelector(selectSelectedDeliveryPoint);
-  const formattedDate = useSelector(selectFormattedDate);
-  const formattedTime = useSelector(selectFormattedTime);
-
   // Get cart items from CartProvider
   const cartItems = useMemo(() => cartList ?? [], [cartList]);
 
+  console.log(cartItems, "----");
   // Calculate totals
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.newPrice * item.qty,
@@ -104,62 +67,6 @@ const Cart = () => {
 
   const total = subtotal - promoDiscount + deliveryCharge;
   const grandTotal = total;
-
-  // Delivery information from Redux
-  const pickupLocation = fromLocationDetailed || "Not selected yet";
-  
-  const route = {
-    name: selectedRoute?.name || "No route selected",
-    origin: selectedRoute?.origin || "Origin not set",
-    destination: selectedRoute?.destination || "Destination not set",
-    distanceKm: selectedRoute?.distanceKm || 0,
-    durationMinutes: selectedRoute?.durationMinutes || 0,
-  };
-
-  const deliveryPoint = {
-    name: selectedDeliveryPoint?.name || "No delivery point selected",
-    fullAddress:
-      selectedDeliveryPoint?.address?.fullAddress || "Address not available",
-    city: selectedDeliveryPoint?.address?.city || "",
-    state: selectedDeliveryPoint?.address?.state || "",
-    pincode: selectedDeliveryPoint?.address?.pincode || "",
-  };
-
-  const journey = {
-    date: formattedDate || "Date not set",
-    time: formattedTime || "Time not set",
-  };
-
-  const isDeliveryComplete = completeDeliveryData?.isComplete || false;
-
-  const formatDuration = (minutes) => {
-    if (!minutes || minutes === 0) return "Duration not available";
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
-  };
-
-  const formatDistance = (km) => {
-    if (!km || km === 0) return "Distance not available";
-    return `${km} km`;
-  };
-
-  const getFullDeliveryAddress = () => {
-    const parts = [
-      deliveryPoint.fullAddress,
-      deliveryPoint.city,
-      deliveryPoint.state,
-      deliveryPoint.pincode,
-    ].filter(Boolean);
-    return parts.join(", ") || "Address not available";
-  };
-
-  const getPickupDisplay = () => {
-    if (pickupLocation === "Not selected yet") return pickupLocation;
-    return pickupLocation.length > 60
-      ? `${pickupLocation.substring(0, 57)}...`
-      : pickupLocation;
-  };
 
   // Cart actions
   const updateQuantity = (id, delta) => {
@@ -182,6 +89,8 @@ const Cart = () => {
 
   const clearCart = () => {
     if (window.confirm("Are you sure you want to clear your cart?")) {
+      // You'll need to add a clearCart method to your CartProvider
+      // For now, we'll remove items one by one
       cartItems.forEach((item) => {
         removeItem(item.restaurantId, item.productId);
       });
@@ -206,9 +115,7 @@ const Cart = () => {
     setAppliedPromo(null);
     setPromoDiscount(0);
   };
-  
   const router = useRouter();
-  
   // Veg/Non-veg badge component
   const VegBadge = ({ isVeg }) => (
     <div
@@ -261,12 +168,11 @@ const Cart = () => {
     </svg>
   );
 
-  // Show loading skeleton while checking cart items
   if (!hasItems) {
     return (
       <>
-        <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2">
-          <div className="h-12 px-3 flex items-center justify-between">
+        <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2 ">
+          <div className="h-12 px-3 flex items-center justify-between ">
             <button
               onClick={() => router.back()}
               className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
@@ -282,20 +188,17 @@ const Cart = () => {
           </div>
         </div>
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="text-center p-6">
-            <div className="w-24 h-24 mx-auto mb-4 relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#ff581b] to-orange-500 rounded-full opacity-10 animate-pulse"></div>
-              <FaBagShopping className="text-6xl text-gray-300 mx-auto mt-4 relative z-10" />
-            </div>
+          <div className="text-center">
+            <FaBagShopping className="text-6xl text-gray-300 mx-auto mb-4" />
             <h2 className="text-xl font-bold text-gray-900 mb-2">
               Your cart is empty
             </h2>
-            <p className="text-gray-500 text-sm mb-6 max-w-xs mx-auto">
+            <p className="text-gray-500 text-sm mb-6">
               Add items from any restaurant and they will appear here.
             </p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 bg-[#ff581b] text-white px-6 py-3 rounded-full font-bold hover:bg-[#e84d15] transition-colors shadow-lg"
+              className="inline-flex items-center gap-2 bg-[#ff581b] text-white px-6 py-3 rounded-full font-bold hover:bg-[#e84d15] transition-colors"
             >
               Browse Menu
               <FaChevronRight className="text-xs" />
@@ -309,8 +212,8 @@ const Cart = () => {
   return (
     <div className="font-sans text-gray-600 bg-white pb-10 md:pb-0">
       {/* Mobile Cart Header - visible only on small screens */}
-      <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2">
-        <div className="h-12 px-3 flex items-center justify-between">
+      <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2 ">
+        <div className="h-12 px-3 flex items-center justify-between ">
           <button
             onClick={() => router.back()}
             className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
@@ -329,183 +232,162 @@ const Cart = () => {
       {/* Main Three Grid Layout */}
       <div className="container mx-auto px-4 max-w-[1480px] py-4 sm:py-6 lg:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-          {/* Grid 1: Delivery Information - Dynamic like OrderOverview */}
+          {/* Grid 1: Delivery Information */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 lg:sticky lg:top-24">
-              <div className="p-3 sm:p-4">
-                {/* Delivery Header */}
-                <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                  <div className="bg-gradient-to-r from-[#ff581b] to-orange-500 p-1.5 rounded-lg">
-                    <FaBoxOpen className="text-white text-sm sm:text-base" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-extrabold text-gray-900 text-sm sm:text-base leading-none">
-                      Delivery Information
-                    </h3>
-                    <p className="text-[10px] text-gray-400 mt-0.5">
-                      {subtotal >= 500
-                        ? "✨ Free delivery on this order!"
-                        : `Add ₹${(500 - subtotal).toFixed(2)} more for free delivery`}
-                    </p>
-                  </div>
-                  <span
-                    className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full whitespace-nowrap ${
-                      deliveryCharge === 0
-                        ? "bg-green-100 text-green-700"
-                        : "bg-amber-100 text-amber-700"
-                    }`}
-                  >
-                    {deliveryCharge === 0 ? "FREE" : `₹${deliveryCharge}`}
+            <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-sm border border-gray-100 lg:sticky lg:top-24">
+              {/* Delivery Header */}
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#ff581b] flex items-center justify-center flex-shrink-0">
+                  <FaLocationDot className="text-white text-sm sm:text-lg" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-extrabold text-gray-900 text-sm sm:text-base leading-none">
+                    Delivery Information
+                  </h3>
+                  <p className="text-[10px] text-gray-400 mt-0.5">
+                    {subtotal >= 500
+                      ? "✨ Free delivery on this order!"
+                      : `Add ₹${(500 - subtotal).toFixed(2)} more for free delivery`}
+                  </p>
+                </div>
+                <span
+                  className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full whitespace-nowrap ${
+                    deliveryCharge === 0
+                      ? "bg-green-100 text-green-700"
+                      : "bg-amber-100 text-amber-700"
+                  }`}
+                >
+                  {deliveryCharge === 0 ? "FREE" : `₹${deliveryCharge}`}
+                </span>
+              </div>
+
+              {/* Savings Banner */}
+              {totalSavings > 0 && (
+                <div className="bg-[#fff3ed] rounded-lg py-1.5 sm:py-2 text-center mb-3 sm:mb-4">
+                  <span className="text-[#ff581b] text-xs font-bold">
+                    ✨ You saved ₹{totalSavings.toFixed(2)} on this order!
                   </span>
                 </div>
+              )}
 
-                {/* Incomplete Delivery Warning */}
-                {!isDeliveryComplete && (
-                  <div className="mb-4 p-2.5 bg-amber-50 rounded-lg border-l-4 border-amber-500">
-                    <div className="flex items-center gap-2">
-                      <FaExclamationTriangle className="text-amber-500 text-sm" />
-                      <p className="text-xs text-amber-800 font-medium">
-                        Please complete all delivery details (pickup, destination,
-                        route, and delivery point)
+              {/* Delivery Cards Grid - 2 cols on mobile, 1 col on lg */}
+              <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 sm:gap-3">
+                <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg sm:rounded-xl border border-gray-100 p-2 sm:p-3">
+                  <div className="flex items-start gap-2 sm:gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                      <FaLocationDot className="text-blue-500 text-sm sm:text-lg" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[9px] sm:text-[10px] font-bold uppercase text-gray-400">
+                        Current Location
+                      </p>
+                      <h4 className="text-xs sm:text-sm font-bold text-gray-800 truncate">
+                        203 Kalyan Nagar
+                      </h4>
+                      <p className="text-[10px] sm:text-[11px] text-gray-500">
+                        Hyderabad
                       </p>
                     </div>
                   </div>
-                )}
+                </div>
 
-                {/* Savings Banner */}
-                {totalSavings > 0 && (
-                  <div className="bg-[#fff3ed] rounded-lg py-1.5 sm:py-2 text-center mb-3 sm:mb-4">
-                    <span className="text-[#ff581b] text-xs font-bold">
-                      ✨ You saved ₹{totalSavings.toFixed(2)} on this order!
-                    </span>
-                  </div>
-                )}
-
-                {/* Delivery Cards Grid - Dynamic from Redux */}
-                <div className="grid grid-cols-1 gap-2 sm:gap-3">
-                  {/* Pickup Location Card */}
-                  <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm">
-                    <div className="flex items-start gap-2 p-3">
-                      <div className="bg-emerald-100 p-1.5 rounded-md">
-                        <HiMapPin className="text-emerald-600 text-base sm:text-lg" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-semibold text-emerald-600 uppercase tracking-wide mb-0.5">
-                          Current Location
-                        </p>
-                        <p className="text-xs sm:text-sm font-medium text-gray-800 leading-relaxed break-words">
-                          {getPickupDisplay()}
-                        </p>
-                      </div>
+                <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg sm:rounded-xl border border-gray-100 p-2 sm:p-3">
+                  <div className="flex items-start gap-2 sm:gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        className="text-purple-500 sm:w-4 sm:h-4"
+                      >
+                        <path
+                          d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                          fill="currentColor"
+                        />
+                      </svg>
                     </div>
-                  </div>
-
-                  {/* Route Card */}
-                  <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm">
-                    <div className="flex items-start gap-2 p-3">
-                      <div className="bg-blue-100 p-1.5 rounded-md">
-                        <MdRoute className="text-blue-600 text-base sm:text-lg" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-semibold text-blue-600 uppercase tracking-wide mb-0.5">
-                          Selected Route
-                        </p>
-                        <p className="text-xs sm:text-sm font-medium text-gray-800 mb-1 break-words">
-                          {route.name !== "No route selected"
-                            ? route.name
-                            : `${route.origin} → ${route.destination}`}
-                        </p>
-                        {route.distanceKm > 0 && (
-                          <div className="flex items-center gap-3 text-[10px] text-gray-500">
-                            <span className="flex items-center gap-0.5">
-                              <GiPathDistance className="text-blue-500 text-[10px]" />
-                              {formatDistance(route.distanceKm)}
-                            </span>
-                            <span className="flex items-center gap-0.5">
-                              <GiDuration className="text-blue-500 text-[10px]" />
-                              {formatDuration(route.durationMinutes)}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Delivery Point Card */}
-                  <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm">
-                    <div className="flex items-start gap-2 p-3">
-                      <div className="bg-purple-100 p-1.5 rounded-md">
-                        <MdDeliveryDining className="text-purple-600 text-base sm:text-lg" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-semibold text-purple-600 uppercase tracking-wide mb-0.5">
-                          Delivery Point
-                        </p>
-                        <p className="text-xs sm:text-sm font-medium text-gray-800 mb-0.5 break-words">
-                          {deliveryPoint.name}
-                        </p>
-                        {deliveryPoint.city && (
-                          <p className="text-[10px] text-gray-500 flex items-center gap-0.5">
-                            <MdOutlineLocationCity className="text-gray-400 text-[10px]" />
-                            {deliveryPoint.city}
-                            {deliveryPoint.state && `, ${deliveryPoint.state}`}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Date & Time Card */}
-                  <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 overflow-hidden shadow-sm">
-                    <div className="grid grid-cols-2 gap-2 p-3">
-                      <div className="flex items-start gap-2">
-                        <div className="bg-indigo-100 p-1.5 rounded-md">
-                          <HiCalendar className="text-indigo-600 text-base sm:text-lg" />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-semibold text-indigo-600 uppercase tracking-wide">
-                            Delivery Date
-                          </p>
-                          <p className="text-xs sm:text-sm font-medium text-gray-800 mt-0.5">
-                            {journey.date !== "Date not set"
-                              ? journey.date
-                              : "Not set"}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-2">
-                        <div className="bg-rose-100 p-1.5 rounded-md">
-                          <HiClock className="text-rose-600 text-base sm:text-lg" />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-semibold text-rose-600 uppercase tracking-wide">
-                            Delivery Time
-                          </p>
-                          <p className="text-xs sm:text-sm font-medium text-gray-800 mt-0.5">
-                            {journey.time !== "Time not set"
-                              ? journey.time
-                              : "Not set"}
-                          </p>
-                        </div>
-                      </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[9px] sm:text-[10px] font-bold uppercase text-gray-400">
+                        Route
+                      </p>
+                      <h4 className="text-xs sm:text-sm font-bold text-gray-800 truncate">
+                        NH 44
+                      </h4>
+                      <p className="text-[10px] sm:text-[11px] text-gray-500">
+                        575 km - 587 mins
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Delivery Tags */}
-                <div className="flex flex-wrap gap-1.5 mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100">
-                  <div className="bg-[#fff3ed] text-[#ff581b] text-[9px] sm:text-[10px] font-semibold px-2 py-1 rounded-full flex items-center gap-1">
-                    <FastDeliveryIcon /> Fast Delivery
+                <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg sm:rounded-xl border border-gray-100 p-2 sm:p-3">
+                  <div className="flex items-start gap-2 sm:gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
+                      <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[9px] sm:text-[10px] font-bold uppercase text-gray-400">
+                        Delivery Point
+                      </p>
+                      <h4 className="text-xs sm:text-sm font-bold text-gray-800 truncate">
+                        Bengaluru Delivery
+                      </h4>
+                      <p className="text-[10px] sm:text-[11px] text-gray-500">
+                        Whitefield, Bengaluru
+                      </p>
+                    </div>
                   </div>
-                  <div className="bg-[#fff3ed] text-[#ff581b] text-[9px] sm:text-[10px] font-semibold px-2 py-1 rounded-full flex items-center gap-1">
-                    <TodayIcon /> {journey.date !== "Date not set" ? journey.date : "Today"}
+                </div>
+
+                <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg sm:rounded-xl border border-gray-100 p-2 sm:p-3">
+                  <div className="flex items-start gap-2 sm:gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        className="text-amber-500 sm:w-4 sm:h-4"
+                      >
+                        <path
+                          d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[9px] sm:text-[10px] font-bold uppercase text-gray-400">
+                        Delivery
+                      </p>
+                      <h4 className="text-xs sm:text-sm font-bold text-gray-800 truncate">
+                        06-06-2026
+                      </h4>
+                      <p className="text-[10px] sm:text-[11px] text-gray-500">
+                        10:54 AM
+                      </p>
+                    </div>
                   </div>
-                  <div className="bg-[#fff3ed] text-[#ff581b] text-[9px] sm:text-[10px] font-semibold px-2 py-1 rounded-full flex items-center gap-1">
-                    <FreeShippingIcon />{" "}
-                    {subtotal >= 500
-                      ? "Free shipping"
-                      : `₹${deliveryCharge} shipping`}
-                  </div>
+                </div>
+              </div>
+
+              {/* Delivery Tags */}
+              <div className="flex flex-wrap gap-1.5 mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-100">
+                <div className="bg-[#fff3ed] text-[#ff581b] text-[9px] sm:text-[10px] font-semibold px-2 py-1 rounded-full flex items-center gap-1">
+                  <FastDeliveryIcon /> Fast Delivery
+                </div>
+                <div className="bg-[#fff3ed] text-[#ff581b] text-[9px] sm:text-[10px] font-semibold px-2 py-1 rounded-full flex items-center gap-1">
+                  <TodayIcon /> Today • 10:30 AM
+                </div>
+                <div className="bg-[#fff3ed] text-[#ff581b] text-[9px] sm:text-[10px] font-semibold px-2 py-1 rounded-full flex items-center gap-1">
+                  <FreeShippingIcon />{" "}
+                  {subtotal >= 500
+                    ? "Free shipping"
+                    : `₹${deliveryCharge} shipping`}
                 </div>
               </div>
             </div>
@@ -533,7 +415,7 @@ const Cart = () => {
             </div>
 
             {/* Cart Items List */}
-            <div className="space-y-2 sm:space-y-3 lg:max-h-[600px] lg:overflow-y-auto lg:pr-2 px-2 pb-3">
+            <div className="space-y-2 sm:space-y-3 lg:max-h-[600px] lg:overflow-y-auto lg:pr-2 px-2">
               {cartItems.map((item) => (
                 <div
                   key={item.id}
@@ -562,7 +444,7 @@ const Cart = () => {
                       {/* Item Details */}
                       <div className="flex-1 flex flex-col justify-between min-w-0">
                         <div>
-                          <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          <div className="flex items-center gap-2 mb-1">
                             <VegBadge isVeg={item.isVeg} />
                             {/* Discount Badge */}
                             {item.oldPrice > item.newPrice && (
@@ -617,7 +499,7 @@ const Cart = () => {
                         {/* Remove Button - Always visible on all screens */}
                         <button
                           onClick={() => removeCartItem(item.id)}
-                          className="flex items-center gap-1 text-[9px] sm:text-[10px] font-bold text-gray-400 hover:text-red-600 mt-1 transition-colors"
+                          className="flex items-center gap-1 text-[9px] sm:text-[10px] font-bold text-gray-400 hover:text-red-600 mt-1"
                         >
                           <FaTrashCan className="text-[9px] sm:text-[10px]" />{" "}
                           Remove
@@ -807,3 +689,4 @@ const Cart = () => {
 };
 
 export default Cart;
+  

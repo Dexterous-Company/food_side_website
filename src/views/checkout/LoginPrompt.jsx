@@ -480,7 +480,6 @@ const LoginPrompt = ({ isDesktop, isUserAuth, userData, onLogin }) => {
           <span className="text-xs">{toastMessage.message}</span>
         </div>
       )}
-
       <div className="text-center mb-4">
         <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-orange-100">
           <FaUser className="h-6 w-6 text-[#ff581b]" />
