@@ -721,7 +721,7 @@ export default function Step1SelectTowards({
             formattedTime={formattedTime}
           />
 
-          <div className="flex gap-3 mt-4 md:hidden">
+          <div className="flex gap-3 mt-4 md:mb-0 md:hidden">
             {onNext && (
               <button
                 type="button"
