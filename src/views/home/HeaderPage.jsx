@@ -22,7 +22,6 @@ import {
   FaSignInAlt,
 } from "react-icons/fa";
 import { logout } from "@/redux/Authentication/AuthenticationSlice";
-import DeliverySelectionModal from "../selectRoutes/DeliverySelectionModal";
 import { useCart } from "@/context/CartContext";
 
 const HeaderPage = () => {
@@ -763,12 +762,6 @@ const HeaderPage = () => {
           </div>
         </nav>
       </header>
-
-      {/* Delivery Selection Modal */}
-      <DeliverySelectionModal
-        isOpen={isDeliveryModalOpen}
-        onClose={() => setIsDeliveryModalOpen(false)}
-      />
     </>
   );
 };
