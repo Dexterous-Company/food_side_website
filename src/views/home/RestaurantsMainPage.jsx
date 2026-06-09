@@ -306,7 +306,7 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
   // Show restaurants
   return (
     <div id="restaurants-main" className="space-y-3">
-      <div className="mx-3 text-xl sm:text-5xl font-extrabold text-black leading-[1.1] sm:mb-5 tracking-[-1px]">
+      <div className="mx-3 sm:max-w-7xl sm:mx-auto text-xl sm:text-5xl font-extrabold text-black leading-[1.1] sm:mb-5 tracking-[-1px]">
         Discover{" "}
         <span className="hero-highlight text-[#ff581b] font-['Yesteryear',cursive] inline-block">
           Nearby{" "}{" "}

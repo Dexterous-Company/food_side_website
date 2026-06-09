@@ -500,7 +500,7 @@ export default function Step1SelectTowards({
                 <span className="text-[#F57C00]">Side</span>
               </h1>
 
-              <p className="text-[12px] text-gray-400 mt-1 truncate max-w-[190px]">
+              <p className="text-[12px] text-gray-400 truncate max-w-[190px]">
                 {locationLoading
                   ? "Detecting your location..."
                   : fromLocation || "Location unavailable"}
