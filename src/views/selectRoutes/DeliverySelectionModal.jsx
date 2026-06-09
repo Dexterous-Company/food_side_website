@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import Step1SelectTowards from "./Step1SelectTowards";
 import Step2SelectRoute from "./Step2SelectRoute";
@@ -72,8 +73,35 @@ const getPointRouteIds = (point) => {
   return [];
 };
 
-const getRoutesForDestination = (routeSearch) =>
-  Array.isArray(routeSearch?.matchedRoutes) ? routeSearch.matchedRoutes : [];
+const getRoutesForDestination = (routeSearch, selectedDest) => {
+  const allRoutes = Array.isArray(routeSearch?.matchedRoutes)
+    ? routeSearch.matchedRoutes
+    : [];
+
+  // If no destination selected, return all routes
+  if (!selectedDest) return allRoutes;
+
+  // Filter routes by selected destination (towards)
+  const destName = (
+    selectedDest.name ||
+    selectedDest.destination ||
+    selectedDest.primaryText ||
+    ""
+  ).toLowerCase();
+
+  return allRoutes.filter((route) => {
+    const routeName = (
+      route.name ||
+      route.destination ||
+      route.routeId ||
+      ""
+    ).toLowerCase();
+    const routeOrigin = (route.origin || "").toLowerCase();
+
+    // Check if route name or origin contains the destination
+    return routeName.includes(destName) || routeOrigin.includes(destName);
+  });
+};
 
 const filterDeliveryPointsForRoute = (points, route) => {
   if (!route) return [];
@@ -107,6 +135,7 @@ const filterDeliveryPointsForRoute = (points, route) => {
 };
 
 export default function DeliverySelectionModal({ onFinish }) {
+  const router = useRouter();
   const dispatch = useDispatch();
   const routeSearch = useSelector(selectRouteSearch);
   const savedRoute = useSelector(selectSelectedRoute);
@@ -312,6 +341,9 @@ export default function DeliverySelectionModal({ onFinish }) {
         deliveryPoint: selDP,
         details,
       });
+      
+      // Navigate to /home to show restaurant details
+      router.push('/home');
     }
   };
 
@@ -349,7 +381,7 @@ export default function DeliverySelectionModal({ onFinish }) {
               selDest={selDest}
               selRoute={selRoute}
               onSelectRoute={handleSelectRoute}
-              routes={getRoutesForDestination(routeSearch)}
+              routes={getRoutesForDestination(routeSearch, selDest)}
               onBack={handlePrev}
             />
           )}
@@ -413,7 +445,7 @@ export default function DeliverySelectionModal({ onFinish }) {
                   }
                 `}
             >
-              {step === 4 ? "Update ✓" : "Next →"}
+              <div className="text-white">{step === 4 ? "Finish ✓" : "Next →"}</div>
             </button>
           </div>
         </div>
