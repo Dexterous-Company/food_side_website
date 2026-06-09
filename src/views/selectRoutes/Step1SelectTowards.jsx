@@ -494,17 +494,17 @@ export default function Step1SelectTowards({
               <IoLocationOutline className="text-[#E6B800] text-[24px]" />
             </div>
 
-            <div className="leading-none">
-              <h1 className="font-bold text-[18px]">
+            <div className="leading-none flex flex-col gap-1">
+              <div className="font-bold text-[18px]">
                 <span className="text-[#222]">Food</span>
                 <span className="text-[#F57C00]">Side</span>
-              </h1>
+              </div>
 
-              <p className="text-[12px] text-gray-400 truncate max-w-[190px]">
+              <div className="text-[12px] text-black truncate max-w-[190px]">
                 {locationLoading
                   ? "Detecting your location..."
                   : fromLocation || "Location unavailable"}
-              </p>
+              </div>
             </div>
           </div>
 
@@ -535,12 +535,12 @@ export default function Step1SelectTowards({
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
             </svg>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-gray-800 leading-tight break-words">
+              <div className="text-sm font-semibold text-gray-800 leading-tight break-words">
                 {locationLoading
                   ? "Detecting your location..."
                   : fromLocation || "Location unavailable"}
-              </p>
-              <p className="text-xs text-gray-400 mt-0.5 break-words">
+              </div>
+              {/* <p className="text-xs text-gray-400 mt-0.5 break-words">
                 {fromLocationDetailed ||
                   "Allow location access to detect your current location."}
               </p>
@@ -556,7 +556,7 @@ export default function Step1SelectTowards({
                     .filter(Boolean)
                     .join(" - ")}
                 </p>
-              )}
+              )} */}
             </div>
             <button
               type="button"

@@ -657,6 +657,12 @@ export default function BusSearch() {
   };
 
   const handleSearch = () => {
+    // Validate towards (destination) is selected
+    if (!to || to.trim() === "") {
+      showToast("Please select a destination (Going To)", true);
+      return;
+    }
+
     if (!validateAndShowWarning()) {
       return;
     }
@@ -1127,7 +1133,7 @@ export default function BusSearch() {
                      {selectedRoute ? "Click to change on map" : "Click to view on map"}
                    </div>
                    <AutoComplete
-                     value={selectedRoute?.name || ""}
+                     value={selectedRoute?.name?.replace(/[^a-zA-Z0-9]+/g, ' ') || ""}
                     //  options={routes.map((route) => ({
                     //    value: route.name,
                     //    key: getRouteKey(route),

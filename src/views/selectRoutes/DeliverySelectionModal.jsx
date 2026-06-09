@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Step1SelectTowards from "./Step1SelectTowards";
 import Step2SelectRoute from "./Step2SelectRoute";
 import Step3SelectDeliveryPoint from "./Step3SelectDeliveryPoint";
-import Step4CompleteDetails from "./Step4CompleteDetails";
 import { STEPS } from "./constants";
 import {
   generateBookingSummary,
@@ -213,7 +212,7 @@ export default function DeliverySelectionModal({ onFinish }) {
       setSelDP(point);
       dispatch(setSelectedDeliveryPoint(point));
       dispatch(generateBookingSummary());
-      setStep(4);
+      // Don't navigate automatically - user must click Finish button
     },
     [dispatch],
   );
@@ -314,6 +313,7 @@ export default function DeliverySelectionModal({ onFinish }) {
     setSelDP(null);
     setDeliveryPoints([]);
     dispatch(setSelectedRoute(route));
+    // Automatically move to Step 3 after selecting route from map
     setStep(3);
   };
 
@@ -332,9 +332,10 @@ export default function DeliverySelectionModal({ onFinish }) {
   };
 
   const handleNext = () => {
-    if (step < 4) {
+    if (step < 3) {
       setStep((s) => s + 1);
     } else {
+      // Step 3 is the last step - navigate to home
       onFinish?.({
         towards: selDest,
         route: selRoute,
@@ -396,18 +397,6 @@ export default function DeliverySelectionModal({ onFinish }) {
               onBack={handlePrev}
             />
           )}
-          {step === 4 && (
-            <Step4CompleteDetails
-              selDest={selDest}
-              selRoute={selRoute}
-              selDP={selDP}
-              details={details}
-              onDetailsChange={handleDetailsChange}
-              onBack={handlePrev}
-              showTimeUpdatedToast={timeAutoUpdate.didUpdate}
-              updatedTime={timeAutoUpdate.formattedTime || formattedTime}
-            />
-          )}
         </div>
 
         <div className="flex flex-col gap-3 sm:p-0 p-2 sm:flex-row sm:items-center sm:justify-between pt-3 sm:pt-4 border-t border-gray-100 mt-3 sm:mt-4 flex-shrink-0">
@@ -445,7 +434,7 @@ export default function DeliverySelectionModal({ onFinish }) {
                   }
                 `}
             >
-              <div className="text-white">{step === 4 ? "Finish ✓" : "Next →"}</div>
+              <div className="text-white">{step === 3 ? "Finish ✓" : "Next →"}</div>
             </button>
           </div>
         </div>
