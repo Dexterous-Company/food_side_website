@@ -115,43 +115,22 @@ const HeroSection = () => {
             data-aos="fade-right"
             data-aos-duration="900"
           >
-            <h1 className="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-extrabold text-white leading-[1.1] mb-5 lg:mb-6 tracking-[-1px]">
+            <div className="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-extrabold text-white leading-[1.1] mb-5 lg:mb-51 tracking-[-1px]">
               Taste The{" "}
               <span className="hero-highlight text-[#ff581b] font-['Yesteryear',cursive] inline-block">
                 Finest
               </span>
               <br />
               Food In Town
-            </h1>
-            <p className="hero-desc text-white/65 text-base sm:text-lg leading-relaxed mb-8 lg:mb-9 max-w-[480px]">
+            </div>
+            <div className="hero-desc text-white/65 text-base sm:text-lg leading-relaxed max-w-[480px]">
               Handpicked meals prepared with fresh ingredients from trusted
               highway restaurants. Every order ensures a hot, hygienic, and
               satisfying travel food experience. Order now and enjoy seamless
               delivery on your journey.
-            </p>
-            <div className="hero-actions flex gap-4 flex-wrap mb-10 lg:mb-12">
-              <Link
-                href="/restaurant-page"
-                className="group inline-flex items-center gap-3 bg-[#ff581b] text-white font-bold uppercase rounded-full py-4 pl-6 pr-2 transition-all duration-300 hover:bg-black hover:shadow-xl hover:scale-105"
-              >
-                <span>Order Now</span>
-
-                <span className="flex items-center justify-center w-10 h-10 bg-white text-[#ff581b] rounded-full overflow-hidden">
-                  <FiArrowRight
-                    size={18}
-                    className="transition-all duration-300 group-hover:translate-x-1"
-                  />
-                </span>
-              </Link>
-              <Link
-                href="/about"
-                className="btn-outline-white inline-flex items-center gap-2 bg-white/6 border border-white/35 text-white backdrop-blur-md text-base font-bold uppercase rounded-full py-[17px] px-[56px] pl-[25px]"
-              >
-               <FaRoute />
-                Select or Change Route
-              </Link>
             </div>
-            <div className="hero-stats flex items-center gap-6 lg:gap-7 flex-wrap">
+
+            <div className="hero-stats pt-1 flex items-center gap-6 lg:gap-7 flex-wrap">
               <div
                 className="stat-item"
                 data-aos="zoom-in"
