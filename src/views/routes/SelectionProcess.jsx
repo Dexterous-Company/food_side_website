@@ -657,6 +657,12 @@ export default function BusSearch() {
   };
 
   const handleSearch = () => {
+    // Validate leaving from (source) is selected
+    if (!from || from.trim() === "" || from === "Select your location") {
+      showToast("Please detect your location or enter a source location (Leaving From)", true);
+      return;
+    }
+
     // Validate towards (destination) is selected
     if (!to || to.trim() === "") {
       showToast("Please select a destination (Going To)", true);
