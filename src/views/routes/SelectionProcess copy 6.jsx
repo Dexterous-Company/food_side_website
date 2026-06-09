@@ -541,7 +541,7 @@ export default function BusSearch() {
       // Save selected delivery point to Redux so RestaurantsMainPage can fetch restaurants
       dispatch(reduxSetSelectedDeliveryPoint(deliveryPointWithId));
 
-      showToast("Booking completed successfully!", false);
+      showToast("Selection completed successfully!", false);
 
       // Scroll to RestaurantsMainPage to show restaurants
       // Use longer delay to ensure Redux state updates and API call is triggered
