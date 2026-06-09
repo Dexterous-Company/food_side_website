@@ -1,4 +1,3 @@
-
 "use client";
 import React from "react";
 import {
@@ -49,7 +48,15 @@ const OrderOverview = ({ isDesktop = true }) => {
     distanceKm: selectedRoute?.distanceKm || 0,
     durationMinutes: selectedRoute?.durationMinutes || 0,
   };
-
+  const formatRouteName = (routeName) => {
+    if (!routeName) return "Selected route";
+    return routeName
+      .replace(/[_-]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  };
   const deliveryPoint = {
     name: selectedDeliveryPoint?.name || "No delivery point selected",
     fullAddress:
@@ -147,9 +154,11 @@ const OrderOverview = ({ isDesktop = true }) => {
                     Selected Route
                   </p>
                   <p className="text-xs font-medium text-gray-800 mb-1">
-                    {route.name !== "No route selected"
-                      ? route.name
-                      : `${route.origin} → ${route.destination}`}
+                    {formatRouteName(
+                      route.name !== "No route selected"
+                        ? route.name
+                        : `${route.origin} → ${route.destination}`,
+                    )}
                   </p>
                   {route.distanceKm > 0 && (
                     <div className="flex items-center gap-3 text-[10px] text-gray-500">
@@ -229,7 +238,6 @@ const OrderOverview = ({ isDesktop = true }) => {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>

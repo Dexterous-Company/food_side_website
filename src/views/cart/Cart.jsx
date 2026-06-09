@@ -66,7 +66,7 @@ const DELIVERY_FEE = 40;
 // Skeleton Loader Component
 const CartSkeleton = () => {
   const router = useRouter();
-  
+
   return (
     <>
       <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2">
@@ -195,11 +195,22 @@ const Cart = () => {
     (sum, item) => sum + (item.newPrice || item.price || 0) * item.qty,
     0,
   );
+  const formatRouteName = (value) =>
+    String(value || "")
+      .replace(/[-_]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
 
   const deliveryCharge = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
 
   const totalSavings = cartItems.reduce(
-    (sum, item) => sum + ((item.oldPrice || item.price || 0) - (item.newPrice || item.price || 0)) * item.qty,
+    (sum, item) =>
+      sum +
+      ((item.oldPrice || item.price || 0) -
+        (item.newPrice || item.price || 0)) *
+        item.qty,
     0,
   );
 
@@ -208,7 +219,7 @@ const Cart = () => {
 
   // Delivery information from Redux
   const pickupLocation = fromLocationDetailed || "Not selected yet";
-  
+
   const route = {
     name: selectedRoute?.name || "No route selected",
     origin: selectedRoute?.origin || "Origin not set",
@@ -307,9 +318,9 @@ const Cart = () => {
     setAppliedPromo(null);
     setPromoDiscount(0);
   };
-  
+
   const router = useRouter();
-  
+
   // Veg/Non-veg badge component
   const VegBadge = ({ isVeg }) => (
     <div
@@ -401,7 +412,8 @@ const Cart = () => {
               Your cart is empty
             </h2>
             <p className="text-gray-500 text-sm mb-8 max-w-xs mx-auto">
-              Looks like you haven't added anything to your cart yet. Add items from any restaurant and they will appear here.
+              Looks like you haven't added anything to your cart yet. Add items
+              from any restaurant and they will appear here.
             </p>
             <Link
               href="/"
@@ -475,7 +487,8 @@ const Cart = () => {
                     <div className="flex items-center gap-2">
                       <FaExclamationTriangle className="text-amber-500 text-sm" />
                       <p className="text-xs text-amber-800 font-medium">
-                        Please complete all delivery details (pickup, destination, route, and delivery point)
+                        Please complete all delivery details (pickup,
+                        destination, route, and delivery point)
                       </p>
                     </div>
                   </div>
@@ -520,9 +533,11 @@ const Cart = () => {
                           Selected Route
                         </p>
                         <p className="text-xs sm:text-sm font-medium text-gray-800 mb-1 break-words">
-                          {route.name !== "No route selected"
-                            ? route.name
-                            : `${route.origin} → ${route.destination}`}
+                          {formatRouteName(
+                            route.name !== "No route selected"
+                              ? route.name
+                              : `${route.origin} → ${route.destination}`,
+                          )}
                         </p>
                         {route.distanceKm > 0 && (
                           <div className="flex items-center gap-3 text-[10px] text-gray-500">
@@ -607,7 +622,8 @@ const Cart = () => {
                     <FastDeliveryIcon /> Fast Delivery
                   </div>
                   <div className="bg-[#fff3ed] text-[#ff581b] text-[9px] sm:text-[10px] font-semibold px-2 py-1 rounded-full flex items-center gap-1">
-                    <TodayIcon /> {journey.date !== "Date not set" ? journey.date : "Today"}
+                    <TodayIcon />{" "}
+                    {journey.date !== "Date not set" ? journey.date : "Today"}
                   </div>
                   <div className="bg-[#fff3ed] text-[#ff581b] text-[9px] sm:text-[10px] font-semibold px-2 py-1 rounded-full flex items-center gap-1">
                     <FreeShippingIcon />{" "}
@@ -660,7 +676,8 @@ const Cart = () => {
                           alt={item.name}
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            e.target.src = "https://via.placeholder.com/100x100?text=No+Image";
+                            e.target.src =
+                              "https://via.placeholder.com/100x100?text=No+Image";
                           }}
                         />
                         {item.discount && (
@@ -677,7 +694,8 @@ const Cart = () => {
                             <VegBadge isVeg={item.isVeg} />
                             {item.oldPrice > item.newPrice && (
                               <span className="text-[8px] sm:text-[9px] font-bold bg-[#fff3ed] text-[#ff581b] px-1.5 py-0.5 rounded-full">
-                                ₹{(item.oldPrice - item.newPrice).toFixed(2)} OFF
+                                ₹{(item.oldPrice - item.newPrice).toFixed(2)}{" "}
+                                OFF
                               </span>
                             )}
                           </div>
@@ -696,7 +714,8 @@ const Cart = () => {
                               <sup className="text-[8px] sm:text-[9px] text-[#ff581b]">
                                 ₹
                               </sup>
-                              {item.newPrice?.toFixed(2) || item.price?.toFixed(2)}
+                              {item.newPrice?.toFixed(2) ||
+                                item.price?.toFixed(2)}
                             </div>
                             {item.oldPrice > item.newPrice && (
                               <div className="text-[8px] sm:text-[9px] text-gray-400 line-through">
@@ -729,7 +748,8 @@ const Cart = () => {
                           onClick={() => removeCartItem(item.id)}
                           className="flex items-center gap-1 text-[9px] sm:text-[10px] font-bold text-gray-400 hover:text-red-600 mt-1 transition-colors"
                         >
-                          <FaTrashCan className="text-[9px] sm:text-[10px]" /> Remove
+                          <FaTrashCan className="text-[9px] sm:text-[10px]" />{" "}
+                          Remove
                         </button>
                       </div>
                     </div>
@@ -744,7 +764,9 @@ const Cart = () => {
             <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm overflow-hidden lg:sticky lg:top-24">
               {/* Summary Header */}
               <div className="bg-gray-900 text-white p-3 sm:p-4">
-                <h3 className="text-base sm:text-lg font-black">Bill Summary</h3>
+                <h3 className="text-base sm:text-lg font-black">
+                  Bill Summary
+                </h3>
                 <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5 sm:mt-1">
                   Review your order details
                 </p>
@@ -874,9 +896,15 @@ const Cart = () => {
                 </div>
 
                 {/* Free Delivery Message */}
-                <div className={`rounded-lg p-2 sm:p-3 flex items-center gap-2 mb-3 sm:mb-4 ${deliveryCharge === 0 ? 'bg-emerald-50 border border-emerald-200' : 'bg-amber-50 border border-amber-200'}`}>
-                  <FaCircleCheck className={`${deliveryCharge === 0 ? 'text-emerald-600' : 'text-amber-600'} text-xs sm:text-sm flex-shrink-0`} />
-                  <div className={`text-[10px] sm:text-xs font-semibold ${deliveryCharge === 0 ? 'text-emerald-600' : 'text-amber-600'}`}>
+                <div
+                  className={`rounded-lg p-2 sm:p-3 flex items-center gap-2 mb-3 sm:mb-4 ${deliveryCharge === 0 ? "bg-emerald-50 border border-emerald-200" : "bg-amber-50 border border-amber-200"}`}
+                >
+                  <FaCircleCheck
+                    className={`${deliveryCharge === 0 ? "text-emerald-600" : "text-amber-600"} text-xs sm:text-sm flex-shrink-0`}
+                  />
+                  <div
+                    className={`text-[10px] sm:text-xs font-semibold ${deliveryCharge === 0 ? "text-emerald-600" : "text-amber-600"}`}
+                  >
                     {deliveryCharge === 0
                       ? "✨ Free delivery applied"
                       : `Add ₹${(500 - subtotal).toFixed(2)} more for free delivery`}

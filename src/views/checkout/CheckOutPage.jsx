@@ -28,7 +28,11 @@ const RUPEE = "₹";
 
 const formatRouteName = (routeName) => {
   if (!routeName) return "Selected route";
-  return routeName.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+
+  return routeName
+    .replace(/[_-]+/g, " ") // remove _ and -
+    .replace(/\s+/g, " ") // fix multiple spaces
+    .trim(); // clean edges
 };
 
 const CheckOutPage = () => {
@@ -52,7 +56,6 @@ const CheckOutPage = () => {
   const [toastMessage, setToastMessage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [validationErrors, setValidationErrors] = useState([]);
-  const [updatedTime, setUpdatedTime] = useState(null);
 
   const isLoading = orderLoading || paymentLoading || isProcessing;
 
@@ -100,60 +103,145 @@ const CheckOutPage = () => {
     }
     return {};
   }, [deliveryData]);
+const testRouteParams = {
+  pickup: {
+    location: "8-3-199, C, Vengal Rao Nagar Rd, Kalyan Nagar Phase 1, Sunder Nagar, Hyderabad, Telangana 500038, India"
+  },
+  journey: {
+    date: "2026-06-09T13:38:53.426Z",
+    formattedDate: "09 Jun 2026",
+    time: "2026-06-09T14:45:00.426Z", // This is 14:45 (2:45 PM)
+    formattedTime: "08:15 PM"
+  },
+  route: {
+    _id: "69f5ec9f0a801c1723cdc745",
+    name: "Hyderabad to Bengaluru",
+    distanceKm: 575,
+    durationMinutes: 587
+  },
+  deliveryPoint: {
+    _id: "6a190faa53081932aeffa90c",
+    name: "Bengaluru Delivery Point",
+    address: {
+      fullAddress: "Plot No 75, 8th Rd, EPIP Zone, Whitefield, Bengaluru, Karnataka 560066, India"
+    }
+  }
+};
 
-  // Check and update order time if it's less than 1 hour from now
-  useEffect(() => {
-    const journeyDate = routeParams?.journey?.date;
+  // Helper function to extract date and time from journey object
+  const getJourneyDateTime = useCallback(() => {
+    const journeyDate = testRouteParams?.journey?.date;
     const journeyTime = routeParams?.journey?.time;
     
-    if (!journeyDate || !journeyTime) return;
+    if (!journeyDate) return null;
     
-    // Create a date object from the journey date and time
-    let selectedDateTime;
     try {
-      // Handle different date formats
+      // If journey.time is an ISO string, use it directly
+      if (journeyTime && journeyTime.includes('T')) {
+        return new Date(journeyTime);
+      }
+      
+      // If journey.date is ISO string, use it
+      if (journeyDate.includes('T')) {
+        return new Date(journeyDate);
+      }
+      
+      // Otherwise, combine date and formatted time
       let dateStr = journeyDate;
-      if (typeof journeyDate === 'object' && journeyDate instanceof Date) {
+      if (typeof journeyDate === "object" && journeyDate instanceof Date) {
         dateStr = journeyDate.toISOString();
       }
       
-      // Parse time string (assuming format like "02:30 PM")
-      const timeStr = journeyTime;
-      const [timePart, period] = timeStr.split(' ');
-      let [hours, minutes] = timePart.split(':').map(Number);
+      let hours = 0, minutes = 0;
       
-      if (period === 'PM' && hours !== 12) hours += 12;
-      if (period === 'AM' && hours === 12) hours = 0;
+      if (journeyTime) {
+        // Check if time is in HH:MM format or has AM/PM
+        if (journeyTime.includes('AM') || journeyTime.includes('PM')) {
+          const [timePart, period] = journeyTime.split(" ");
+          let [hourPart, minutePart] = timePart.split(":").map(Number);
+          hours = hourPart;
+          minutes = minutePart || 0;
+          if (period === "PM" && hours !== 12) hours += 12;
+          if (period === "AM" && hours === 12) hours = 0;
+        } else if (journeyTime.includes(':')) {
+          const [hourPart, minutePart] = journeyTime.split(":").map(Number);
+          hours = hourPart;
+          minutes = minutePart || 0;
+        }
+      }
       
-      // Create date object
       const dateObj = new Date(dateStr);
-      dateObj.setHours(hours, minutes || 0, 0, 0);
-      selectedDateTime = dateObj;
-    } catch (e) {
-      console.error('Error parsing journey date/time:', e);
-      return;
-    }
-    
-    const now = new Date();
-    const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
-    
-    // If selected time is less than 1 hour from now, update it
-    if (selectedDateTime < oneHourFromNow) {
-      const newTime = oneHourFromNow;
-      const formattedTime = newTime.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-      
-      // Store the updated time in state
-      setUpdatedTime(formattedTime);
-      
-      // Show toast notification
-      showToast(`Order time updated to ${formattedTime} (minimum 1 hour advance order required)`);
-      
-      console.log(`Time updated from ${journeyTime} to ${formattedTime}`);
+      dateObj.setHours(hours, minutes, 0, 0);
+      return dateObj;
+    } catch (error) {
+      console.error("Error parsing journey date/time:", error);
+      return null;
     }
   }, [routeParams]);
+
+  // Function to check if time is valid for today's delivery
+  const isTimeValidForToday = useCallback(() => {
+    const selectedDateTime = getJourneyDateTime();
+    
+    if (!selectedDateTime) return false;
+    
+    const now = new Date();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const selectedDate = new Date(selectedDateTime);
+    selectedDate.setHours(0, 0, 0, 0);
+    
+    const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+    
+    // For future dates (tomorrow or later), always valid
+    if (selectedDate.getTime() > today.getTime()) {
+      console.log("Future date detected - valid:", selectedDateTime);
+      return true;
+    }
+    
+    // For today's date, check if time is at least 1 hour from now
+    if (selectedDate.getTime() === today.getTime()) {
+      const isValid = selectedDateTime >= oneHourFromNow;
+      console.log("Today's date - Time valid?", isValid, "Selected:", selectedDateTime, "Min allowed:", oneHourFromNow);
+      return isValid;
+    }
+    
+    // For past dates
+    console.log("Past date detected - invalid");
+    return false;
+  }, [getJourneyDateTime]);
+
+  // Show warning if time is invalid for today
+  useEffect(() => {
+    const selectedDateTime = getJourneyDateTime();
+    
+    if (!selectedDateTime) return;
+    
+    const now = new Date();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const selectedDate = new Date(selectedDateTime);
+    selectedDate.setHours(0, 0, 0, 0);
+    
+    const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+    
+    // Only check for today's date
+    if (selectedDate.getTime() === today.getTime()) {
+      if (selectedDateTime < oneHourFromNow) {
+        const formattedMinTime = oneHourFromNow.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        
+        showToast(
+          `Please select delivery time after ${formattedMinTime} (minimum 1 hour advance required for today's delivery)`,
+          true
+        );
+      }
+    }
+  }, [getJourneyDateTime]);
 
   // Format cart items with better validation
   const cartItems = useMemo(() => {
@@ -215,6 +303,18 @@ const CheckOutPage = () => {
 
   // Prepare order overview
   const orderOverview = useMemo(() => {
+    // Get formatted time for display
+    let displayTime = routeParams?.journey?.formattedTime || routeParams?.time;
+    if (!displayTime && routeParams?.journey?.time) {
+      const timeObj = new Date(routeParams.journey.time);
+      if (!isNaN(timeObj.getTime())) {
+        displayTime = timeObj.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }
+    }
+    
     return {
       CurrentLocation:
         routeParams?.pickup?.location ||
@@ -234,11 +334,7 @@ const CheckOutPage = () => {
         routeParams?.journey?.formattedDate ||
         routeParams?.date ||
         new Date().toLocaleDateString(),
-      timeLabel:
-        updatedTime || 
-        routeParams?.journey?.formattedTime ||
-        routeParams?.time ||
-        new Date().toLocaleTimeString(),
+      timeLabel: displayTime || new Date().toLocaleTimeString(),
       distanceKm:
         routeParams?.route?.distanceKm || routeParams?.distanceKm || 0,
       durationMinutes:
@@ -246,7 +342,7 @@ const CheckOutPage = () => {
         routeParams?.durationMinutes ||
         30,
     };
-  }, [routeParams, updatedTime]);
+  }, [routeParams]);
 
   // Validate order before placing
   const validateOrder = useCallback(() => {
@@ -277,6 +373,17 @@ const CheckOutPage = () => {
       routeParams?.date;
     if (!journeyDate) {
       errors.push("Please select delivery date and time");
+    }
+    
+    // CRITICAL: Check if time is valid for today's delivery - THIS BLOCKS THE ORDER
+    if (!isTimeValidForToday()) {
+      const now = new Date();
+      const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+      const formattedMinTime = oneHourFromNow.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      errors.push(`For today's delivery, time must be at least 1 hour from now. Please select time after ${formattedMinTime}`);
     }
 
     // Check restaurant info
@@ -317,6 +424,7 @@ const CheckOutPage = () => {
     userData,
     selectedPayment,
     isUserAuth,
+    isTimeValidForToday,
     showToast,
   ]);
 
@@ -433,7 +541,7 @@ const CheckOutPage = () => {
   const handlePlaceOrder = async () => {
     console.log("=== Placing Order ===");
 
-    // Validate first
+    // Validate first - THIS WILL BLOCK ORDER IF TIME INVALID
     if (!validateOrder()) {
       console.log("Validation failed:", validationErrors);
       return;
