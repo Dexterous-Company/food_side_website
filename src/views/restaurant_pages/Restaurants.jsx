@@ -1073,7 +1073,7 @@ export default function RestaurantShopPage() {
                       setPriceRange(maxPrice);
                       setSelectedRating(null);
                     }}
-                    className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition-all"
+                    className="mt-4 px-4 py-2 bg-orange-500 !text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition-all"
                   >
                     Reset all filters
                   </button>

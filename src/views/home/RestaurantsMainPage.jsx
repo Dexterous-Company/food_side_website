@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-// ========== Normalization Functions (same as app) ==========
+// ========== Normalization Functions ==========
 const normalizePrice = (value) => {
   const rawValue = value ?? 0;
   if (typeof rawValue === "string" && /₹|â‚¹/.test(rawValue)) {
@@ -20,34 +20,6 @@ const normalizePrice = (value) => {
   const safeAmount = Number.isFinite(amount) ? amount : 0;
   return safeAmount;
 };
-
-// const normalizeProduct = (product, index) => ({
-//   id: product?.id || product?._id || `product-${index}`,
-//   name: product?.name || product?.title || `Product ${index + 1}`,
-//   price: normalizePrice(product?.price),
-//   oldPrice: normalizePrice(
-//     product?.discount_price ?? product?.discountPrice ?? product?.price,
-//   ),
-//   save:
-//     normalizePrice(product?.price) -
-//     normalizePrice(product?.discount_price ?? product?.price),
-//   offer:
-//     product?.offer || product?.discount_percent
-//       ? `${product?.discount_percent}% OFF`
-//       : "",
-//   type: product?.isVeg || product?.foodType === "veg" ? "veg" : "non-veg",
-//   image:
-//     product?.image ||
-//     product?.images?.[0] ||
-//     product?.productImage ||
-//     "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1200&auto=format&fit=crop",
-//   description: product?.description || "",
-//   rating: product?.rating ?? 4,
-//   stock: Number(product?.stock ?? product?.quantity ?? 10),
-//   outOfStock: product?.outOfStock === true || Number(product?.stock ?? 1) <= 0,
-//   recommended: Boolean(product?.recommended ?? product?.isRecommended),
-//   trending: Boolean(product?.trending ?? product?.isTrending),
-// });
 
 const normalizeProduct = (product, index) => ({
   id: product?.id || product?._id || `product-${index}`,
@@ -75,10 +47,10 @@ const normalizeProduct = (product, index) => ({
   outOfStock: product?.outOfStock === true || Number(product?.stock ?? 1) <= 0,
   recommended: Boolean(product?.recommended ?? product?.isRecommended),
   trending: Boolean(product?.trending ?? product?.isTrending),
-  // IMPORTANT: Add these fields
-  restaurantId: product?.restaurantId, // MongoDB ID
-  RESTID: product?.RESTID, // Business ID
+  restaurantId: product?.restaurantId,
+  RESTID: product?.RESTID,
 });
+
 const normalizeRestaurant = (restaurant, index) => {
   const products = Array.isArray(restaurant?.products)
     ? restaurant.products
@@ -211,7 +183,6 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Get selected delivery point from Redux (same as app)
   const { selectedDeliveryPoint } = useSelector(
     (state) => state.delivery || { selectedDeliveryPoint: null },
   );
@@ -223,56 +194,43 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
     selectedDeliveryPoint?.address?.city ||
     "this delivery point";
 
-  // Fetch restaurants based on delivery point
   const fetchRestaurants = useCallback(async () => {
-    console.log("fetchRestaurants called, deliveryPointId:", deliveryPointId);
-    console.log("selectedDeliveryPoint from Redux:", selectedDeliveryPoint);
     setLoading(true);
     setError("");
 
-    try {
-      let response;
-      if (deliveryPointId) {
-        // API endpoint (same as app)
-        const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/delivery/restaurants-with-products/by-delivery-point/${deliveryPointId}`;
-        console.log("Fetching restaurants from:", apiUrl);
-        response = await axios.get(apiUrl);
-        console.log("API response:", response?.data);
-        const rawRestaurants = extractRestaurantList(response?.data);
-        console.log("Raw restaurants:", rawRestaurants);
-        const normalizedRestaurants = rawRestaurants
-          .map(normalizeRestaurant)
-          .filter((restaurant) => restaurant.items.length > 0);
-        console.log("Normalized restaurants:", normalizedRestaurants);
+    if (!deliveryPointId) {
+      setLoading(false);
+      setRestaurants([]);
+      return;
+    }
 
-        if (!normalizedRestaurants.length) {
-          setError("No restaurants available for this delivery point.");
-          setRestaurants([]);
-        } else {
-          setRestaurants(normalizedRestaurants);
-        }
-      } else {
-        // No delivery point selected - show empty or use fallback
-        console.log("No deliveryPointId, showing empty state");
+    try {
+      const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/delivery/restaurants-with-products/by-delivery-point/${deliveryPointId}`;
+      const response = await axios.get(apiUrl);
+      const rawRestaurants = extractRestaurantList(response?.data);
+      const normalizedRestaurants = rawRestaurants
+        .map(normalizeRestaurant)
+        .filter((restaurant) => restaurant.items.length > 0);
+
+      if (!normalizedRestaurants.length) {
+        setError("No restaurants available for this delivery point.");
         setRestaurants([]);
-        setError("Please select a delivery point to see restaurants.");
+      } else {
+        setRestaurants(normalizedRestaurants);
       }
     } catch (err) {
       console.error("Error fetching restaurants:", err);
-      setError(getErrorMessage(err));
+      setError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Unable to load restaurants. Please try again.",
+      );
       setRestaurants([]);
     } finally {
       setLoading(false);
     }
   }, [deliveryPointId]);
 
-  const getErrorMessage = (error) => {
-    if (error?.response?.data?.message) return error.response.data.message;
-    if (error?.message) return error.message;
-    return "Unable to load restaurants. Please try again.";
-  };
-
-  // Fetch on mount and when delivery point changes
   useEffect(() => {
     fetchRestaurants();
   }, [fetchRestaurants]);
@@ -282,7 +240,11 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
       ? "mt-4 sm:mt-6 flex gap-3 sm:gap-4 overflow-x-auto scrollbar-hide pb-2"
       : "mt-4 sm:mt-6 flex flex-wrap gap-3 sm:gap-4";
 
-  // Show loading skeletons
+  // If no delivery point selected, show nothing
+  if (!deliveryPointId) {
+    return null;
+  }
+
   if (loading) {
     return (
       <div className="space-y-6">
@@ -293,7 +255,6 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
     );
   }
 
-  // Show error/empty state
   if (error || restaurants.length === 0) {
     return (
       <EmptyState
@@ -303,15 +264,14 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
     );
   }
 
-  // Show restaurants
   return (
     <div id="restaurants-main" className="space-y-3">
-      <div className="max-w-7xl mx-auto text-4xl sm:text-5xl font-extrabold text-black leading-[1.1] mb-5 tracking-[-1px]">
+      <div className="max-w-7xl mx-auto text-xl sm:text-5xl font-extrabold text-black leading-[1.1] mb-5 tracking-[-1px]">
         Discover{" "}
         <span className="hero-highlight text-[#ff581b] font-['Yesteryear',cursive] inline-block">
-          Nearby{" "}{" "}
-        </span>
-         {" "}Restaurants
+          Nearby{" "}
+        </span>{" "}
+        Restaurants
       </div>
 
       {restaurants.map((restaurant) => (
@@ -322,17 +282,14 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
           transition={{ duration: 0.5 }}
           className="max-w-7xl mx-1 md:mt-0 mt-3 sm:mx-auto rounded-2xl border border-gray-200 bg-white p-4 hover:shadow-lg transition-shadow duration-300"
         >
-          {/* Header */}
           <div className="flex flex-row justify-between gap-4 sm:gap-0">
             <div>
               <p className="text-[12px] sm:text-[13px] font-semibold text-[#FF6B35]">
                 {restaurant.badge}
               </p>
-
               <div className="sm:mt-1 text-[20px] sm:text-[28px] md:text-[32px] font-bold leading-tight sm:leading-none text-gray-900">
                 {restaurant.name}
               </div>
-
               <div className="mt-2 flex flex-wrap items-center gap-2 text-[12px] sm:text-[13px] text-gray-500">
                 <IoStar className="text-green-500" size={14} />
                 <span>{restaurant.rating}</span>
@@ -341,13 +298,11 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
                 <span>•</span>
                 <span>{restaurant.cuisine}</span>
               </div>
-
               <div className="mt-1 flex items-center gap-2 text-[11px] sm:text-[13px] font-medium text-green-600">
                 <FaTag size={11} />
                 <span>{restaurant.offer}</span>
               </div>
             </div>
-
             <Link href={`/restaurant-page/${restaurant.id}`}>
               <motion.button
                 whileHover={{ scale: 1.05, rotate: 90 }}
@@ -358,12 +313,11 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
               </motion.button>
             </Link>
           </div>
-
           <div className={containerClasses}>
             {restaurant.items.map((item) => (
               <ProductCard
                 key={item.id}
-                item={item} // This now includes restaurantId and RESTID
+                item={item}
                 restaurantId={restaurant.id}
                 restaurant={restaurant}
                 layout={layout}
