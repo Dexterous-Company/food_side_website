@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { AutoComplete, DatePicker } from "antd";
+import { AutoComplete, DatePicker, TimePicker } from "antd";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -15,7 +15,6 @@ import {
   Package,
   Navigation,
   X,
-  Clock,
 } from "lucide-react";
 
 import {
@@ -172,73 +171,12 @@ const getAvailableTimeOptions = (selectedDate) => {
         value: timeString,
         label: timeString,
         hour: hour,
-        minute: minute,
-        displayValue: `${hour12}:${minute.toString().padStart(2, "0")} ${period}`
+        minute: minute
       });
     }
   }
   
   return timeOptions;
-};
-
-// Custom Time Dropdown Component
-const CustomTimeDropdown = ({ value, onChange, options, disabled }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
-  
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-    
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-  
-  const selectedOption = options.find(opt => opt.value === value?.format("hh:mm A"));
-  
-  return (
-    <div className="relative" ref={dropdownRef}>
-      <div
-        onClick={() => !disabled && setIsOpen(!isOpen)}
-        className={`w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm flex items-center justify-between cursor-pointer ${
-          disabled ? "bg-gray-100 cursor-not-allowed" : "hover:border-[#ff581b]"
-        } focus:outline-none focus:ring-2 focus:ring-[#ff581b] focus:border-transparent`}
-      >
-        <span className={!selectedOption ? "text-gray-400" : "text-gray-700"}>
-          {selectedOption ? selectedOption.displayValue : "Select Time"}
-        </span>
-        <Clock size={16} className="text-gray-400" />
-      </div>
-      
-      {isOpen && !disabled && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-          {options.length > 0 ? (
-            options.map((option) => (
-              <div
-                key={option.value}
-                onClick={() => {
-                  onChange(option);
-                  setIsOpen(false);
-                }}
-                className={`px-3 py-2 hover:bg-gray-50 cursor-pointer text-sm ${
-                  selectedOption?.value === option.value ? "bg-orange-50 text-[#ff581b]" : "text-gray-700"
-                }`}
-              >
-                {option.displayValue}
-              </div>
-            ))
-          ) : (
-            <div className="px-3 py-2 text-sm text-gray-500 text-center">
-              No available times
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
 };
 
 export default function BusSearch() {
@@ -499,15 +437,6 @@ export default function BusSearch() {
       setDepartureTime(oneHourFromNow);
     } else {
       setDepartureDate(date);
-    }
-  };
-
-  // Handle time change from custom dropdown
-  const handleTimeChange = (selectedOption) => {
-    if (selectedOption) {
-      setDepartureTime(
-        dayjs(departureDate).hour(selectedOption.hour).minute(selectedOption.minute)
-      );
     }
   };
 
@@ -897,17 +826,39 @@ export default function BusSearch() {
                 />
               </div>
 
-              {/* Custom Time Dropdown */}
-              <div className="w-[180px] border-l-3 border-r-3 border-r-white border-l-white bg-gray-50 px-3 py-2">
+              {/* Custom Time Picker - 12 Hour Format Single Box */}
+              <div className="w-[180px] relative border-l-3 border-r-3 border-r-white border-l-white bg-gray-50 px-3 py-2">
                 <div className="mb-1 text-[10px] font-semibold text-gray-500">
                   Departure Time
                 </div>
-                <CustomTimeDropdown
-                  value={departureTime}
-                  onChange={handleTimeChange}
-                  options={availableTimeOptions}
-                  disabled={false}
-                />
+                <div className="relative">
+                  <div className="flex items-center justify-center h-8 w-full text-[0.9rem] text-black">
+                    <select
+                      value={departureTime.format("hh:mm A")}
+                      onChange={(e) => {
+                        const selectedOption = availableTimeOptions.find(
+                          opt => opt.value === e.target.value
+                        );
+                        if (selectedOption) {
+                          setDepartureTime(
+                            dayjs(departureDate).hour(selectedOption.hour).minute(selectedOption.minute)
+                          );
+                        }
+                      }}
+                      className="h-full w-full px-2 border border-gray-300 rounded-md bg-white text-xs focus:outline-none focus:ring-2 focus:ring-[#ff581b] appearance-none cursor-pointer"
+                    >
+                      {availableTimeOptions.length > 0 ? (
+                        availableTimeOptions.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))
+                      ) : (
+                        <option value="">No available times</option>
+                      )}
+                    </select>
+                  </div>
+                </div>
               </div>
 
               {/* Search */}
@@ -1033,12 +984,30 @@ export default function BusSearch() {
                   <div className="mb-1 text-[10px] font-semibold text-gray-500">
                     Departure Time
                   </div>
-                  <CustomTimeDropdown
-                    value={departureTime}
-                    onChange={handleTimeChange}
-                    options={availableTimeOptions}
-                    disabled={false}
-                  />
+                  <select
+                    value={departureTime.format("hh:mm A")}
+                    onChange={(e) => {
+                      const selectedOption = availableTimeOptions.find(
+                        opt => opt.value === e.target.value
+                      );
+                      if (selectedOption) {
+                        setDepartureTime(
+                          dayjs(departureDate).hour(selectedOption.hour).minute(selectedOption.minute)
+                        );
+                      }
+                    }}
+                    className="w-full px-3 py-1 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#ff581b] focus:border-transparent"
+                  >
+                    {availableTimeOptions.length > 0 ? (
+                      availableTimeOptions.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="">No available times</option>
+                    )}
+                  </select>
                 </div>
               </div>
 

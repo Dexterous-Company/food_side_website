@@ -712,7 +712,7 @@ const RegisterForm = ({ onRegisterSuccess }) => {
             </div>
 
             {/* Phone Field */}
-            <div className="group">
+            <div className="group mb-1">
               <label className="mb-2 block text-sm font-semibold text-stone-700">
                 Mobile Number <span className="text-red-500">*</span>
               </label>
@@ -848,11 +848,12 @@ const RegisterForm = ({ onRegisterSuccess }) => {
         {/* Action Button */}
         <button
           type="button"
+          
           onClick={step === "details" ? handleSendOtp : handleVerifyOtp}
           disabled={step === "details" ? isDetailsDisabled : isOtpDisabled}
           className="group relative mt-6 w-full overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-4 text-sm font-semibold text-white transition-all duration-300 hover:from-amber-600 hover:to-orange-600 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <span className="relative z-10 flex items-center justify-center gap-2">
+          <span className="relative z-10 flex items-center justify-center gap-2 !text-white">
             {isLoading ? (
               <>
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

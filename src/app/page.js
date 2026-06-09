@@ -13,6 +13,7 @@ import {
   selectIsRouteSelected,
   selectIsDestinationSet,
 } from "@/redux/delivery/deliverySlice";
+import { Marquee } from "@/views/home/Marquee";
 
 const Page = () => {
   const [open, setOpen] = useState(false);
@@ -74,6 +75,7 @@ const Page = () => {
       </div>
       <div className="md:block hidden md:mt-78">
         <RestaurantsMainPage />
+        <Marquee />
         <About />
       </div>
     </div>
