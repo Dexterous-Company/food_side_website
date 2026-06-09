@@ -32,7 +32,7 @@ const getStopsCount = (route) =>
 // Google Maps API Key - Replace with your actual key
 const GOOGLE_MAPS_API_KEY = "AIzaSyDfjw4P4PnfI08-B-ljZDhEeQxnBqNv3hQ";
 
-// Map View Component
+// Map View Component - inline view, not a modal
 function MapView({ routes, selRoute, onSelectRoute, onClose, selDest }) {
   // Get origin and destination from selDest or routes
   const origin = selDest?.origin || selDest?.primaryText || "Hyderabad, India";
@@ -42,20 +42,20 @@ function MapView({ routes, selRoute, onSelectRoute, onClose, selDest }) {
   const mapUrl = `https://www.google.com/maps/embed/v1/directions?key=${GOOGLE_MAPS_API_KEY}&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&mode=driving`;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black flex flex-col">
+    <div className="bg-white rounded-xl border border-gray-200 flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="flex justify-between items-center p-4 bg-white border-b shadow-sm z-10">
-        <h3 className="text-lg font-semibold text-gray-800">Route Map</h3>
+      <div className="flex justify-between items-center p-3 bg-gray-50 border-b border-gray-200">
+        <h3 className="text-base font-semibold text-gray-800">Route Map</h3>
         <button
           onClick={onClose}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          className="p-1 hover:bg-gray-200 rounded-full transition-colors"
         >
-          <FiX size={24} className="text-gray-600" />
+          <FiX size={18} className="text-gray-600" />
         </button>
       </div>
 
       {/* Map Container */}
-      <div className="flex-1 relative">
+      <div className="flex-1 relative min-h-[300px]">
         <iframe
           src={mapUrl}
           width="100%"
@@ -64,12 +64,13 @@ function MapView({ routes, selRoute, onSelectRoute, onClose, selDest }) {
           allowFullScreen
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
+          className="absolute inset-0"
         />
       </div>
 
-      {/* Route selector overlay */}
-      <div className="absolute bottom-4 left-4 right-4 bg-white rounded-xl shadow-lg p-3 max-h-32 overflow-y-auto">
-        <div className="flex gap-2 overflow-x-auto pb-2">
+      {/* Route selector */}
+      <div className="bg-white border-t border-gray-200 p-3">
+        <div className="flex gap-2 overflow-x-auto pb-1">
           {routes.map((route, idx) => {
             const isSelected = getRouteKey(selRoute) === getRouteKey(route);
             return (
@@ -101,8 +102,8 @@ function MapView({ routes, selRoute, onSelectRoute, onClose, selDest }) {
         {selRoute && (
           <div className="mt-2 pt-2 border-t text-xs text-gray-500">
             <span className="font-semibold text-gray-700">Selected:</span>{" "}
-            {formatRouteName(selRoute.name || selRoute.routeId)} •{" "}
-            {selRoute.distanceKm || selRoute.totalDistance || 0} km •{" "}
+            {formatRouteName(selRoute.name || selRoute.routeId)} • {" "}
+            {selRoute.distanceKm || selRoute.totalDistance || 0} km • {" "}
             {formatDuration(selRoute.durationMinutes || selRoute.totalTime || 0)}
           </div>
         )}
@@ -128,13 +129,17 @@ export default function Step2SelectRoute({
   return (
     <>
       {showMapView && (
-        <MapView
-          routes={routes}
-          selRoute={selRoute}
-          onSelectRoute={onSelectRoute}
-          onClose={() => setShowMapView(false)}
-          selDest={selDest}
-        />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-auto">
+            <MapView
+              routes={routes}
+              selRoute={selRoute}
+              onSelectRoute={onSelectRoute}
+              onClose={() => setShowMapView(false)}
+              selDest={selDest}
+            />
+          </div>
+        </div>
       )}
 
       <div className="relative w-full h-39 sm:h-40 md:h-48 rounded-b-2xl overflow-hidden">
