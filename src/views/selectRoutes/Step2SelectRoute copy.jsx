@@ -6,7 +6,6 @@ import { HiOutlineLocationMarker } from "react-icons/hi";
 import { BsMap } from "react-icons/bs";
 import { MdOutlineRoute } from "react-icons/md";
 import { FaRegFlag } from "react-icons/fa6";
-import MapViewModal from "../routes/MapViewModal";
 
 const formatDuration = (minutes) => {
   if (!minutes) return "0h 0m";
@@ -37,9 +36,8 @@ const GOOGLE_MAPS_API_KEY = "AIzaSyDfjw4P4PnfI08-B-ljZDhEeQxnBqNv3hQ";
 function MapView({ routes, selRoute, onSelectRoute, onClose, selDest }) {
   // Get origin and destination from selDest or routes
   const origin = selDest?.origin || selDest?.primaryText || "Hyderabad, India";
-  const destination =
-    selDest?.destination || selDest?.secondaryText || "Bengaluru, India";
-
+  const destination = selDest?.destination || selDest?.secondaryText || "Bengaluru, India";
+  
   // Build the embedded map URL - simple directions
   const mapUrl = `https://www.google.com/maps/embed/v1/directions?key=${GOOGLE_MAPS_API_KEY}&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&mode=driving`;
 
@@ -57,7 +55,7 @@ function MapView({ routes, selRoute, onSelectRoute, onClose, selDest }) {
       </div>
 
       {/* Map Container */}
-      <div className="flex-1 relative min-h-[10px]">
+      <div className="flex-1 relative min-h-[300px]">
         <iframe
           src={mapUrl}
           width="100%"
@@ -86,15 +84,10 @@ function MapView({ routes, selRoute, onSelectRoute, onClose, selDest }) {
                 }`}
               >
                 <span className="font-medium">
-                  Route {idx + 1}:{" "}
-                  {formatRouteName(route.name || route.routeId).slice(0, 25)}
+                  Route {idx + 1}: {formatRouteName(route.name || route.routeId).slice(0, 25)}
                 </span>
                 {isSelected && (
-                  <svg
-                    className="w-3 h-3"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -109,11 +102,9 @@ function MapView({ routes, selRoute, onSelectRoute, onClose, selDest }) {
         {selRoute && (
           <div className="mt-2 pt-2 border-t text-xs text-gray-500">
             <span className="font-semibold text-gray-700">Selected:</span>{" "}
-            {formatRouteName(selRoute.name || selRoute.routeId)} •{" "}
-            {selRoute.distanceKm || selRoute.totalDistance || 0} km •{" "}
-            {formatDuration(
-              selRoute.durationMinutes || selRoute.totalTime || 0,
-            )}
+            {formatRouteName(selRoute.name || selRoute.routeId)} • {" "}
+            {selRoute.distanceKm || selRoute.totalDistance || 0} km • {" "}
+            {formatDuration(selRoute.durationMinutes || selRoute.totalTime || 0)}
           </div>
         )}
       </div>
@@ -128,51 +119,27 @@ export default function Step2SelectRoute({
   routes = [],
   onBack,
 }) {
-  // Show map view by default for route selection
-  const [showMapView, setShowMapView] = useState(true);
-  const [showListView, setShowListView] = useState(false);
+  const [showMapView, setShowMapView] = useState(false);
 
   const handleMapClick = (e, route) => {
     e.stopPropagation();
     setShowMapView(true);
   };
 
-  // Get origin and destination from selDest
-  const from =
-    selDest?.origin || selDest?.secondaryText || selDest?.primaryText || "";
-  const to = selDest?.destination || selDest?.primaryText || "";
-
-  // Handle route selection from map
-  const handleRouteSelectFromMap = (route) => {
-    onSelectRoute(route);
-  };
-
   return (
     <>
-      <div className="relative w-full flex flex-col h-full min-h-0">
-        <div className="flex-1 min-h-[85vh] relative">
-          <MapViewModal
-            from={from}
-            to={to}
-            selectedRoute={selRoute}
-            routes={routes}
-            onClose={() => setShowMapView(false)}
-            onSelectRoute={handleRouteSelectFromMap}
-            isInline={true}
-            onBack={onBack}
-          />
+      {showMapView && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-auto">
+            <MapView
+              routes={routes}
+              selRoute={selRoute}
+              onSelectRoute={onSelectRoute}
+              onClose={() => setShowMapView(false)}
+              selDest={selDest}
+            />
+          </div>
         </div>
-      </div>
-
-      <>
-        {/* {!showMapView && (
-        <button
-          onClick={() => setShowMapView(true)}
-          className="fixed bottom-20 right-4 z-40 bg-[#ff581b] text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-medium hover:bg-[#e04d16] transition-colors"
-        >
-          <BsMap size={16} />
-          Show Map
-        </button>
       )}
 
       <div className="relative w-full h-39 sm:h-40 md:h-48 rounded-b-2xl overflow-hidden">
@@ -207,6 +174,7 @@ export default function Step2SelectRoute({
         )}
       </div>
       <div className="w-full p-2 max-w-3xl mx-auto bg-white flex flex-col gap-3 h-full min-h-0">
+        {/* Address Card - Design 1 style (from selDest) */}
         {selDest && (
           <div className="px-2 -mt-15 relative z-10">
             <div className="bg-white rounded-2xl shadow-md p-3">
@@ -249,6 +217,7 @@ export default function Step2SelectRoute({
           </div>
         )}
 
+        {/* Available Routes Section - Design 1 style */}
         <div className="px-2 mt-3 flex-1 overflow-y-auto pb-4">
           <div className="flex justify-between items-center px-2">
             <h2 className="text-orange-500 text-[13px] font-bold uppercase">
@@ -329,6 +298,7 @@ export default function Step2SelectRoute({
                       </div>
                     </div>
 
+                    {/* Route Stats - Design 1 style */}
                     <div className="mt-2 bg-orange-50 rounded-lg p-2 flex justify-between text-[10px] text-gray-600">
                       <div className="flex items-center gap-1">
                         <FiNavigation size={10} />
@@ -354,6 +324,7 @@ export default function Step2SelectRoute({
                       </button>
                     </div>
 
+                    {/* Locations - Design 1 style */}
                     <div className="flex justify-between mt-3 text-[10px] text-gray-600">
                       <div className="flex items-center gap-1">
                         <FiMapPin size={11} className="text-orange-500" />
@@ -371,8 +342,7 @@ export default function Step2SelectRoute({
             )}
           </div>
         </div>
-      </div> */}
-      </>
+      </div>
     </>
   );
 }
