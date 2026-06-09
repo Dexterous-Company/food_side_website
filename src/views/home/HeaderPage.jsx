@@ -618,7 +618,7 @@ const HeaderPage = () => {
               {/* Auth Dropdown - Desktop */}
               {!isLoggedIn ? (
                 <div className="relative auth-dropdown">
-                  <button
+                  <div
                     onClick={() => setShowAuthDropdown(!showAuthDropdown)}
                     className={`flex items-center gap-2 font-bold py-3 px-5 rounded-full transition-all duration-300 shadow-md hover:shadow-lg ${
                       scrolled || !isHomePage
@@ -630,7 +630,7 @@ const HeaderPage = () => {
                     <FaAngleDown
                       className={`text-xs transition-transform duration-300 ${showAuthDropdown ? "rotate-180" : ""}`}
                     />
-                  </button>
+                  </div>
 
                   {/* Dropdown Menu */}
                   {showAuthDropdown && (
