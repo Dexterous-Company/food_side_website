@@ -602,8 +602,7 @@ export default function BusSearch() {
         {/* TAB 1: Select Towards */}
         {activeTab === "towards" && (
           <>
-            {/* Desktop Layout - Single Row */}
-            <div className="hidden md:flex relative rounded-xl border border-gray-200">
+            <div className="relative flex rounded-xl border border-gray-200">
               {/* Leaving From - with location detection */}
               <div className="flex-1 border-r-3 border-r-white bg-gray-50 px-3 py-2">
                 <div className="mb-1 text-[10px] font-semibold text-gray-500 flex items-center justify-between">
@@ -637,6 +636,16 @@ export default function BusSearch() {
                   </p>
                 )}
               </div>
+
+              {/* Swap Button */}
+              {/* <div className="absolute left-81.5 top-10 -translate-x-1/2 -translate-y-1/2 z-10">
+                <button
+                  onClick={swapLocations}
+                  className="w-6 h-6 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition-all shadow"
+                >
+                  <ArrowLeftRight size={14} />
+                </button>
+              </div> */}
 
               {/* Going To */}
               <div
@@ -713,7 +722,7 @@ export default function BusSearch() {
               <div className="w-[180px] relative border-l-3 border-r-3 border-r-white border-l-white bg-gray-50 px-3 py-2">
                 <div className="mb-1 text-[10px] flex justify-between items-center font-semibold text-gray-500">
                   <div>Departure Time</div>
-                  <div className="text-[9px] text-gray-400">
+                  <div className=" text-[9px] text-gray-400 ">
                     {departureTime.format("hh:mm A")}
                   </div>
                 </div>
@@ -741,148 +750,7 @@ export default function BusSearch() {
                 onClick={handleSearch}
                 className="w-40 bg-[#ff581b] rounded-r-2xl text-white font-semibold flex items-center justify-center gap-2"
               >
-                <span className="text-white">Next</span>
-                <ArrowRight size={16} className="text-white" />
-              </button>
-            </div>
-
-            {/* Mobile Layout - Stacked */}
-            <div className="md:hidden flex flex-col gap-2">
-              {/* Leaving From */}
-              <div className="bg-gray-50 px-3 py-2 rounded-xl border border-gray-200">
-                <div className="mb-1 text-[10px] font-semibold text-gray-500 flex items-center justify-between">
-                  <span>Leaving From</span>
-                  <button
-                    onClick={fetchCurrentLocation}
-                    disabled={locationLoading}
-                    className="flex items-center gap-1 text-[#ff581b] hover:text-[#ff4510] transition-colors"
-                  >
-                    <Navigation size={12} />
-                    <span className="text-[9px]">
-                      {locationLoading ? "Detecting..." : "Detect"}
-                    </span>
-                  </button>
-                </div>
-                <AutoComplete
-                  value={from}
-                  options={fromOptions}
-                  onSearch={(v) => searchPlaces(v, "from")}
-                  onChange={setFrom}
-                  placeholder={
-                    locationLoading
-                      ? "Detecting your location..."
-                      : "Source City"
-                  }
-                  className="w-full"
-                />
-                {locationError && (
-                  <p className="text-[10px] text-red-500 mt-1">
-                    {locationError}
-                  </p>
-                )}
-              </div>
-
-              {/* Going To */}
-              <div
-                ref={searchContainerRef}
-                className="bg-gray-50 px-3 py-2 rounded-xl border border-gray-200 relative"
-              >
-                <div className="mb-1 text-[10px] font-semibold text-gray-500">
-                  Going To
-                </div>
-                <AutoComplete
-                  value={to}
-                  options={toOptions}
-                  onSearch={(v) => {
-                    searchPlaces(v, "to");
-                    setShowDestinationDropdown(true);
-                  }}
-                  onChange={(value) => {
-                    setTo(value);
-                    setShowDestinationDropdown(true);
-                  }}
-                  onFocus={() => setShowDestinationDropdown(true)}
-                  onBlur={() =>
-                    setTimeout(() => setShowDestinationDropdown(false), 200)
-                  }
-                  placeholder="Destination City"
-                  className="w-full"
-                />
-
-                {/* Dynamic Destination Dropdown from API */}
-                {showDestinationDropdown &&
-                  to &&
-                  routeSearch?.suggestions?.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-60 overflow-y-auto">
-                      {routeSearch.suggestions.map((dest) => (
-                        <div
-                          key={getDestinationKey(dest)}
-                          onClick={() => {
-                            const destName =
-                              dest.primaryText || dest.destination || dest.name;
-                            handleSelectDestination({ name: destName });
-                          }}
-                          className="px-3 py-2 hover:bg-gray-50 cursor-pointer text-sm"
-                        >
-                          <div className="font-medium">
-                            {dest.primaryText || dest.destination || dest.name}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {dest.secondaryText || dest.origin || ""}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-              </div>
-
-              {/* Date and Time Row */}
-              <div className="flex gap-2">
-                <div className="flex-1 bg-gray-50 px-3 py-2 rounded-xl border border-gray-200">
-                  <div className="mb-1 text-[10px] font-semibold text-gray-500">
-                    Departure Date
-                  </div>
-                  <DatePicker
-                    value={departureDate}
-                    onChange={(value) => setDepartureDate(value)}
-                    format="DD MMM YYYY"
-                    className="w-full"
-                    placeholder="Select Date"
-                    disabledDate={(current) => {
-                      return current && current < dayjs().startOf("day");
-                    }}
-                  />
-                </div>
-
-                <div className="flex-1 bg-gray-50 px-3 py-2 rounded-xl border border-gray-200">
-                  <div className="mb-1 text-[10px] font-semibold text-gray-500">
-                    Departure Time
-                  </div>
-                  <input
-                    type="time"
-                    value={departureTime.format("HH:mm")}
-                    onChange={(e) => {
-                      const [hours, minutes] = e.target.value
-                        .split(":")
-                        .map(Number);
-                      if (!isNaN(hours) && !isNaN(minutes)) {
-                        setDepartureTime(
-                          departureTime.hour(hours).minute(minutes),
-                        );
-                      }
-                    }}
-                    step="900"
-                    className="w-full px-3 py-1 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#ff581b] focus:border-transparent"
-                  />
-                </div>
-              </div>
-
-              {/* Search Button */}
-              <button
-                onClick={handleSearch}
-                className="w-full bg-[#ff581b] rounded-xl text-white font-semibold flex items-center justify-center gap-2 py-3"
-              >
-                <span className="text-white">Next</span>
+                <span className="text-white text-lg">Next</span>
                 <ArrowRight size={16} className="text-white" />
               </button>
             </div>
@@ -911,129 +779,45 @@ export default function BusSearch() {
         {/* TAB 2: Select Route + Delivery Point - Dynamic from API */}
         {activeTab === "route" && (
           <>
-            {/* Desktop Layout */}
-            <div className="hidden md:block">
-              {/* Selected Journey Details Row with Arrow */}
-              <div className="flex items-center justify-between bg-gray-100 rounded-xl px-4 py-2 mb-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="font-semibold text-gray-700">
-                    {from || "Source"}
-                  </span>
-                  <ArrowRight size={14} className="text-[#ff581b]" />
-                  <span className="font-semibold text-gray-700">
-                    {to || "Destination"}
-                  </span>
-                  <span className="text-gray-400 mx-1">•</span>
-                  <span className="text-gray-600">
-                    {departureDate.format("DD MMM")}
-                  </span>
-                  <span className="text-gray-400">•</span>
-                  <span className="text-gray-600">
-                    {departureTime.format("hh:mm A")}
-                  </span>
-                </div>
-              </div>
-
-              <div className="relative flex rounded-xl border border-gray-200">
-                {/* Select Route - Dynamic */}
-                <div className="flex-1 border-r border-gray-200 bg-gray-50 px-3 py-2">
-                  {selectedRoute ? (
-                    <div
-                      onClick={() => setShowMapView(true)}
-                      className="mb-1 text-[10px] cursor-pointer font-semibold text-gray-500 flex items-center gap-2"
-                    >
-                      Select Route
-                      <Map size={14} className="text-[#ff581b]" />
-                      click to View on map
-                    </div>
-                  ) : (
-                    <div className="mb-1 text-[10px] font-semibold text-gray-500 flex items-center gap-2">
-                      Select Route
-                      <Map size={14} className="text-[#ff581b]" />
-                    </div>
-                  )}
-                  <AutoComplete
-                    value={selectedRoute?.name || ""}
-                    options={routes.map((route) => ({
-                      value: route.name,
-                      key: getRouteKey(route),
-                    }))}
-                    onChange={(value) => {
-                      const route = routes.find((r) => r.name === value);
-                      if (route) {
-                        handleSelectRoute(route);
-                      }
-                    }}
-                    placeholder="Choose a route"
-                    className="w-full"
-                    disabled={routes.length === 0}
-                  />
-                </div>
-
-                {/* Select Delivery Point - Dynamic based on selected route */}
-                <div className="flex-1 bg-gray-50 px-3 py-2">
-                  <div className="mb-1 text-[10px] font-semibold text-gray-500 flex items-center gap-2">
-                    Select Delivery Point
-                    <Package size={14} className="text-[#ff581b]" />
-                  </div>
-                  <AutoComplete
-                    value={selectedDeliveryPoint?.name || ""}
-                    options={deliveryPoints.map((point) => ({
-                      value: point.name,
-                      key: getPointKey(point),
-                    }))}
-                    onChange={(value) => {
-                      const point = deliveryPoints.find((p) => p.name === value);
-                      if (point) {
-                        handleSelectDeliveryPoint(point);
-                      }
-                    }}
-                    placeholder="Choose delivery point"
-                    className="w-full"
-                    disabled={!selectedRoute || deliveryPoints.length === 0}
-                  />
-                </div>
-
-                {/* Complete Booking Button */}
-                <button
-                  onClick={handleCompleteBooking}
-                  disabled={!selectedRoute || !selectedDeliveryPoint}
-                  className={`w-40 rounded-r-2xl text-white font-semibold flex items-center justify-center gap-2 ${
-                    selectedRoute && selectedDeliveryPoint
-                      ? "bg-[#ff581b] hover:bg-[#ff4510]"
-                      : "bg-gray-300 cursor-not-allowed"
-                  }`}
-                >
-                  <span className="text-white text-lg">Search</span>
-                  <ArrowRight size={16} className="text-white" />
-                </button>
+            {/* Selected Journey Details Row with Arrow */}
+            <div className="flex items-center justify-between bg-gray-100 rounded-xl px-4 py-2 mb-3">
+              <div className="flex items-center gap-2 text-sm">
+                <span className="font-semibold text-gray-700">
+                  {from || "Source"}
+                </span>
+                <ArrowRight size={14} className="text-[#ff581b]" />
+                <span className="font-semibold text-gray-700">
+                  {to || "Destination"}
+                </span>
+                <span className="text-gray-400 mx-1">•</span>
+                <span className="text-gray-600">
+                  {departureDate.format("DD MMM")}
+                </span>
+                <span className="text-gray-400">•</span>
+                <span className="text-gray-600">
+                  {departureTime.format("hh:mm A")}
+                </span>
               </div>
             </div>
 
-            {/* Mobile Layout */}
-            <div className="md:hidden flex flex-col gap-2">
-              {/* Selected Journey Details */}
-              <div className="bg-gray-100 rounded-xl px-4 py-3">
-                <div className="flex items-center justify-center gap-2 text-sm">
-                  <span className="font-semibold text-gray-700">
-                    {from || "Source"}
-                  </span>
-                  <ArrowRight size={14} className="text-[#ff581b]" />
-                  <span className="font-semibold text-gray-700">
-                    {to || "Destination"}
-                  </span>
-                </div>
-                <div className="text-center text-xs text-gray-500 mt-1">
-                  {departureDate.format("DD MMM")} • {departureTime.format("hh:mm A")}
-                </div>
-              </div>
-
-              {/* Select Route */}
-              <div className="bg-gray-50 px-3 py-2 rounded-xl border border-gray-200">
-                <div className="mb-1 text-[10px] font-semibold text-gray-500 flex items-center gap-2">
-                  <Map size={14} className="text-[#ff581b]" />
-                  Select Route
-                </div>
+            <div className="relative flex rounded-xl border border-gray-200">
+              {/* Select Route - Dynamic */}
+              <div className="flex-1 border-r border-gray-200 bg-gray-50 px-3 py-2">
+                {selectedRoute ? (
+                  <div
+                    onClick={() => setShowMapView(true)}
+                    className="mb-1 text-[10px] cursor-pointer font-semibold text-gray-500 flex items-center gap-2"
+                  >
+                    Select Route
+                    <Map size={14} className="text-[#ff581b]" />
+                    click to View on map
+                  </div>
+                ) : (
+                  <div className="mb-1 text-[10px] font-semibold text-gray-500 flex items-center gap-2">
+                    Select Route
+                    <Map size={14} className="text-[#ff581b]" />
+                  </div>
+                )}
                 <AutoComplete
                   value={selectedRoute?.name || ""}
                   options={routes.map((route) => ({
@@ -1050,22 +834,13 @@ export default function BusSearch() {
                   className="w-full"
                   disabled={routes.length === 0}
                 />
-                {selectedRoute && (
-                  <button
-                    onClick={() => setShowMapView(true)}
-                    className="mt-1 text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1"
-                  >
-                    <Map size={12} />
-                    View on Map
-                  </button>
-                )}
               </div>
 
-              {/* Select Delivery Point */}
-              <div className="bg-gray-50 px-3 py-2 rounded-xl border border-gray-200">
+              {/* Select Delivery Point - Dynamic based on selected route */}
+              <div className="flex-1 bg-gray-50 px-3 py-2">
                 <div className="mb-1 text-[10px] font-semibold text-gray-500 flex items-center gap-2">
-                  <Package size={14} className="text-[#ff581b]" />
                   Select Delivery Point
+                  <Package size={14} className="text-[#ff581b]" />
                 </div>
                 <AutoComplete
                   value={selectedDeliveryPoint?.name || ""}
@@ -1085,11 +860,11 @@ export default function BusSearch() {
                 />
               </div>
 
-              {/* Search Button */}
+              {/* Complete Booking Button */}
               <button
                 onClick={handleCompleteBooking}
                 disabled={!selectedRoute || !selectedDeliveryPoint}
-                className={`w-full rounded-xl text-white font-semibold flex items-center justify-center gap-2 py-3 ${
+                className={`w-40 rounded-r-2xl text-white font-semibold flex items-center justify-center gap-2 ${
                   selectedRoute && selectedDeliveryPoint
                     ? "bg-[#ff581b] hover:bg-[#ff4510]"
                     : "bg-gray-300 cursor-not-allowed"

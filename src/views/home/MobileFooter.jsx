@@ -9,7 +9,6 @@ import { MdRestaurant } from "react-icons/md";
 import { PiShoppingCartSimpleBold } from "react-icons/pi";
 import { FiBox } from "react-icons/fi";
 import { useCart } from "@/context/CartContext";
-import DeliverySelectionModal from "../selectRoutes/DeliverySelectionModal";
 
 export default function MobileFooter() {
   const pathname = usePathname();
@@ -206,12 +205,6 @@ export default function MobileFooter() {
           })}
         </div>
       </div>
-
-      {/* Delivery Selection Modal */}
-      <DeliverySelectionModal
-        isOpen={isDeliveryModalOpen}
-        onClose={() => setIsDeliveryModalOpen(false)}
-      />
     </div>
   );
 }

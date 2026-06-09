@@ -287,7 +287,7 @@ export default function RestaurantsMainPage({ layout = "scroll" }) {
 
   // Show restaurants
   return (
-    <div className="space-y-6">
+    <div id="restaurants-main" className="space-y-6">
       {restaurants.map((restaurant) => (
         <motion.section
           key={restaurant.id}
