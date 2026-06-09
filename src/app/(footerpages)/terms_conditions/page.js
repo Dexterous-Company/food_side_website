@@ -1,4 +1,4 @@
-import TermsAndCondtion from '@/pages/footer_pages/TermsAndCondtion'
+import TermsAndCondtion from '@/views/footer_pages/TermsAndCondtion'
 import React from 'react'
 
 const page = () => {

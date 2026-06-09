@@ -1,0 +1,1121 @@
+[{
+  "_id": {
+    "$oid": "69f99c192611c0935abd49c3"
+  },
+  "RESTID": "REST1777966105077795",
+  "deliveryPointIDs": [
+    {
+      "$oid": "69f99af12611c0935abd4990"
+    }
+  ],
+  "collectionCenterIDs": [
+    {
+      "$oid": "69f5c45c3475a86da3962bad"
+    }
+  ],
+  "name": "Nishitha Restaurant",
+  "ownerName": "Nishi",
+  "address": {
+    "area": "Begumpet Rd, Leelanagar, Begumpet, Hyderabad, Telangana 500016, India",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "pincode": "500016",
+    "country": "India"
+  },
+  "email": "mnishitha@gmail.com",
+  "phone": "7416264657",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      78.45380829999999,
+      17.4361301
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "09:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "documents": [],
+  "createdAt": {
+    "$date": "2026-05-05T07:28:25.090Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-14T06:21:59.785Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69fb1128fd9d78bce9f01ee1"
+  },
+  "RESTID": "REST1778061608172368",
+  "deliveryPointIDs": [
+    {
+      "$oid": "69f99af12611c0935abd4990"
+    }
+  ],
+  "collectionCenterIDs": [
+    {
+      "$oid": "69f5c45c3475a86da3962bad"
+    },
+    {
+      "$oid": "69f5c45c3475a86da3962bae"
+    },
+    {
+      "$oid": "69f99b692611c0935abd49b2"
+    }
+  ],
+  "name": "Kfc",
+  "ownerName": "Vinod",
+  "address": {
+    "area": "Sanjeeva Reddy Nagar, Hyderabad, Telangana, India",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "pincode": "",
+    "country": "India"
+  },
+  "email": "shaik@gmail.com",
+  "phone": "9515705570",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      78.45380829999999,
+      17.4361301
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "09:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "documents": [],
+  "createdAt": {
+    "$date": "2026-05-06T10:00:08.180Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-21T11:05:30.267Z"
+  },
+  "__v": 0,
+  "rejectionReason": null
+},
+{
+  "_id": {
+    "$oid": "69fb3082fd830b3855917417"
+  },
+  "RESTID": "REST177806963429741",
+  "deliveryPointIDs": [
+    {
+      "$oid": "69f99af12611c0935abd4990"
+    }
+  ],
+  "collectionCenterIDs": [
+    {
+      "$oid": "69f5c45c3475a86da3962bae"
+    },
+    {
+      "$oid": "69f99b692611c0935abd49b2"
+    }
+  ],
+  "name": "Burger King",
+  "ownerName": "Akshay",
+  "address": {
+    "area": "Madhapur",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "pincode": "500081",
+    "country": "India"
+  },
+  "email": "akshay@gmail.com",
+  "phone": "8431347468",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      78.387364,
+      17.448275
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "09:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "documents": [],
+  "createdAt": {
+    "$date": "2026-05-06T12:13:54.306Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-07T13:33:37.632Z"
+  },
+  "__v": 0,
+  "rejectionReason": null
+},
+{
+  "_id": {
+    "$oid": "6a0db03acbe1aa0e8c7cbe15"
+  },
+  "RESTID": "REST1779281978446224",
+  "deliveryPointIDs": [
+    {
+      "$oid": "6a0dad30cbe1aa0e8c7cbdf8"
+    }
+  ],
+  "collectionCenterIDs": [
+    {
+      "$oid": "6a0daea1cbe1aa0e8c7cbe08"
+    }
+  ],
+  "name": "Krishna Restaurant",
+  "ownerName": "Krishna Kumar",
+  "address": {
+    "area": "Bangarugadda",
+    "city": "Miryalaguda",
+    "state": "Telangana",
+    "pincode": "508207",
+    "country": "India"
+  },
+  "email": "kirshna@gmail.com",
+  "phone": "9359275467",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      79.56095,
+      16.876427
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "09:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "documents": [],
+  "createdAt": {
+    "$date": "2026-05-20T12:59:38.449Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-21T07:20:59.865Z"
+  },
+  "__v": 0,
+  "rejectionReason": "",
+  "collectionCenterETA": [
+    {
+      "collectionCenterId": {
+        "$oid": "6a0daea1cbe1aa0e8c7cbe08"
+      },
+      "collectionCenterName": "Miryalaguda Collection Center",
+      "deliveryPointETA": [
+        {
+          "deliveryPointId": {
+            "$oid": "6a0dad30cbe1aa0e8c7cbdf8"
+          },
+          "deliveryPointName": "Miryalaguda Delivery Point",
+          "distanceKm": 1.69,
+          "estimatedTravelMinutes": 4,
+          "_id": {
+            "$oid": "6a0eb235ed6c311198651952"
+          }
+        }
+      ],
+      "_id": {
+        "$oid": "6a0eb235ed6c311198651951"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6a0db108cbe1aa0e8c7cbe2c"
+  },
+  "RESTID": "REST1779282184257796",
+  "deliveryPointIDs": [
+    {
+      "$oid": "6a0dad30cbe1aa0e8c7cbdf8"
+    }
+  ],
+  "collectionCenterIDs": [
+    {
+      "$oid": "6a0daea1cbe1aa0e8c7cbe08"
+    }
+  ],
+  "name": "Radha Restaurant",
+  "ownerName": "Radha Kumar",
+  "address": {
+    "area": "Bangarugadda",
+    "city": "Miryalaguda",
+    "state": "Telangana",
+    "pincode": "508207",
+    "country": "India"
+  },
+  "email": "radha@gmail.com",
+  "phone": "7989158957",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      79.561878,
+      16.876519
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "09:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "documents": [],
+  "createdAt": {
+    "$date": "2026-05-20T13:03:04.259Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-27T07:08:23.776Z"
+  },
+  "__v": 0,
+  "rejectionReason": null
+},
+{
+  "_id": {
+    "$oid": "6a0db191cbe1aa0e8c7cbe50"
+  },
+  "RESTID": "REST1779282321067836",
+  "deliveryPointIDs": [
+    {
+      "$oid": "6a0dad30cbe1aa0e8c7cbdf8"
+    }
+  ],
+  "collectionCenterIDs": [
+    {
+      "$oid": "6a0daea1cbe1aa0e8c7cbe08"
+    }
+  ],
+  "name": "Kavya Restaurant",
+  "ownerName": "Kavya G",
+  "address": {
+    "area": "Doctors Colony",
+    "city": "Miryalaguda",
+    "state": "Telangana",
+    "pincode": "508207",
+    "country": "India"
+  },
+  "email": "kavya@gmail.com",
+  "phone": "9359275467",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      79.561706,
+      16.869127
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "9:00",
+    "closeTime": "19:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "documents": [],
+  "createdAt": {
+    "$date": "2026-05-20T13:05:21.069Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-21T05:34:05.304Z"
+  },
+  "__v": 0,
+  "rejectionReason": null,
+  "collectionCenterETA": [
+    {
+      "collectionCenterId": {
+        "$oid": "6a0daea1cbe1aa0e8c7cbe08"
+      },
+      "collectionCenterName": "Miryalaguda Collection Center",
+      "deliveryPointETA": [
+        {
+          "deliveryPointId": {
+            "$oid": "6a0dad30cbe1aa0e8c7cbdf8"
+          },
+          "deliveryPointName": "Miryalaguda Delivery Point",
+          "distanceKm": 1.09,
+          "estimatedTravelMinutes": 3,
+          "_id": {
+            "$oid": "6a0e994df63fd96c5bcfe4b8"
+          }
+        }
+      ],
+      "_id": {
+        "$oid": "6a0e994df63fd96c5bcfe4b7"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6a0e9de7cbe1aa0e8c7cc05f"
+  },
+  "RESTID": "REST177934282309450",
+  "deliveryPointIDs": [
+    {
+      "$oid": "6a0dad30cbe1aa0e8c7cbdf8"
+    }
+  ],
+  "collectionCenterIDs": [
+    {
+      "$oid": "6a0daea1cbe1aa0e8c7cbe08"
+    }
+  ],
+  "name": "Vinod Restaurant",
+  "ownerName": "Vinod",
+  "address": {
+    "area": "Reddy Colony",
+    "city": "Miryalaguda",
+    "state": "Telangana",
+    "pincode": "508207",
+    "country": "India"
+  },
+  "email": "software.testing121@yahoo.com",
+  "phone": "8121358374",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      79.559346,
+      16.859763
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "9:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "documents": [],
+  "createdAt": {
+    "$date": "2026-05-21T05:53:43.100Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-21T09:09:51.286Z"
+  },
+  "__v": 0,
+  "rejectionReason": null,
+  "collectionCenterETA": [
+    {
+      "collectionCenterId": {
+        "$oid": "6a0daea1cbe1aa0e8c7cbe08"
+      },
+      "collectionCenterName": "Miryalaguda Collection Center",
+      "deliveryPointETA": [
+        {
+          "deliveryPointId": {
+            "$oid": "6a0dad30cbe1aa0e8c7cbdf8"
+          },
+          "deliveryPointName": "Miryalaguda Delivery Point",
+          "distanceKm": 0.66,
+          "estimatedTravelMinutes": 2,
+          "_id": {
+            "$oid": "6a0ea4952e4529570381b4e1"
+          }
+        }
+      ],
+      "_id": {
+        "$oid": "6a0ea4952e4529570381b4e0"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6a0eafe32e4529570381b542"
+  },
+  "RESTID": "REST1779347427786406",
+  "deliveryPointIDs": [
+    {
+      "$oid": "6a0ea66bcbe1aa0e8c7cc13e"
+    }
+  ],
+  "collectionCenterIDs": [
+    {
+      "$oid": "6a0eabf8cbe1aa0e8c7cc28a"
+    }
+  ],
+  "name": "Sita Resturant",
+  "ownerName": "Sita G",
+  "address": {
+    "area": "Near  Kapu Satam",
+    "city": "Srisailam",
+    "state": "Andhra Pradesh",
+    "pincode": "518101",
+    "country": "India"
+  },
+  "email": "sita@gmail.com",
+  "phone": "8459962274",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      78.871397,
+      16.074818
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "9:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "collectionCenterETA": [
+    {
+      "collectionCenterId": {
+        "$oid": "6a0eabf8cbe1aa0e8c7cc28a"
+      },
+      "collectionCenterName": "Srisailam Collection Center",
+      "deliveryPointETA": [
+        {
+          "deliveryPointId": {
+            "$oid": "6a0ea66bcbe1aa0e8c7cc13e"
+          },
+          "deliveryPointName": "Srisailam Delivery Point",
+          "distanceKm": 0.25,
+          "estimatedTravelMinutes": 1,
+          "_id": {
+            "$oid": "6a13ea015ba291f0c213de7b"
+          }
+        }
+      ],
+      "_id": {
+        "$oid": "6a13ea015ba291f0c213de7a"
+      }
+    }
+  ],
+  "documents": [],
+  "createdAt": {
+    "$date": "2026-05-21T07:10:27.813Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-25T06:19:45.918Z"
+  },
+  "__v": 0,
+  "rejectionReason": ""
+},
+{
+  "_id": {
+    "$oid": "6a19161153081932aeffa992"
+  },
+  "RESTID": "REST1780028945239517",
+  "deliveryPointIDs": [
+    {
+      "$oid": "6a190faa53081932aeffa90c"
+    }
+  ],
+  "collectionCenterIDs": [
+    {
+      "$oid": "6a1913c345b3921cdb578f11"
+    }
+  ],
+  "name": "Bangalore  Kfc",
+  "ownerName": "Nishitha Restaurant1",
+  "address": {
+    "area": "Whitefield",
+    "city": "Muthkur",
+    "state": "Karnataka",
+    "pincode": "560117",
+    "country": "India"
+  },
+  "email": "akshay1111@gmail.com",
+  "phone": "8431347469",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      77.803994,
+      12.964164
+    ]
+  },
+  "serviceAreas": [
+    "Supply"
+  ],
+  "workingHours": {
+    "openTime": "09:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "collectionCenterETA": [
+    {
+      "collectionCenterId": {
+        "$oid": "6a1913c345b3921cdb578f11"
+      },
+      "collectionCenterName": "Bangluru Collection Center",
+      "deliveryPointETA": [
+        {
+          "deliveryPointId": {
+            "$oid": "6a190faa53081932aeffa90c"
+          },
+          "deliveryPointName": "Bengaluru",
+          "distanceKm": 8.4,
+          "estimatedTravelMinutes": 20,
+          "_id": {
+            "$oid": "6a19161153081932aeffa994"
+          }
+        }
+      ],
+      "_id": {
+        "$oid": "6a19161153081932aeffa993"
+      }
+    }
+  ],
+  "documents": [],
+  "createdAt": {
+    "$date": "2026-05-29T04:29:05.242Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-29T04:29:05.242Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a1920de53081932aeffabfe"
+  },
+  "RESTID": "REST1780031710724777",
+  "deliveryPointIDs": [
+    {
+      "$oid": "6a190faa53081932aeffa90c"
+    }
+  ],
+  "collectionCenterIDs": [
+    {
+      "$oid": "6a1913c345b3921cdb578f11"
+    }
+  ],
+  "name": "Habibo Restaurant",
+  "ownerName": "Vinod Restaurant",
+  "address": {
+    "area": "Kadugodi",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "pincode": "560067",
+    "country": "India"
+  },
+  "email": "mni@gmail.com",
+  "phone": "9827272727",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      77.763589,
+      12.995841
+    ]
+  },
+  "serviceAreas": [
+    "Supply"
+  ],
+  "workingHours": {
+    "openTime": "09:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "collectionCenterETA": [
+    {
+      "collectionCenterId": {
+        "$oid": "6a1913c345b3921cdb578f11"
+      },
+      "collectionCenterName": "Bangluru Collection Center",
+      "deliveryPointETA": [
+        {
+          "deliveryPointId": {
+            "$oid": "6a190faa53081932aeffa90c"
+          },
+          "deliveryPointName": "Bengaluru",
+          "distanceKm": 4.28,
+          "estimatedTravelMinutes": 10,
+          "_id": {
+            "$oid": "6a1920de53081932aeffac00"
+          }
+        }
+      ],
+      "_id": {
+        "$oid": "6a1920de53081932aeffabff"
+      }
+    }
+  ],
+  "documents": [],
+  "createdAt": {
+    "$date": "2026-05-29T05:15:10.728Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-29T05:15:10.728Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a197ffde864810031bf8fe9"
+  },
+  "RESTID": "REST17800560622672230",
+  "deliveryPointIDs": [
+    {
+      "$oid": "6a190faa53081932aeffa90c"
+    }
+  ],
+  "collectionCenterIDs": [
+    {
+      "$oid": "6a1913c345b3921cdb578f11"
+    }
+  ],
+  "name": "Hemanth Restaurant",
+  "ownerName": "Hemanth",
+  "address": {
+    "area": "Plot No 75, 8th Rd, EPIP Zone, Whitefield, Bengaluru, Karnataka 560066, India",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "pincode": "560066",
+    "country": "India"
+  },
+  "email": "hemanth123@gmail.com",
+  "phone": "9390080935",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      77.72799599999999,
+      12.9792093
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "09:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "documents": [
+    {
+      "name": "Pizza 1.jpg",
+      "fileUrl": "blob:https://foodsiderestaurantpanel.netlify.app/1645bfd1-5db6-489a-b901-db4eceb45209",
+      "status": "pending",
+      "_id": {
+        "$oid": "6a197ffde864810031bf8fea"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-05-29T12:01:01.907Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-29T12:12:53.993Z"
+  },
+  "__v": 0,
+  "rejectionReason": "",
+  "collectionCenterETA": [
+    {
+      "collectionCenterId": {
+        "$oid": "6a1913c345b3921cdb578f11"
+      },
+      "collectionCenterName": "Bengaluru Collection Center",
+      "deliveryPointETA": [
+        {
+          "deliveryPointId": {
+            "$oid": "6a190faa53081932aeffa90c"
+          },
+          "deliveryPointName": "Bengaluru Delivery Point",
+          "distanceKm": 0,
+          "estimatedTravelMinutes": 1,
+          "_id": {
+            "$oid": "6a1982c553081932aeffb53b"
+          }
+        }
+      ],
+      "_id": {
+        "$oid": "6a1982c553081932aeffb53a"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6a1988c6e864810031bf90bc"
+  },
+  "RESTID": "REST17800583104686636",
+  "deliveryPointIDs": [],
+  "collectionCenterIDs": [],
+  "name": "Pooja Restaurant",
+  "ownerName": "Pooja Patil",
+  "address": {
+    "area": "Plot No 75, 8th Rd, EPIP Zone, Whitefield, Bengaluru, Karnataka 560066, India",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "pincode": "560066",
+    "country": "India"
+  },
+  "email": "pooja123@gmail.com",
+  "phone": "9373317232",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      77.72799599999999,
+      12.9792093
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "09:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "documents": [
+    {
+      "name": "Grilled chicken image.jpg",
+      "fileUrl": "blob:https://foodsiderestaurantpanel.netlify.app/fec1a694-7ae6-4cde-b402-35565adce060",
+      "status": "pending",
+      "_id": {
+        "$oid": "6a1988c6e864810031bf90bd"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-05-29T12:38:30.130Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-29T12:39:31.685Z"
+  },
+  "__v": 0,
+  "rejectionReason": null
+},
+{
+  "_id": {
+    "$oid": "6a1ad04577478c5b391117f9"
+  },
+  "RESTID": "REST17801421495159000",
+  "deliveryPointIDs": [],
+  "collectionCenterIDs": [],
+  "name": "Ganesh Restarent",
+  "ownerName": "Ganesh",
+  "address": {
+    "area": "Sarojini Devi Rd, Sappu Bagh Apaprtment, Jogani, Ramgopalpet, Secunderabad, Hyderabad, Telangana 500003, India",
+    "city": "Secunderabad",
+    "state": "Telangana",
+    "pincode": "500003",
+    "country": "India"
+  },
+  "email": "abcdef@gmail.com",
+  "phone": "9356102292",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      78.4872154,
+      17.4417141
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "09:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "documents": [
+    {
+      "name": "Invoice_82ab581b.pdf",
+      "fileUrl": "blob:http://localhost:5173/e4f000b8-ab35-476c-9f4e-1bd25399e4df",
+      "status": "pending",
+      "_id": {
+        "$oid": "6a1ad04577478c5b391117fa"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-05-30T11:55:49.564Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-30T11:58:21.130Z"
+  },
+  "__v": 0,
+  "rejectionReason": null
+},
+{
+  "_id": {
+    "$oid": "6a202280a7e2a0433f6227d7"
+  },
+  "RESTID": "REST17804908803377377",
+  "deliveryPointIDs": [],
+  "collectionCenterIDs": [],
+  "name": "Rahul Restarent",
+  "ownerName": "Rahul",
+  "address": {
+    "area": "Sanjeeva Reddy Nagar, Hyderabad, Telangana, India",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "pincode": "500038",
+    "country": "India"
+  },
+  "email": "gundlapallirahul123@gmail.com",
+  "phone": "6302407453",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      78.445753,
+      17.4419501
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "09:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ]
+  },
+  "approvalStatus": "pending",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "documents": [
+    {
+      "name": "Invoice_e586ab61 (2).pdf",
+      "fileUrl": "blob:http://localhost:5173/2457c556-a512-4de6-b704-fdc09be9c8da",
+      "status": "pending",
+      "_id": {
+        "$oid": "6a202280a7e2a0433f6227d8"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-03T12:48:00.418Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-03T12:48:00.418Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a211cc47a6bd9f61bdb3f1c"
+  },
+  "RESTID": "REST1780554948793569",
+  "deliveryPointIDs": [
+    {
+      "$oid": "6a211be57a6bd9f61bdb3ef2"
+    }
+  ],
+  "collectionCenterIDs": [
+    {
+      "$oid": "6a211c4a7a6bd9f61bdb3f03"
+    }
+  ],
+  "name": "Kfc Restaurant",
+  "ownerName": "Sumanth Sakhamuri",
+  "address": {
+    "area": "Kadugodi",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "pincode": "560067",
+    "country": "India"
+  },
+  "email": "foodside2026@gmail.com",
+  "phone": "8977767969",
+  "location": {
+    "type": "Point",
+    "coordinates": [
+      77.763589,
+      12.995841
+    ]
+  },
+  "serviceAreas": [],
+  "workingHours": {
+    "openTime": "09:00",
+    "closeTime": "21:00",
+    "workingDays": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ]
+  },
+  "approvalStatus": "approved",
+  "isActive": true,
+  "isOpen": true,
+  "acceptsOrders": true,
+  "collectionCenterETA": [
+    {
+      "collectionCenterId": {
+        "$oid": "6a211c4a7a6bd9f61bdb3f03"
+      },
+      "collectionCenterName": "Sumanth Bengaluru Collection Center",
+      "deliveryPointETA": [
+        {
+          "deliveryPointId": {
+            "$oid": "6a211be57a6bd9f61bdb3ef2"
+          },
+          "deliveryPointName": "Sumanth Bengaluru Delivery Point",
+          "distanceKm": 0,
+          "estimatedTravelMinutes": 1,
+          "_id": {
+            "$oid": "6a211cc47a6bd9f61bdb3f1e"
+          }
+        }
+      ],
+      "_id": {
+        "$oid": "6a211cc47a6bd9f61bdb3f1d"
+      }
+    }
+  ],
+  "documents": [],
+  "createdAt": {
+    "$date": "2026-06-04T06:35:48.804Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-04T06:36:05.567Z"
+  },
+  "__v": 0,
+  "rejectionReason": null
+}]

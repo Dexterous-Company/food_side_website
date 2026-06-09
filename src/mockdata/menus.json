@@ -1,0 +1,4141 @@
+[
+  {
+    "_id": {
+      "$oid": "69fb08d8eab765dad2e24bec"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Dal Tadka",
+    "description": "Classic North Indian dal made with yellow lentils, tempered with ghee, garlic, cumin, and traditional spices. Best enjoyed with jeera rice or roti.",
+    "price": 180,
+    "discount_price": 159,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778059478/Menu/Items/omuhmif1ccn8givy62mc.jpg",
+    "isAvailable": true,
+    "stock": 40,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fad9cbfd9d78bce9f01737"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:24:40.026Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:24:40.026Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb2b2aeab765dad2e24edc"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Tandoori Aloo",
+    "description": "Baby potatoes marinated in a spicy yogurt-based masala with traditional Indian spices, then roasted in a tandoor until crispy outside and soft inside. Served with mint chutney and fresh salad for a flavorful experience.",
+    "price": 280,
+    "discount_price": 239,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778068263/Menu/Items/e3uqkic6v975bzdgcea6.jpg",
+    "isAvailable": true,
+    "stock": 35,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69faea86fd9d78bce9f01da8"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T11:51:06.066Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T11:51:06.066Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb0ab5eab765dad2e24c32"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Mutton Rogan Josh",
+    "description": "Authentic North Indian mutton curry made with tender mutton pieces slow-cooked in rich onion-tomato gravy and aromatic spices. Best paired with naan or steamed rice.",
+    "price": 420,
+    "discount_price": 389,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778059954/Menu/Items/fmlanxng2opcrf0bkjh5.jpg",
+    "isAvailable": true,
+    "stock": 18,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fada9efd9d78bce9f01758"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:32:37.121Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:32:37.121Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 40
+  },
+  {
+    "_id": {
+      "$oid": "69fb1b3beab765dad2e24d9e"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Chilli Chicken",
+    "description": "Spicy and crispy chicken tossed with onions, capsicum, green chilies, and flavorful Indo-Chinese sauces. A popular dish best enjoyed hot with noodles or fried rice.",
+    "price": 280,
+    "discount_price": 249,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778064185/Menu/Items/qvfixoq9l92nbzgjzgn9.jpg",
+    "isAvailable": true,
+    "stock": 22,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae2fcfd9d78bce9f01add"
+    },
+    "subcategoryId": {
+      "$oid": "69fae4e9fd9d78bce9f01b56"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:43:07.810Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:43:07.810Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb1e90eab765dad2e24e36"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Chicken Gravy Noodles",
+    "description": "Soft noodles served with flavorful chicken gravy loaded with vegetables, garlic, soy sauce, and Indo-Chinese spices. A rich and satisfying meal served hot.",
+    "price": 250,
+    "discount_price": 219,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778065038/Menu/Items/kkqoha9od9lbmlreueru.jpg",
+    "isAvailable": true,
+    "stock": 21,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae2fcfd9d78bce9f01add"
+    },
+    "subcategoryId": {
+      "$oid": "69fae79efd9d78bce9f01c71"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:57:20.043Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:57:20.043Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb131feab765dad2e24cf1"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Spicy Tomato Rice",
+    "description": "Delicious South Indian rice dish cooked with tangy tomatoes, onions, curry leaves, and aromatic spices. Served hot with papad and chutney.",
+    "price": 130,
+    "discount_price": 109,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778062109/Menu/Items/rh1jxtnwia3fgzdqau5h.jpg",
+    "isAvailable": true,
+    "stock": 32,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fadbccfd9d78bce9f01794"
+    },
+    "subcategoryId": {
+      "$oid": "69fae1c4fd9d78bce9f01a7e"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:08:31.310Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:08:31.310Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "69fb1684eab765dad2e24d38"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Veg Manchurian Gravy",
+    "description": "Crispy vegetable balls tossed in spicy and flavorful Indo-Chinese gravy made with garlic, soy sauce, and mixed vegetables. Best served with fried rice or noodles.",
+    "price": 220,
+    "discount_price": 189,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778062978/Menu/Items/o3qdftmmxxwjojmvexts.jpg",
+    "isAvailable": true,
+    "stock": 28,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae2fcfd9d78bce9f01add"
+    },
+    "subcategoryId": {
+      "$oid": "69fae343fd9d78bce9f01ae5"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:23:00.472Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:23:00.472Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb1c94eab765dad2e24dc0"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Veg Fried Rice",
+    "description": "Flavorful Indo-Chinese fried rice cooked with fresh vegetables, soy sauce, garlic, and aromatic seasonings. Served hot and perfect with Manchurian or chilli dishes.",
+    "price": 210,
+    "discount_price": 179,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778064530/Menu/Items/o0ho3r8indaclrg1drut.jpg",
+    "isAvailable": true,
+    "stock": 31,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae2fcfd9d78bce9f01add"
+    },
+    "subcategoryId": {
+      "$oid": "69fae625fd9d78bce9f01c12"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:48:52.128Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:48:52.128Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "69fb1e5aeab765dad2e24e25"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Tandoori Fish",
+    "description": "Fresh fish pieces marinated in spicy yogurt masala and grilled in a traditional tandoor. Served with mint chutney, lemon slices, and onion rings. Crispy outside and soft, juicy inside with a rich smoky flavor.",
+    "price": 380,
+    "discount_price": 330,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778064983/Menu/Items/r59e3epj2ltfwlb755jv.jpg",
+    "isAvailable": true,
+    "stock": 30,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69fae9b0fd9d78bce9f01d77"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:56:26.933Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:56:26.933Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb2df6eab765dad2e24f8a"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Mutton Nihari",
+    "description": "Traditional Mughlai slow-cooked mutton stew prepared with rich spices, flavorful gravy, and tender meat. Served hot with naan or rumali roti for an authentic royal taste.",
+    "price": 450,
+    "discount_price": 409,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778068980/Menu/Items/fx1l0p2g4mf4isciucww.jpg",
+    "isAvailable": true,
+    "stock": 14,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faeb89fd9d78bce9f01dc8"
+    },
+    "subcategoryId": {
+      "$oid": "69fafb81fd9d78bce9f01e6b"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T12:03:02.096Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T12:03:02.096Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 50
+  },
+  {
+    "_id": {
+      "$oid": "69fb0868eab765dad2e24bd1"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Butter Naan",
+    "description": "Soft and fluffy tandoor-baked naan topped with melted butter. Perfect accompaniment for North Indian curries and gravies. Served hot and fresh.",
+    "price": 60,
+    "discount_price": 49,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778059367/Menu/Items/mbq2cff5ypx9nsyjtb8k.jpg",
+    "isAvailable": true,
+    "stock": 80,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fad967fd9d78bce9f01727"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:22:48.795Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:22:48.795Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 10
+  },
+  {
+    "_id": {
+      "$oid": "69fb0ec2eab765dad2e24c78"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Masala Dosa",
+    "description": "Crispy South Indian dosa filled with flavorful potato masala, served with coconut chutney and hot sambar. A classic and popular breakfast meal.",
+    "price": 140,
+    "discount_price": 119,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778060993/Menu/Items/q8cmkorsbphgmae3j7l4.jpg",
+    "isAvailable": true,
+    "stock": 45,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fadbccfd9d78bce9f01794"
+    },
+    "subcategoryId": {
+      "$oid": "69fadccbfd9d78bce9f017c1"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:49:54.809Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:49:54.809Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "69fb2f36eab765dad2e24fac"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Tandoori Broccoli",
+    "description": "Fresh broccoli florets are marinated in hung curd, tandoori spices, ginger-garlic paste, and mild seasonings, then grilled in a traditional clay oven (tandoor). It has a rich smoky flavor and is best served hot with mint chutney.",
+    "price": 280,
+    "discount_price": 240,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778069294/Menu/Items/rom8s3h9nzat1n5b83lp.jpg",
+    "isAvailable": true,
+    "stock": 37,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69faeb03fd9d78bce9f01db3"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T12:08:22.670Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T12:08:22.670Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "69fb1164eab765dad2e24ccf"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Classic Curd Rice",
+    "description": "Refreshing South Indian curd rice made with steamed rice, fresh curd, and traditional tempering of mustard seeds, curry leaves, and green chilies. Served chilled with pickle.",
+    "price": 110,
+    "discount_price": 89,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778061666/Menu/Items/kntff3ugu4neqltdn8gd.jpg",
+    "isAvailable": true,
+    "stock": 40,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fadbccfd9d78bce9f01794"
+    },
+    "subcategoryId": {
+      "$oid": "69fae098fd9d78bce9f01a18"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:01:08.283Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:01:08.283Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 10
+  },
+  {
+    "_id": {
+      "$oid": "69fb1214eab765dad2e24ce0"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "South Indian Lemon Rice",
+    "description": "Tangy and flavorful rice prepared with fresh lemon juice, curry leaves, mustard seeds, peanuts, and traditional South Indian spices. Served with pickle and papad.",
+    "price": 120,
+    "discount_price": 99,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778061843/Menu/Items/srsemy56s0obydvf319c.jpg",
+    "isAvailable": true,
+    "stock": 36,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fadbccfd9d78bce9f01794"
+    },
+    "subcategoryId": {
+      "$oid": "69fae0e4fd9d78bce9f01a53"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:04:04.890Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:04:04.890Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "69fb1d89eab765dad2e24dec"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Mutton Seekh Kebab",
+    "description": "Juicy minced mutton mixed with aromatic spices, shaped on skewers and grilled in a traditional tandoor. Served hot with mint chutney, lemon wedges, and onion rings. Perfect smoky flavor and soft texture.",
+    "price": 320,
+    "discount_price": 280,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778064767/Menu/Items/dkhlpujnfiyvm3e0wot5.jpg",
+    "isAvailable": true,
+    "stock": 30,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69fae961fd9d78bce9f01d6c"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:52:57.490Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:52:57.490Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb20d7eab765dad2e24e87"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Cheese Chicken Burger",
+    "description": "Juicy chicken patty layered with melted cheese, fresh lettuce, onions, and special sauce inside a soft toasted bun. Served hot for a delicious fast-food treat.",
+    "price": 180,
+    "discount_price": 149,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778065621/Menu/Items/hwotbzb8jecpugxft2nv.jpg",
+    "isAvailable": true,
+    "stock": 35,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T11:07:03.108Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T11:07:03.108Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "69fb30bdeab765dad2e24fdf"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Chicken Korma",
+    "description": "Classic Mughlai chicken curry cooked in rich creamy gravy with yogurt, cashews, onions, and aromatic spices. Perfectly paired with naan, paratha, or rice.",
+    "price": 330,
+    "discount_price": 289,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778069689/Menu/Items/zufoeq6kuqk8ja9msjwe.jpg",
+    "isAvailable": true,
+    "stock": 22,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faeb89fd9d78bce9f01dc8"
+    },
+    "subcategoryId": {
+      "$oid": "69faedcafd9d78bce9f01e03"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T12:14:53.279Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T10:49:21.200Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 30
+  },
+  {
+    "_id": {
+      "$oid": "69fb0c8beab765dad2e24c54"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Deluxe North Indian Thali",
+    "description": "Complete North Indian meal platter including paneer curry, dal, seasonal vegetable, rice, butter naan, salad, pickle, dessert, and raita. Perfect for a full traditional dining experience.",
+    "price": 399,
+    "discount_price": 349,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778060426/Menu/Items/jpn3fc6vbx9gi33fbqyl.jpg",
+    "isAvailable": true,
+    "stock": 20,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadb20fd9d78bce9f01773"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:40:27.481Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:40:27.481Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 30
+  },
+  {
+    "_id": {
+      "$oid": "69fb1dd3eab765dad2e24e03"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Schezwan Chicken",
+    "description": "Spicy Indo-Chinese chicken dish cooked in authentic Schezwan sauce with garlic, onions, capsicum, and red chilies. Served hot with bold flavors and smoky taste.",
+    "price": 290,
+    "discount_price": 259,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778064849/Menu/Items/alpjrid4fzbkky3dzvub.jpg",
+    "isAvailable": true,
+    "stock": 23,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae2fcfd9d78bce9f01add"
+    },
+    "subcategoryId": {
+      "$oid": "69fae69cfd9d78bce9f01c29"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:54:11.182Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:54:11.182Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb2ce9eab765dad2e24f0f"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Mughlai Mutton Korma",
+    "description": "Tender mutton slow-cooked in rich Mughlai-style creamy gravy with yogurt, cashews, onions, and aromatic spices. Best enjoyed with naan, rumali roti, or biryani rice.",
+    "price": 420,
+    "discount_price": 379,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778068710/Menu/Items/kacsik18rbeanprpxv7m.jpg",
+    "isAvailable": true,
+    "stock": 16,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faeb89fd9d78bce9f01dc8"
+    },
+    "subcategoryId": {
+      "$oid": "69fafd68fd9d78bce9f01ea6"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T11:58:33.036Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T06:40:18.014Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 45
+  },
+  {
+    "_id": {
+      "$oid": "69fb13cbeab765dad2e24d02"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Fresh Coconut Chutney",
+    "description": "Authentic South Indian coconut chutney made with fresh coconut, roasted chana dal, green chilies, and tempered spices. Perfect side dish for dosa, idli, and vada.",
+    "price": 40,
+    "discount_price": 30,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778062282/Menu/Items/kvwmstdzd9uzvkstnlox.jpg",
+    "isAvailable": true,
+    "stock": 60,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fadbccfd9d78bce9f01794"
+    },
+    "subcategoryId": {
+      "$oid": "69fae246fd9d78bce9f01aa9"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:11:23.366Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:11:23.366Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 5
+  },
+  {
+    "_id": {
+      "$oid": "69fb2c79eab765dad2e24efe"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Shahi Paneer",
+    "description": "Rich and creamy Mughlai paneer curry prepared with soft paneer cubes, cashew gravy, fresh cream, and aromatic royal spices. Best served with naan or jeera rice.",
+    "price": 310,
+    "discount_price": 279,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778068599/Menu/Items/slmmobhjunml2hcih0nd.jpg",
+    "isAvailable": true,
+    "stock": 26,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faeb89fd9d78bce9f01dc8"
+    },
+    "subcategoryId": {
+      "$oid": "69fafd30fd9d78bce9f01e9b"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T11:56:41.272Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T11:56:41.272Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb0f9eeab765dad2e24c9a"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Onion Uttapam",
+    "description": "Soft and thick South Indian uttapam topped with fresh onions, tomatoes, and green chilies. Served with coconut chutney and hot sambar for a delicious meal.",
+    "price": 160,
+    "discount_price": 139,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778061213/Menu/Items/c9jmzmnabdcnvysldzr6.jpg",
+    "isAvailable": true,
+    "stock": 38,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fadbccfd9d78bce9f01794"
+    },
+    "subcategoryId": {
+      "$oid": "69fadd32fd9d78bce9f0183f"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:53:34.608Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:53:34.608Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "69fb2ac4eab765dad2e24ecb"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Chicken Seekh Kebab",
+    "description": "Juicy minced chicken kebabs blended with Mughlai spices and grilled to perfection in tandoor style. Served hot with mint chutney and onion salad.",
+    "price": 260,
+    "discount_price": 229,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778068159/Menu/Items/kikydr7bw35afaah4xzw.avif",
+    "isAvailable": true,
+    "stock": 24,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faeb89fd9d78bce9f01dc8"
+    },
+    "subcategoryId": {
+      "$oid": "69fafc06fd9d78bce9f01e81"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T11:49:24.664Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T11:49:24.664Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "69fb09caeab765dad2e24c09"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Kadai Paneer",
+    "description": "Delicious paneer cubes cooked with capsicum, onions, tomatoes, and aromatic kadai spices in rich North Indian style gravy. Best served with naan or butter roti.",
+    "price": 290,
+    "discount_price": 259,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778059720/Menu/Items/smhdctkwa6w2xm0m4ske.jpg",
+    "isAvailable": true,
+    "stock": 32,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fada06fd9d78bce9f01742"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:28:42.367Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:28:42.367Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb0db0eab765dad2e24c65"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Paneer Combo Meal",
+    "description": "Special North Indian combo meal including paneer butter masala, jeera rice, 2 butter naan, salad, and soft drink. A complete and satisfying meal for one person.",
+    "price": 320,
+    "discount_price": 279,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778060719/Menu/Items/fpuo0xoiaq39zynihepo.jpg",
+    "isAvailable": true,
+    "stock": 22,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadb5dfd9d78bce9f0177e"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:45:20.633Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:45:20.633Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb0f15eab765dad2e24c89"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Idli Vada Combo",
+    "description": "Soft steamed idlis and crispy medu vadas served with fresh coconut chutney and hot sambar. A traditional and healthy South Indian favorite.",
+    "price": 120,
+    "discount_price": 99,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778061076/Menu/Items/lxjet0wn8cdgzvftvi0x.jpg",
+    "isAvailable": true,
+    "stock": 50,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fadbccfd9d78bce9f01794"
+    },
+    "subcategoryId": {
+      "$oid": "69fadcfefd9d78bce9f017fc"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:51:17.622Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:51:17.622Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 10
+  },
+  {
+    "_id": {
+      "$oid": "69fb1a9feab765dad2e24d8d"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Chilli Paneer",
+    "description": "Crispy paneer cubes stir-fried with onions, capsicum, garlic, and spicy Indo-Chinese sauces. A flavorful and popular starter served hot.",
+    "price": 240,
+    "discount_price": 209,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778064019/Menu/Items/zv2fyacyhwb6kdrirtnr.jpg",
+    "isAvailable": true,
+    "stock": 29,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae2fcfd9d78bce9f01add"
+    },
+    "subcategoryId": {
+      "$oid": "69fae3fcfd9d78bce9f01b0b"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:40:31.891Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:40:31.891Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "69fb2a62eab765dad2e24eba"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Veg Seekh Kebab",
+    "description": "A delicious mix of finely minced vegetables, paneer, and aromatic spices shaped into seekh kebabs and roasted in a traditional tandoor. Served with green chutney, onion rings, and lemon for a smoky and flavorful experience.",
+    "price": 320,
+    "discount_price": 279,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778068062/Menu/Items/xdev0jevzvaw1aojhwim.jpg",
+    "isAvailable": true,
+    "stock": 40,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69faea3cfd9d78bce9f01d8d"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T11:47:46.822Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T11:47:46.822Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb2ed7eab765dad2e24f9b"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Mutton Rogan Josh",
+    "description": "Authentic Mughlai-style Rogan Josh made with tender mutton cooked in rich aromatic gravy with Kashmiri spices and herbs. Best served with naan or steamed rice.",
+    "price": 430,
+    "discount_price": 389,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778069175/Menu/Items/h0w7ykiwjkm7zxhn4tds.jpg",
+    "isAvailable": true,
+    "stock": 17,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faeb89fd9d78bce9f01dc8"
+    },
+    "subcategoryId": {
+      "$oid": "69fafb49fd9d78bce9f01e60"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T12:06:47.642Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T12:06:47.642Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 40
+  },
+  {
+    "_id": {
+      "$oid": "69fb303eeab765dad2e24fce"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Tandoori Roti",
+    "description": "Made from whole wheat dough, this roti is soft yet slightly crispy and baked in a traditional clay oven (tandoor). Its smoky flavor and light char make it a perfect accompaniment to dal, curries, and kebabs.",
+    "price": 30,
+    "discount_price": 20,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778069559/Menu/Items/pux2viu9q8guajhngcxg.jpg",
+    "isAvailable": true,
+    "stock": 200,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69faeb37fd9d78bce9f01dbe"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T12:12:46.115Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T09:33:05.639Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 10
+  },
+  {
+    "_id": {
+      "$oid": "69fb0a4beab765dad2e24c21"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Butter Chicken",
+    "description": "Tender chicken cooked in a creamy tomato-butter gravy with rich North Indian spices and herbs. A flavorful dish best served with butter naan or jeera rice.",
+    "price": 360,
+    "discount_price": 329,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778059849/Menu/Items/yu6aowg2lbwjhjbjrm79.jpg",
+    "isAvailable": true,
+    "stock": 25,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fada4afd9d78bce9f0174d"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:30:51.511Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:30:51.511Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 30
+  },
+  {
+    "_id": {
+      "$oid": "69fb0c22eab765dad2e24c43"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Veg Pulao",
+    "description": "Fragrant basmati rice cooked with fresh vegetables, whole spices, and herbs in traditional North Indian style. Served hot with raita or curry.",
+    "price": 220,
+    "discount_price": 199,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778060321/Menu/Items/pe18czdbqpwqlsdnlmby.jpg",
+    "isAvailable": true,
+    "stock": 30,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadadffd9d78bce9f01768"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:38:42.906Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:38:42.906Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "69fb10c1eab765dad2e24cbe"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Traditional Sambar Rice",
+    "description": "Flavorful South Indian rice dish cooked with aromatic sambar, vegetables, and traditional spices. Served hot with papad and pickle.",
+    "price": 150,
+    "discount_price": 129,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778061503/Menu/Items/e7exe5nciiy3e00fwwn8.jpg",
+    "isAvailable": true,
+    "stock": 35,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fadbccfd9d78bce9f01794"
+    },
+    "subcategoryId": {
+      "$oid": "69fadee6fd9d78bce9f018e9"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:58:25.344Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:58:25.344Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "69fb1d50eab765dad2e24dd1"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Veg Spring Rolls",
+    "description": "Crispy golden spring rolls stuffed with seasoned vegetables and Indo-Chinese spices. Served hot with spicy schezwan dip for a crunchy and flavorful snack.",
+    "price": 180,
+    "discount_price": 149,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778064718/Menu/Items/a1hoaowarjg1p97cjzp8.jpg",
+    "isAvailable": false,
+    "stock": 27,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae2fcfd9d78bce9f01add"
+    },
+    "subcategoryId": {
+      "$oid": "69fae653fd9d78bce9f01c1e"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:52:00.134Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:52:00.134Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "69fb2b6eeab765dad2e24eed"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Chicken Mughlai Paratha",
+    "description": "Crispy and layered Mughlai-style paratha stuffed with spiced chicken filling, eggs, and aromatic herbs. Served hot with chutney and salad.",
+    "price": 220,
+    "discount_price": 189,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778068332/Menu/Items/t6vfmlrv9lvhw9oszdi4.jpg",
+    "isAvailable": true,
+    "stock": 28,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faeb89fd9d78bce9f01dc8"
+    },
+    "subcategoryId": {
+      "$oid": "69fafc6dfd9d78bce9f01e90"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T11:52:14.451Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T11:52:14.451Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+ 
+  {
+    "_id": {
+      "$oid": "69fb29c2eab765dad2e24ea9"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Hyderabadi Mutton Haleem",
+    "description": "Rich and slow-cooked Mughlai delicacy made with tender mutton, wheat, lentils, ghee, and aromatic spices. Garnished with fried onions, lemon, and fresh coriander.",
+    "price": 320,
+    "discount_price": 279,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778067904/Menu/Items/x6v9cqak3ek9imltfoke.jpg",
+    "isAvailable": true,
+    "stock": 18,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faeb89fd9d78bce9f01dc8"
+    },
+    "subcategoryId": {
+      "$oid": "69fafbc2fd9d78bce9f01e76"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T11:45:06.056Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T11:45:06.056Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 45
+  },
+  {
+    "_id": {
+      "$oid": "69fb3026eab765dad2e24fbd"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Chicken Pasanda",
+    "description": "Rich Mughlai-style chicken curry cooked in creamy cashew and yogurt gravy with mild spices and aromatic herbs. Best served with naan or jeera rice.",
+    "price": 340,
+    "discount_price": 299,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778069541/Menu/Items/adpu0eqvsayywpf6kaxc.webp",
+    "isAvailable": true,
+    "stock": 20,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faeb89fd9d78bce9f01dc8"
+    },
+    "subcategoryId": {
+      "$oid": "69fafb17fd9d78bce9f01e55"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T12:12:22.974Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-30T08:12:01.807Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 30
+  },
+  {
+    "_id": {
+      "$oid": "69fb19deeab765dad2e24d6b"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Chicken Manchurian",
+    "description": "Juicy chicken pieces tossed in spicy Indo-Chinese Manchurian sauce with garlic, onions, capsicum, and soy flavors. Perfect side dish with fried rice or noodles.",
+    "price": 260,
+    "discount_price": 229,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778063822/Menu/Items/pepkmhtzepdoxt6okliy.jpg",
+    "isAvailable": true,
+    "stock": 26,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae2fcfd9d78bce9f01add"
+    },
+    "subcategoryId": {
+      "$oid": "69fae398fd9d78bce9f01af0"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:37:18.002Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:37:18.002Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb1c00eab765dad2e24daf"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Veg Hakka Noodles",
+    "description": "Stir-fried Hakka noodles tossed with fresh vegetables, garlic, soy sauce, and Indo-Chinese seasonings. Served hot with delicious smoky flavor.",
+    "price": 190,
+    "discount_price": 169,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778064383/Menu/Items/hdtgxelqxuuafikt0ckk.jpg",
+    "isAvailable": true,
+    "stock": 33,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae2fcfd9d78bce9f01add"
+    },
+    "subcategoryId": {
+      "$oid": "69fae52bfd9d78bce9f01b82"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:46:24.972Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:46:24.972Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "69fb07deeab765dad2e24bbb"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Chicken Curry",
+    "description": "Traditional North Indian chicken curry cooked with tender chicken pieces, onions, tomatoes, and authentic Indian spices. Served best with naan, roti, or steamed rice.",
+    "price": 320,
+    "discount_price": 289,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778059226/Menu/Items/z9z85njqkkzdhymyyapi.jpg",
+    "isAvailable": true,
+    "stock": 28,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fad8d5fd9d78bce9f0171c"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:20:30.511Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:20:30.511Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 30
+  },
+  {
+    "_id": {
+      "$oid": "69fb1009eab765dad2e24cad"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Ven Pongal",
+    "description": "Traditional South Indian dish made with rice, moong dal, ghee, black pepper, cumin, and cashews. Served hot with coconut chutney and sambar.",
+    "price": 130,
+    "discount_price": 109,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778061319/Menu/Items/rzqjs1bljsf9c6obdnny.jpg",
+    "isAvailable": true,
+    "stock": 42,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fadbccfd9d78bce9f01794"
+    },
+    "subcategoryId": {
+      "$oid": "69fade8afd9d78bce9f0189e"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:55:21.689Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:55:21.689Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "69fb17cbeab765dad2e24d49"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Tandoori Chicken Full",
+    "description": "Fresh full chicken marinated in yogurt, spices, and grilled in a traditional tandoor. Served with mint chutney and onion salad. Smoky flavor and juicy texture make it perfect for dinner.",
+    "price": 400,
+    "discount_price": 350,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778060218/Menu/Items/jtyudx0bfaznrzbs50fb.jpg",
+    "isAvailable": true,
+    "stock": 25,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69fae873fd9d78bce9f01cf3"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:28:27.308Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:28:27.308Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 30
+  },
+  {
+    "_id": {
+      "$oid": "69fb1fcbeab765dad2e24e6f"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Hyderabadi Chicken Biryani",
+    "description": "Authentic Hyderabadi-style chicken biryani made with fragrant basmati rice, tender chicken, and rich aromatic spices. Served with raita and salan.",
+    "price": 340,
+    "discount_price": 299,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778065353/Menu/Items/ibnyoclfcoimnvcoydy5.jpg",
+    "isAvailable": true,
+    "stock": 26,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faee4efd9d78bce9f01e0c"
+    },
+    "subcategoryId": {
+      "$oid": "69faeebafd9d78bce9f01e14"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T11:02:35.869Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T11:02:35.869Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 35
+  },
+  {
+    "_id": {
+      "$oid": "69fb2999eab765dad2e24e98"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Tandoori Butter Garlic Prawns",
+    "description": "Juicy prawns marinated in a rich blend of yogurt, butter, garlic, and traditional Indian spices, then grilled in a tandoor for a smoky flavor. Served hot with mint chutney and lemon wedges.",
+    "price": 649.95,
+    "discount_price": 549,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778067860/Menu/Items/rgpfk6cr7vu295ewgn6t.jpg",
+    "isAvailable": true,
+    "stock": 25,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69fae9f0fd9d78bce9f01d82"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T11:44:25.971Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T11:44:25.971Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb065aeab765dad2e24b99"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Paneer Butter Masala",
+    "description": "Creamy and rich North Indian curry made with fresh paneer cubes cooked in buttery tomato gravy with aromatic spices. Best served with naan, roti, or jeera rice.",
+    "price": 280,
+    "discount_price": 249,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778058833/Menu/Items/s7eqmofrqii9tj2wzo0q.jpg",
+    "isAvailable": true,
+    "stock": 35,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69fae873fd9d78bce9f01cf3"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T09:14:02.162Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T09:14:02.162Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fb157beab765dad2e24d27"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "South Indian Filter Coffee",
+    "description": "Traditional South Indian filter coffee made with freshly brewed coffee decoction and creamy milk. Served hot with rich aroma and authentic taste.",
+    "price": 70,
+    "discount_price": 55,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778062713/Menu/Items/r9uiu95ds4otlfznnd2j.jpg",
+    "isAvailable": true,
+    "stock": 75,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fadbccfd9d78bce9f01794"
+    },
+    "subcategoryId": {
+      "$oid": "69fae287fd9d78bce9f01ac4"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:18:35.015Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:18:35.015Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 5
+  },
+  {
+    "_id": {
+      "$oid": "69fb1e32eab765dad2e24e14"
+    },
+    "restaurantId": {
+      "$oid": "69f99c192611c0935abd49c3"
+    },
+    "RESTID": "REST1777966105077795",
+    "name": "Hot & Sour Soup",
+    "description": "Spicy and tangy Indo-Chinese soup prepared with fresh vegetables, soy sauce, garlic, and aromatic spices. Served hot for a comforting and flavorful starter.",
+    "price": 140,
+    "discount_price": 119,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1778064944/Menu/Items/tdf33piyvrknc9yljkca.jpg",
+    "isAvailable": true,
+    "stock": 40,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae2fcfd9d78bce9f01add"
+    },
+    "subcategoryId": {
+      "$oid": "69fae6effd9d78bce9f01c44"
+    },
+    "createdAt": {
+      "$date": "2026-05-06T10:55:46.059Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T10:55:46.059Z"
+    },
+    "__v": 0,
+    "rating": 5,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "estimateTimePrepareMenuItem": 10
+  },
+
+  {
+    "_id": {
+      "$oid": "6a0abaa3e31abfb145e7b8bf"
+    },
+    "restaurantId": {
+      "$oid": "69fb1128fd9d78bce9f01ee1"
+    },
+    "RESTID": "REST1778061608172368",
+    "name": "Dunked Zinger Burger",
+    "description": "Zinger Burger dunked in smoky, fiery Texas BBQ sauce",
+    "price": 299,
+    "discount_price": 249,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779088030/Menu/Items/yn9359a39qdm4wn9xk2b.jpg",
+    "isAvailable": true,
+    "stock": 15,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T07:07:15.921Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T07:08:31.034Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0abbb9e31abfb145e7b8e3"
+    },
+    "restaurantId": {
+      "$oid": "69fb1128fd9d78bce9f01ee1"
+    },
+    "RESTID": "REST1778061608172368",
+    "name": "Zinger Pro Burger",
+    "description": "New premium zinger with crunchy zinger fillet,cheese,lettuce,tomatoes,sauce in sesame bun!",
+    "price": 299,
+    "discount_price": 229,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779088308/Menu/Items/ijsptxgkj1cvypmjsk2a.png",
+    "isAvailable": true,
+    "stock": 20,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T07:11:53.641Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T07:11:53.641Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0abcb8e31abfb145e7b8f4"
+    },
+    "restaurantId": {
+      "$oid": "69fb1128fd9d78bce9f01ee1"
+    },
+    "RESTID": "REST1778061608172368",
+    "name": "Classic Zinger",
+    "description": "Relish the KFC Classic Zinger-lettuce, mayo & Zinger patty filled between",
+    "price": 249,
+    "discount_price": 199,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779088566/Menu/Items/jiquc7gezyefhlltlnka.png",
+    "isAvailable": true,
+    "stock": 25,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T07:16:08.601Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T07:16:08.601Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0abdd7e31abfb145e7b909"
+    },
+    "restaurantId": {
+      "$oid": "69fb1128fd9d78bce9f01ee1"
+    },
+    "RESTID": "REST1778061608172368",
+    "name": "Paneer Zinger Burger",
+    "description": "Relish the Indian delicious paneer zinger",
+    "price": 259,
+    "discount_price": 209,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779088849/Menu/Items/jogcshiheeebl8tf7omb.png",
+    "isAvailable": true,
+    "stock": 22,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T07:20:55.752Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T08:59:05.182Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0abf39e31abfb145e7b91a"
+    },
+    "restaurantId": {
+      "$oid": "69fb1128fd9d78bce9f01ee1"
+    },
+    "RESTID": "REST1778061608172368",
+    "name": "Veg Zinger Burger",
+    "description": "The OG Veg Zinger- Burgered to perfection",
+    "price": 229,
+    "discount_price": 189,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779089625/Menu/Items/ltk8vhdiuzyaeslqejbu.jpg",
+    "isAvailable": true,
+    "stock": 15,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T07:26:49.625Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T07:33:48.336Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0ad4a4e31abfb145e7b948"
+    },
+    "restaurantId": {
+      "$oid": "69fb1128fd9d78bce9f01ee1"
+    },
+    "RESTID": "REST1778061608172368",
+    "name": "The Hitter Chicken Combo",
+    "description": "Hitter huge on 5 Pc Chicken Leg Piece & 5 Pc Hot Wings",
+    "price": 699,
+    "discount_price": 666,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779094688/Menu/Items/sbilbo1b6hddttk62qdp.jpg",
+    "isAvailable": true,
+    "stock": 10,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T08:58:12.650Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T08:58:12.650Z"
+    },
+    "__v": 0,
+    "isVeg": false,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "6a0adb0de31abfb145e7b993"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Classic Veg Burger",
+    "description": "Crispy veg patty with lettuce, onion, tomato & mayo in a soft bun.",
+    "price": 149,
+    "discount_price": 119,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779096331/Menu/Items/ryxw2zm3n4fkwt0e58dt.webp",
+    "isAvailable": true,
+    "stock": 40,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:25:33.833Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:25:33.833Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0adb3be31abfb145e7b9a4"
+    },
+    "restaurantId": {
+      "$oid": "69fb1128fd9d78bce9f01ee1"
+    },
+    "RESTID": "REST1778061608172368",
+    "name": "Peri Peri",
+    "description": "Save Rs. 120 on 5 Peri Peri Leg pc",
+    "price": 699,
+    "discount_price": 555,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779096280/Menu/Items/c2bc8nt4vixyostkmqsf.jpg",
+    "isAvailable": true,
+    "stock": 12,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:26:19.280Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T10:43:31.465Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "6a0adb6be31abfb145e7b9b2"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Cheese Burst Burger",
+    "description": "Juicy veg patty loaded with melted cheese and creamy sauce.",
+    "price": 179,
+    "discount_price": 149,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779096425/Menu/Items/ctcqizr3w0ufudvpqgxl.webp",
+    "isAvailable": true,
+    "stock": 35,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:27:07.248Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:27:07.248Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0adbbce31abfb145e7b9c3"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Crispy Chicken Burger",
+    "description": "Crunchy chicken fillet with lettuce and spicy mayo.",
+    "price": 199,
+    "discount_price": 169,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779096506/Menu/Items/ca4d3y5tqymq7yulwd6n.jpg",
+    "isAvailable": true,
+    "stock": 30,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:28:28.676Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:28:28.676Z"
+    },
+    "__v": 0,
+    "isVeg": false,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0adc11e31abfb145e7b9d4"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Double Patty Burger",
+    "description": "Double crispy patties with cheese, onion, and special sauce.",
+    "price": 249,
+    "discount_price": 219,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779096585/Menu/Items/vnucfokpvryjpfpwgros.webp",
+    "isAvailable": true,
+    "stock": 25,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:29:53.833Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:29:53.833Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 18
+  },
+  {
+    "_id": {
+      "$oid": "6a0adc66e31abfb145e7b9e5"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Paneer Tikka Burger",
+    "description": "Grilled paneer tikka patty with mint mayo and veggies.",
+    "price": 189,
+    "discount_price": 159,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779096674/Menu/Items/ef1yzs3oa8udwvqfihdu.jpg",
+    "isAvailable": true,
+    "stock": 28,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:31:18.809Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:31:18.809Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0adcb3e31abfb145e7b9f7"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Peri Peri Chicken Burger",
+    "description": "Spicy peri peri chicken patty with fresh lettuce.",
+    "price": 219,
+    "discount_price": 189,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779096753/Menu/Items/ejset8i3eynpmflxis1j.jpg",
+    "isAvailable": true,
+    "stock": 22,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:32:35.892Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:32:35.892Z"
+    },
+    "__v": 0,
+    "isVeg": false,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0adcf4e31abfb145e7ba08"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Mexican Spicy Burger",
+    "description": "Mexican-style patty with jalapeños and spicy chipotle sauce.",
+    "price": 199,
+    "discount_price": 169,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779096818/Menu/Items/jcme6mxiwrpohcqppzmd.jpg",
+    "isAvailable": true,
+    "stock": 26,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:33:40.564Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:33:40.564Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0add8ee31abfb145e7ba1d"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "BBQ Chicken Burger",
+    "description": "Smoky BBQ chicken burger topped with onion rings.",
+    "price": 229,
+    "discount_price": 199,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779096972/Menu/Items/rba9fcmk7ymjntbzdef6.jpg",
+    "isAvailable": true,
+    "stock": 20,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:36:14.121Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:36:14.121Z"
+    },
+    "__v": 0,
+    "isVeg": false,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0addcce31abfb145e7ba2e"
+    },
+    "restaurantId": {
+      "$oid": "69fb1128fd9d78bce9f01ee1"
+    },
+    "RESTID": "REST1778061608172368",
+    "name": "All Chicken Box",
+    "description": "A Box with your favorites! Get 1 pc Hot & Crispy, 2 Hot Wings & 1 Chicken Strip at a deal price",
+    "price": 249,
+    "discount_price": 189,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779097032/Menu/Items/wffymrucm8dywbza7wms.webp",
+    "isAvailable": true,
+    "stock": 15,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:37:16.361Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:37:16.361Z"
+    },
+    "__v": 0,
+    "isVeg": false,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "6a0addd3e31abfb145e7ba3c"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Aloo Tikki Burger",
+    "description": "Indian-style aloo tikki burger with tangy chutney.",
+    "price": 129,
+    "discount_price": 99,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779097041/Menu/Items/vhgslvgk2nbphsvplnpo.jpg",
+    "isAvailable": true,
+    "stock": 50,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:37:23.533Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:37:23.533Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0ade28e31abfb145e7ba50"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Mushroom Cheese Burger",
+    "description": "Crispy mushroom patty with cheese and garlic mayo.",
+    "price": 209,
+    "discount_price": 179,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779097126/Menu/Items/tlpwckah4konvgifxzgm.jpg",
+    "isAvailable": false,
+    "stock": 24,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:38:48.281Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:38:48.281Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0ade9be31abfb145e7ba6f"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Zinger Burger",
+    "description": "Super crispy spicy chicken zinger burger with mayo.",
+    "price": 249,
+    "discount_price": 219,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779097239/Menu/Items/jkwvst2uzre5pzmqchuj.jpg",
+    "isAvailable": true,
+    "stock": 18,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:40:43.239Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:40:43.239Z"
+    },
+    "__v": 0,
+    "isVeg": false,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0adf28e31abfb145e7ba8f"
+    },
+    "restaurantId": {
+      "$oid": "69fb1128fd9d78bce9f01ee1"
+    },
+    "RESTID": "REST1778061608172368",
+    "name": "Classic Zinger Box",
+    "description": "A deal for Zinger lovers : Get 1 Classic Zinger, 2 Hot Wings, Med Fries, Pepsi PET 475ml",
+    "price": 475,
+    "discount_price": 325,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779097382/Menu/Items/pvfp0lguxw5xwqnn4yom.jpg",
+    "isAvailable": true,
+    "stock": 12,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:43:04.690Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:43:04.690Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "6a0adf7be31abfb145e7ba9f"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Corn and Cheese Burger",
+    "description": "Sweet corn and cheese patty with creamy dressing.",
+    "price": 169,
+    "discount_price": 139,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779097462/Menu/Items/kujtnjv22tqjxgbujnlr.jpg",
+    "isAvailable": false,
+    "stock": 32,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:44:27.050Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:44:27.050Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0adfe0e31abfb145e7bab0"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Veg Supreme Burger",
+    "description": "Loaded veg burger with cheese slice and fresh veggies.",
+    "price": 199,
+    "discount_price": 169,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779097566/Menu/Items/vesqzwstfjo7urapapiw.webp",
+    "isAvailable": true,
+    "stock": 27,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:46:08.349Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:46:08.349Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0ae01de31abfb145e7bac1"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Smoky Grill Burger",
+    "description": "Grilled patty with smoky sauce and caramelized onions.",
+    "price": 219,
+    "discount_price": 189,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779097628/Menu/Items/doopht0h0qheghumhy89.jpg",
+    "isAvailable": true,
+    "stock": 21,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:47:09.859Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:47:09.859Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0ae073e31abfb145e7badd"
+    },
+    "restaurantId": {
+      "$oid": "69fb3082fd830b3855917417"
+    },
+    "RESTID": "REST177806963429741",
+    "name": "Monster Jumbo Burger",
+    "description": "Extra large burger with double cheese and loaded fillings.",
+    "price": 299,
+    "discount_price": 259,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779097713/Menu/Items/ymdnmxubbjnuorughj6t.webp",
+    "isAvailable": true,
+    "stock": 15,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:48:35.548Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:48:35.548Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "6a0ae0c6e31abfb145e7baf7"
+    },
+    "restaurantId": {
+      "$oid": "69fb1128fd9d78bce9f01ee1"
+    },
+    "RESTID": "REST1778061608172368",
+    "name": "Tandoori Zinger Box",
+    "description": "A deal for Tandoori lovers : Get 1 Tandoori Zinger, 2 Hot Wings, 1 reg fries & 1 Pepsi 475ml",
+    "price": 485,
+    "discount_price": 339,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779097794/Menu/Items/la8llbx7iovfx4cfogol.webp",
+    "isAvailable": true,
+    "stock": 20,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T09:49:58.298Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T09:49:58.298Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "69fc933af1a96226462cef3b"
+    },
+    "RESTID": "REST-SOLAPUR-TEST",
+    "__v": 0,
+    "categoryId": {
+      "$oid": "69fc933af1a96226462cef39"
+    },
+    "createdAt": {
+      "$date": "2026-05-19T10:35:33.661Z"
+    },
+    "description": "Testing meal item",
+    "discount_price": 110,
+    "image": "",
+    "isAvailable": true,
+    "name": "Veg Thali",
+    "outOfStock": false,
+    "price": 120,
+    "restaurantId": {
+      "$oid": "69fc933af1a96226462cef37"
+    },
+    "stock": 100,
+    "subcategoryId": {
+      "$oid": "69fc933af1a96226462cef3a"
+    },
+    "updatedAt": {
+      "$date": "2026-05-19T10:39:09.508Z"
+    },
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 25
+  },
+  {
+    "_id": {
+      "$oid": "69fc933af1a96226462cef3c"
+    },
+    "RESTID": "REST-SOLAPUR-TEST",
+    "__v": 0,
+    "categoryId": {
+      "$oid": "69fc933af1a96226462cef39"
+    },
+    "createdAt": {
+      "$date": "2026-05-19T10:35:33.661Z"
+    },
+    "description": "Testing rice item",
+    "discount_price": 160,
+    "image": "",
+    "isAvailable": true,
+    "name": "Paneer Biryani",
+    "outOfStock": false,
+    "price": 180,
+    "restaurantId": {
+      "$oid": "69fc933af1a96226462cef37"
+    },
+    "stock": 100,
+    "subcategoryId": {
+      "$oid": "69fc933af1a96226462cef3a"
+    },
+    "updatedAt": {
+      "$date": "2026-05-19T10:39:09.508Z"
+    },
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 30
+  },
+  {
+    "_id": {
+      "$oid": "6a0db8683fa4abf407b67b3e"
+    },
+    "restaurantId": {
+      "$oid": "6a0db03acbe1aa0e8c7cbe15"
+    },
+    "RESTID": "REST1779281978446224",
+    "name": "Classic Veg Burger",
+    "description": "Crispy veg patty with lettuce, onion, tomato & mayo in a soft bun.",
+    "price": 149,
+    "discount_price": 119,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779284070/Menu/Items/ratdbfk4yftvxbjjfr6f.png",
+    "isAvailable": true,
+    "stock": 40,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T13:34:32.442Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T13:34:32.442Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0db88c3fa4abf407b67b5a"
+    },
+    "restaurantId": {
+      "$oid": "6a0db108cbe1aa0e8c7cbe2c"
+    },
+    "RESTID": "REST1779282184257796",
+    "name": "Crispy Burger",
+    "description": "Spicy & Yummy",
+    "price": 329,
+    "discount_price": 279,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779284104/Menu/Items/vk0j1kmbrkeki706fzzn.jpg",
+    "isAvailable": true,
+    "stock": 10,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69fae873fd9d78bce9f01cf3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T13:35:08.012Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T07:01:44.328Z"
+    },
+    "__v": 0,
+    "isVeg": false,
+    "estimateTimePrepareMenuItem": 15,
+    "recommended": true,
+    "trending": true
+  },
+  {
+    "_id": {
+      "$oid": "6a0db8ae3fa4abf407b67b6d"
+    },
+    "restaurantId": {
+      "$oid": "6a0db03acbe1aa0e8c7cbe15"
+    },
+    "RESTID": "REST1779281978446224",
+    "name": "Cheese Burst Burger",
+    "description": "Juicy veg patty loaded with melted cheese and creamy sauce.",
+    "price": 179,
+    "discount_price": 149,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779284139/Menu/Items/s9doujrckowyuoysodkx.jpg",
+    "isAvailable": true,
+    "stock": 35,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T13:35:42.379Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T13:35:42.379Z"
+    },
+    "__v": 0,
+    "isVeg": true,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0db8c73fa4abf407b67b8d"
+    },
+    "restaurantId": {
+      "$oid": "6a0db108cbe1aa0e8c7cbe2c"
+    },
+    "RESTID": "REST1779282184257796",
+    "name": "Chicken tikka",
+    "description": "Spicy n tasty",
+    "price": 299,
+    "discount_price": 249,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779284164/Menu/Items/hpyptdg7y2w3wc1cikst.jpg",
+    "isAvailable": true,
+    "stock": 15,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69fae8f5fd9d78bce9f01d0e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T13:36:07.503Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T13:36:07.503Z"
+    },
+    "__v": 0,
+    "isVeg": false,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "6a0db8d83fa4abf407b67b9c"
+    },
+    "restaurantId": {
+      "$oid": "6a0db03acbe1aa0e8c7cbe15"
+    },
+    "RESTID": "REST1779281978446224",
+    "name": "Crispy Chicken Burger",
+    "description": "Crunchy chicken fillet with lettuce and spicy mayo.",
+    "price": 199,
+    "discount_price": 169,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779284182/Menu/Items/sr0ucyjcdjzmot9i4iir.webp",
+    "isAvailable": true,
+    "stock": 30,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T13:36:24.587Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T13:36:24.587Z"
+    },
+    "__v": 0,
+    "isVeg": false,
+    "estimateTimePrepareMenuItem": 15
+  },
+  {
+    "_id": {
+      "$oid": "6a0db9763fa4abf407b67bb6"
+    },
+    "restaurantId": {
+      "$oid": "6a0db108cbe1aa0e8c7cbe2c"
+    },
+    "RESTID": "REST1779282184257796",
+    "name": "Chicken wings",
+    "description": "Spicy n tasty",
+    "price": 249,
+    "discount_price": 200,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779284309/Menu/Items/fxjn4ohs47us8njhho7h.webp",
+    "isAvailable": true,
+    "stock": 20,
+    "outOfStock": false,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69fae873fd9d78bce9f01cf3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T13:39:02.064Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T13:39:02.064Z"
+    },
+    "__v": 0,
+    "isVeg": false,
+    "estimateTimePrepareMenuItem": 20
+  },
+  {
+    "_id": {
+      "$oid": "6a0e8e6330a2201d038a2ede"
+    },
+    "restaurantId": {
+      "$oid": "6a0db03acbe1aa0e8c7cbe15"
+    },
+    "RESTID": "REST1779281978446224",
+    "name": "Chicken biryani",
+    "description": "Spicy & tasty",
+    "price": 349,
+    "discount_price": 300,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779338848/Menu/Items/l7rz6drvxfvybtbcca6x.jpg",
+    "isAvailable": true,
+    "stock": 10,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 35,
+    "isVeg": false,
+    "recommended": false,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69faee4efd9d78bce9f01e0c"
+    },
+    "subcategoryId": {
+      "$oid": "69faeebafd9d78bce9f01e14"
+    },
+    "createdAt": {
+      "$date": "2026-05-21T04:47:31.296Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T04:47:31.296Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea9b930a2201d038a2f61"
+    },
+    "restaurantId": {
+      "$oid": "6a0db108cbe1aa0e8c7cbe2c"
+    },
+    "RESTID": "REST1779282184257796",
+    "name": "Chicken Burger",
+    "description": "Spicy &Tasty",
+    "price": 299,
+    "discount_price": 249,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779345847/Menu/Items/loarnyogq30ool9czu0x.jpg",
+    "isAvailable": true,
+    "stock": 15,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": false,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-21T06:44:09.468Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T07:40:48.422Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0eb14530a2201d038a2f99"
+    },
+    "restaurantId": {
+      "$oid": "6a0db03acbe1aa0e8c7cbe15"
+    },
+    "RESTID": "REST1779281978446224",
+    "name": "Biryan",
+    "description": "Spicy",
+    "price": 250,
+    "discount_price": 200,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779347775/Menu/Items/f9t48yppofdm1rtvyoxd.jpg",
+    "isAvailable": true,
+    "stock": 10,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": true,
+    "recommended": false,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69faee4efd9d78bce9f01e0c"
+    },
+    "subcategoryId": {
+      "$oid": "69faeebafd9d78bce9f01e14"
+    },
+    "createdAt": {
+      "$date": "2026-05-21T07:16:21.873Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T07:16:21.873Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0eb7d030a2201d038a308d"
+    },
+    "restaurantId": {
+      "$oid": "6a0e9de7cbe1aa0e8c7cc05f"
+    },
+    "RESTID": "REST177934282309450",
+    "name": "Chicken burger",
+    "description": "Spicy & tasty",
+    "price": 249,
+    "discount_price": 200,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779349454/Menu/Items/qk1ybfssl0zzjfwdyqjf.jpg",
+    "isAvailable": true,
+    "stock": 10,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": true,
+    "recommended": false,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-21T07:44:16.452Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T07:44:16.452Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0eb80a30a2201d038a30a1"
+    },
+    "restaurantId": {
+      "$oid": "6a0e9de7cbe1aa0e8c7cc05f"
+    },
+    "RESTID": "REST177934282309450",
+    "name": "Smoked  crispy burger",
+    "description": "Spicy & tasty",
+    "price": 299,
+    "discount_price": 249,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779349512/Menu/Items/ptosrgvep4350ihlewty.jpg",
+    "isAvailable": true,
+    "stock": 15,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": false,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-21T07:45:14.217Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-22T09:25:35.189Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0eb81030a2201d038a30af"
+    },
+    "restaurantId": {
+      "$oid": "6a0eafe32e4529570381b542"
+    },
+    "RESTID": "REST1779347427786406",
+    "name": "Chicken Biryani",
+    "description": "Tasty and spicy",
+    "price": 350,
+    "discount_price": 300,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779349516/Menu/Items/fyvqctgczelwzc4sckxj.jpg",
+    "isAvailable": true,
+    "stock": 10,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": true,
+    "recommended": false,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69faee4efd9d78bce9f01e0c"
+    },
+    "subcategoryId": {
+      "$oid": "69faeebafd9d78bce9f01e14"
+    },
+    "createdAt": {
+      "$date": "2026-05-21T07:45:20.883Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T07:45:57.684Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0eb90e30a2201d038a30db"
+    },
+    "restaurantId": {
+      "$oid": "6a0eafe32e4529570381b542"
+    },
+    "RESTID": "REST1779347427786406",
+    "name": "Mutton Biryani",
+    "description": "Tasty and spicy",
+    "price": 350,
+    "discount_price": 300,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779349769/Menu/Items/dmwfcifsmvelcqhotbot.jpg",
+    "isAvailable": true,
+    "stock": 20,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": true,
+    "recommended": false,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69faee4efd9d78bce9f01e0c"
+    },
+    "subcategoryId": {
+      "$oid": "69faeebafd9d78bce9f01e14"
+    },
+    "createdAt": {
+      "$date": "2026-05-21T07:49:34.460Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T07:49:34.460Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0eb9a130a2201d038a30ee"
+    },
+    "restaurantId": {
+      "$oid": "6a0eafe32e4529570381b542"
+    },
+    "RESTID": "REST1779347427786406",
+    "name": "Panir Tikka",
+    "description": "Tasty and spicy",
+    "price": 200,
+    "discount_price": 150,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779349919/Menu/Items/kxpul5h6mqpqnojxe1tc.jpg",
+    "isAvailable": true,
+    "stock": 10,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": true,
+    "recommended": false,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69fc933af1a96226462cef39"
+    },
+    "subcategoryId": {
+      "$oid": "69fc933af1a96226462cef3a"
+    },
+    "createdAt": {
+      "$date": "2026-05-21T07:52:01.868Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T07:52:01.868Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0eba1030a2201d038a30ff"
+    },
+    "restaurantId": {
+      "$oid": "6a0eafe32e4529570381b542"
+    },
+    "RESTID": "REST1779347427786406",
+    "name": "Panir Biryani",
+    "description": "Tasty and spicy",
+    "price": 200,
+    "discount_price": 150,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779350030/Menu/Items/fg1aowqtjj4r0lmsiguq.jpg",
+    "isAvailable": true,
+    "stock": 10,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": true,
+    "recommended": false,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69faee4efd9d78bce9f01e0c"
+    },
+    "subcategoryId": {
+      "$oid": "69faeebafd9d78bce9f01e14"
+    },
+    "createdAt": {
+      "$date": "2026-05-21T07:53:52.885Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T07:53:52.885Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ecc2530a2201d038a339f"
+    },
+    "restaurantId": {
+      "$oid": "6a0eafe32e4529570381b542"
+    },
+    "RESTID": "REST1779347427786406",
+    "name": "Sandwitch",
+    "description": "Spicy with chisssyy",
+    "price": 100,
+    "discount_price": 80,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779354655/Menu/Items/bfony3n1pwbzrijuv4th.jpg",
+    "isAvailable": true,
+    "stock": 0,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": true,
+    "recommended": false,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69fad2bafd9d78bce9f016e9"
+    },
+    "subcategoryId": {
+      "$oid": "69fad2f5fd9d78bce9f016fc"
+    },
+    "createdAt": {
+      "$date": "2026-05-21T09:11:01.340Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T09:11:01.340Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ff185861a1f9436e860fd"
+    },
+    "restaurantId": {
+      "$oid": "6a0e9de7cbe1aa0e8c7cc05f"
+    },
+    "RESTID": "REST177934282309450",
+    "name": "Chicken wings",
+    "description": "Spicy & Yummy",
+    "price": 299,
+    "discount_price": 250,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779429762/Menu/Items/au659iiaujy8o4rmbmw7.jpg",
+    "isAvailable": true,
+    "stock": 25,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fad2bafd9d78bce9f016e9"
+    },
+    "subcategoryId": {
+      "$oid": "69fad2f5fd9d78bce9f016fc"
+    },
+    "createdAt": {
+      "$date": "2026-05-22T06:02:45.631Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-22T06:39:21.579Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ff916861a1f9436e8611c"
+    },
+    "restaurantId": {
+      "$oid": "6a0e9de7cbe1aa0e8c7cc05f"
+    },
+    "RESTID": "REST177934282309450",
+    "name": "Smoky Chicken Wings",
+    "description": "Spicy & tasty",
+    "price": 349,
+    "discount_price": 299,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779431698/Menu/Items/g4sl9bmbmefwuiblpiot.jpg",
+    "isAvailable": true,
+    "stock": 25,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fad2bafd9d78bce9f016e9"
+    },
+    "subcategoryId": {
+      "$oid": "69fad2f5fd9d78bce9f016fc"
+    },
+    "createdAt": {
+      "$date": "2026-05-22T06:35:02.783Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-22T06:37:26.711Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a118be2f5f9bedd441b2398"
+    },
+    "restaurantId": {
+      "$oid": "6a0db108cbe1aa0e8c7cbe2c"
+    },
+    "RESTID": "REST1779282184257796",
+    "name": "Chicken Meal Box",
+    "description": "Spicy & tasty",
+    "price": 449,
+    "discount_price": 399,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779534813/Menu/Items/axarxjhzoq5dhfwa5lln.webp",
+    "isAvailable": true,
+    "stock": 12,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T11:13:38.873Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T07:05:51.583Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a1693d0c38db9f76113c36f"
+    },
+    "restaurantId": {
+      "$oid": "6a0db108cbe1aa0e8c7cbe2c"
+    },
+    "RESTID": "REST1779282184257796",
+    "name": "Tandoori Zinger Burger with Cheese",
+    "description": "\"Chicken zinger with tandoori sauce & cheese. Allergen Wheat, Soy, Milk| 937 Kcal | Wt 241 g\"",
+    "price": 279,
+    "discount_price": 229,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779864522/Menu/Items/xoqh0ktm6uvynryr4cxq.jpg",
+    "isAvailable": true,
+    "stock": 15,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T06:48:48.134Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T06:48:48.134Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16968bc38db9f76113c39e"
+    },
+    "restaurantId": {
+      "$oid": "6a0db108cbe1aa0e8c7cbe2c"
+    },
+    "RESTID": "REST1779282184257796",
+    "name": "Indian Tandoori Zinger Burger",
+    "description": "\"Mojito Bottle with Classic Chicken Zinger Allergen Wheat, Soy, Milk| 708 Kcal | Wt 550 g\"",
+    "price": 299,
+    "discount_price": 249,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1779865220/Menu/Items/pmkddguez97xap9wdato.jpg",
+    "isAvailable": true,
+    "stock": 20,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T07:00:27.626Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T07:00:27.626Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a191ba6e864810031bf8c11"
+    },
+    "restaurantId": {
+      "$oid": "6a19161153081932aeffa992"
+    },
+    "RESTID": "REST1780028945239517",
+    "name": "Chicken Bucket Combo",
+    "description": "Crispy fried chicken pieces served with fries and cold drink.",
+    "price": 599,
+    "discount_price": 549,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780030372/Menu/Items/ejlwquy6u2zv6s1zaxok.jpg",
+    "isAvailable": true,
+    "stock": 50,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 15,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadb5dfd9d78bce9f0177e"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T04:52:54.672Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T04:52:54.672Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a191c01e864810031bf8c22"
+    },
+    "restaurantId": {
+      "$oid": "6a19161153081932aeffa992"
+    },
+    "RESTID": "REST1780028945239517",
+    "name": "Zinger Burger Meal",
+    "description": "Spicy chicken zinger burger with fries and Pepsi.",
+    "price": 349,
+    "discount_price": 299,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780030463/Menu/Items/r4craglciyuy6cmaajiy.jpg",
+    "isAvailable": true,
+    "stock": 100,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 10,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadb5dfd9d78bce9f0177e"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T04:54:25.644Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T04:54:25.644Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a191c67e864810031bf8c33"
+    },
+    "restaurantId": {
+      "$oid": "6a19161153081932aeffa992"
+    },
+    "RESTID": "REST1780028945239517",
+    "name": "Hot And Crispy Chicken Combo",
+    "description": "4 pieces hot & crispy chicken with dip and drink.",
+    "price": 499,
+    "discount_price": 449,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780030565/Menu/Items/aowm7rup9dowctfgetkr.webp",
+    "isAvailable": true,
+    "stock": 75,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 12,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadb5dfd9d78bce9f0177e"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T04:56:07.362Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T04:56:07.362Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a191cb9e864810031bf8c44"
+    },
+    "restaurantId": {
+      "$oid": "6a19161153081932aeffa992"
+    },
+    "RESTID": "REST1780028945239517",
+    "name": "Chicken Popcorn Meal",
+    "description": "Regular popcorn chicken served with fries and drink.",
+    "price": 299,
+    "discount_price": 249,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780030647/Menu/Items/bodoobwofxhasvhr8w4v.jpg",
+    "isAvailable": true,
+    "stock": 100,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 8,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadb5dfd9d78bce9f0177e"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T04:57:29.311Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T04:57:29.311Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a191d3ee864810031bf8c60"
+    },
+    "restaurantId": {
+      "$oid": "6a19161153081932aeffa992"
+    },
+    "RESTID": "REST1780028945239517",
+    "name": "Double Zinger Combo",
+    "description": "Double chicken zinger burger with fries and beverage.",
+    "price": 449,
+    "discount_price": 399,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780030781/Menu/Items/ehpmlgvqusbo75ls7qw3.jpg",
+    "isAvailable": true,
+    "stock": 80,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 12,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadb5dfd9d78bce9f0177e"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T04:59:42.653Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T04:59:42.653Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a191db9e864810031bf8c71"
+    },
+    "restaurantId": {
+      "$oid": "6a19161153081932aeffa992"
+    },
+    "RESTID": "REST1780028945239517",
+    "name": "Family Feast Bucket",
+    "description": "Chicken bucket, fries, dips and beverages for family sharing.",
+    "price": 999,
+    "discount_price": 899,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780030903/Menu/Items/wt66wtn0zmufjv54gvuq.jpg",
+    "isAvailable": true,
+    "stock": 30,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 20,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadb5dfd9d78bce9f0177e"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T05:01:45.576Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T05:01:45.576Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a191e14e864810031bf8c82"
+    },
+    "restaurantId": {
+      "$oid": "6a19161153081932aeffa992"
+    },
+    "RESTID": "REST1780028945239517",
+    "name": "Chicken Strips Combo",
+    "description": "Tender chicken strips served with fries and soft drink.",
+    "price": 399,
+    "discount_price": 349,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780030994/Menu/Items/xhrjd8wtloueqtjzockx.webp",
+    "isAvailable": true,
+    "stock": 60,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 10,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadb5dfd9d78bce9f0177e"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T05:03:16.237Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T05:03:16.237Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a191e7be864810031bf8c93"
+    },
+    "restaurantId": {
+      "$oid": "6a19161153081932aeffa992"
+    },
+    "RESTID": "REST1780028945239517",
+    "name": "Boneless Chicken Meal",
+    "description": "Boneless crispy chicken bites with fries and drink.",
+    "price": 379,
+    "discount_price": 329,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780031097/Menu/Items/aqvtz04rwmptizthrwqy.jpg",
+    "isAvailable": true,
+    "stock": 70,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 10,
+    "isVeg": false,
+    "recommended": false,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadb5dfd9d78bce9f0177e"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T05:04:59.638Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T05:04:59.638Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a191ee2e864810031bf8ca4"
+    },
+    "restaurantId": {
+      "$oid": "6a19161153081932aeffa992"
+    },
+    "RESTID": "REST1780028945239517",
+    "name": "Ultimate Burger Combo",
+    "description": "Premium chicken burger, fries, dip and beverage.",
+    "price": 499,
+    "discount_price": 449,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780031201/Menu/Items/kg6u5fbr2t3s8xqhqduu.jpg",
+    "isAvailable": true,
+    "stock": 50,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 15,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadb5dfd9d78bce9f0177e"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T05:06:42.722Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T05:06:42.722Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a191f94e864810031bf8cb5"
+    },
+    "restaurantId": {
+      "$oid": "6a19161153081932aeffa992"
+    },
+    "RESTID": "REST1780028945239517",
+    "name": "Kids Chicken Meal",
+    "description": "Mini chicken burger, fries and juice for kids.",
+    "price": 249,
+    "discount_price": 199,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780031379/Menu/Items/tsn3qlhc4fcodfghpxif.webp",
+    "isAvailable": true,
+    "stock": 80,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 8,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fad83efd9d78bce9f01707"
+    },
+    "subcategoryId": {
+      "$oid": "69fadb5dfd9d78bce9f0177e"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T05:09:40.530Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T05:09:40.530Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a1921c4e864810031bf8d31"
+    },
+    "restaurantId": {
+      "$oid": "6a1920de53081932aeffabfe"
+    },
+    "RESTID": "REST1780031710724777",
+    "name": "Hyderabadi Chicken Biryani",
+    "description": "Authentic Hyderabadi dum biryani made with fragrant basmati rice, tender chicken, and traditional spices.",
+    "price": 349,
+    "discount_price": 299,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780031935/Menu/Items/cwlqofi38o4prfld6awi.webp",
+    "isAvailable": true,
+    "stock": 299,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 25,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69faee4efd9d78bce9f01e0c"
+    },
+    "subcategoryId": {
+      "$oid": "69faeebafd9d78bce9f01e14"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T05:19:00.290Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T05:19:00.290Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a19221ae864810031bf8d42"
+    },
+    "restaurantId": {
+      "$oid": "6a1920de53081932aeffabfe"
+    },
+    "RESTID": "REST1780031710724777",
+    "name": "Chicken Tikka Biryani",
+    "description": "Flavorful chicken tikka pieces layered with aromatic basmati rice and rich biryani masala.",
+    "price": 399,
+    "discount_price": 349,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780032024/Menu/Items/osck5g7txxphro4uvvdp.jpg",
+    "isAvailable": true,
+    "stock": 40,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 30,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69faee4efd9d78bce9f01e0c"
+    },
+    "subcategoryId": {
+      "$oid": "69faeebafd9d78bce9f01e14"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T05:20:26.389Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T05:20:26.389Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a1922a5e864810031bf8d57"
+    },
+    "restaurantId": {
+      "$oid": "6a1920de53081932aeffabfe"
+    },
+    "RESTID": "REST1780031710724777",
+    "name": "Chicken Dum Biryani Family Pack",
+    "description": "Large serving of classic chicken dum biryani, perfect for sharing with family and friends.",
+    "price": 699,
+    "discount_price": 599,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780032161/Menu/Items/lnnuler4v92ml8wrpoys.jpg",
+    "isAvailable": true,
+    "stock": 25,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 35,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69faee4efd9d78bce9f01e0c"
+    },
+    "subcategoryId": {
+      "$oid": "69faeebafd9d78bce9f01e14"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T05:22:45.418Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T05:22:45.418Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a196618e864810031bf8f92"
+    },
+    "restaurantId": {
+      "$oid": "6a1920de53081932aeffabfe"
+    },
+    "RESTID": "REST1780031710724777",
+    "name": "Chicken Keema Biryani",
+    "description": "Aromatic basmati rice cooked with flavorful minced chicken and traditional Indian spices.",
+    "price": 329,
+    "discount_price": 279,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780049431/Menu/Items/nosmhgyjyd4boxu4dp0w.jpg",
+    "isAvailable": true,
+    "stock": 45,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 25,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69faee4efd9d78bce9f01e0c"
+    },
+    "subcategoryId": {
+      "$oid": "69faeebafd9d78bce9f01e14"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T10:10:32.331Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T10:10:32.331Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a19667ae864810031bf8fa5"
+    },
+    "restaurantId": {
+      "$oid": "6a1920de53081932aeffabfe"
+    },
+    "RESTID": "REST1780031710724777",
+    "name": "Special Chicken Fry Piece Biryani",
+    "description": "Delicious chicken biryani served with crispy fried chicken pieces and authentic spices.",
+    "price": 449,
+    "discount_price": 399,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780049526/Menu/Items/h7vekbmvcgxkp2dul366.webp",
+    "isAvailable": true,
+    "stock": 35,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 30,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69faee4efd9d78bce9f01e0c"
+    },
+    "subcategoryId": {
+      "$oid": "69faeebafd9d78bce9f01e14"
+    },
+    "createdAt": {
+      "$date": "2026-05-29T10:12:10.775Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T10:12:10.775Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a196b2153081932aeffb166"
+    },
+    "restaurantId": {
+      "$oid": "6a0db108cbe1aa0e8c7cbe2c"
+    },
+    "RESTID": "REST1779282184257796",
+    "name": "Grilled smoked chicken",
+    "description": "Spicy & Chicken",
+    "price": 349,
+    "discount_price": 299,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780050708/Menu/Items/ocotxcn4otvqosf1y46r.jpg",
+    "isAvailable": true,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "stock": 20,
+    "outOfStock": false,
+    "createdAt": {
+      "$date": "2026-05-29T10:32:01.284Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-29T10:33:33.287Z"
+    },
+    "__v": 0,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true
+  },
+  {
+    "_id": {
+      "$oid": "6a212338eaaeba22c11f7f50"
+    },
+    "restaurantId": {
+      "$oid": "6a211cc47a6bd9f61bdb3f1c"
+    },
+    "RESTID": "REST1780554948793569",
+    "name": "Dunked Zinger Burger",
+    "description": "Zinger Burger dunked in smoky, fiery Texas BBQ sauce",
+    "price": 299,
+    "discount_price": 249,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780568885/Menu/Items/b9skin6drjblbag3z3sl.jpg",
+    "isAvailable": true,
+    "stock": 25,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-06-04T07:03:20.139Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-04T10:28:09.630Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a212699eaaeba22c11f7f61"
+    },
+    "restaurantId": {
+      "$oid": "6a211cc47a6bd9f61bdb3f1c"
+    },
+    "RESTID": "REST1780554948793569",
+    "name": "Spicy Zinger Burger",
+    "description": "Relish the spicy zinger Allergen Wheat,Soy,Milk| 439 Kcal | Wt 215 g",
+    "price": 279,
+    "discount_price": 219,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780557461/Menu/Items/cm6ikpz3jmb3b9ni5iwu.jpg",
+    "isAvailable": true,
+    "stock": 20,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-06-04T07:17:45.859Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-04T07:17:45.859Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a212826eaaeba22c11f7f87"
+    },
+    "restaurantId": {
+      "$oid": "6a211cc47a6bd9f61bdb3f1c"
+    },
+    "RESTID": "REST1780554948793569",
+    "name": "All in One Bucket",
+    "description": "1 Leg, 1 Hot & Crispy, 2 Wings, 2 Strips, 1 Zinger Fillet, 3 Dips & Pepsi PET 475ml",
+    "price": 720,
+    "discount_price": 549,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780557857/Menu/Items/jwqwqhsjdwdac1mbkbz9.jpg",
+    "isAvailable": true,
+    "stock": 15,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-06-04T07:24:22.924Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-04T07:24:22.924Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a212942eaaeba22c11f7f9a"
+    },
+    "restaurantId": {
+      "$oid": "6a211cc47a6bd9f61bdb3f1c"
+    },
+    "RESTID": "REST1780554948793569",
+    "name": "All Chicken Box",
+    "description": "\"Box-1 Hot & Crispy,2 Wings & 1 Strip Allergen Wheat| 686 Kcal| Wt 225 g\"",
+    "price": 349,
+    "discount_price": 299,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780558140/Menu/Items/cv0xbaq8h0b2uc7khwtq.webp",
+    "isAvailable": true,
+    "stock": 25,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": true,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-06-04T07:29:06.209Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-04T09:39:31.077Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a212b46eaaeba22c11f7fb1"
+    },
+    "restaurantId": {
+      "$oid": "6a211cc47a6bd9f61bdb3f1c"
+    },
+    "RESTID": "REST1780554948793569",
+    "name": "Peri Peri chicken Leg Pcs",
+    "description": "5 Peri Peri Leg pc Allergen Wheat, Soy, Milk| 748 Kcal| Wt 500 g\"",
+    "price": 699,
+    "discount_price": 625,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780558658/Menu/Items/x2jvpgdxkbdm3rbdwe0e.jpg",
+    "isAvailable": true,
+    "stock": 22,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": false,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69fae873fd9d78bce9f01cf3"
+    },
+    "createdAt": {
+      "$date": "2026-06-04T07:37:42.873Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-04T07:37:42.873Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a212c43eaaeba22c11f7fc2"
+    },
+    "restaurantId": {
+      "$oid": "6a211cc47a6bd9f61bdb3f1c"
+    },
+    "RESTID": "REST1780554948793569",
+    "name": "Classic Zinger",
+    "description": "Classic Zinger-lettuce,mayo & Zinger patty Allergen Wheat,Soy,Milk| 971 Kcal | Wt 360 g",
+    "price": 249,
+    "discount_price": 199,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780568832/Menu/Items/ex7hf8kqozsifcc9ay6g.webp",
+    "isAvailable": true,
+    "stock": 15,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": true,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69fae82efd9d78bce9f01cab"
+    },
+    "subcategoryId": {
+      "$oid": "69fae873fd9d78bce9f01cf3"
+    },
+    "createdAt": {
+      "$date": "2026-06-04T07:41:55.721Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-04T10:27:14.140Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a212ea9eaaeba22c11f7fd3"
+    },
+    "restaurantId": {
+      "$oid": "6a211cc47a6bd9f61bdb3f1c"
+    },
+    "RESTID": "REST1780554948793569",
+    "name": "Indian Tandoori Zinger Burger",
+    "description": "Zinger Burger with Onions & Tangy sauce Allergen Wheat,Soy,Milk| 902 Kcal | Wt 230 g",
+    "price": 259,
+    "discount_price": 219,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780559524/Menu/Items/usbxzbxywojpmympcmrc.jpg",
+    "isAvailable": true,
+    "stock": 15,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": true,
+    "recommended": true,
+    "trending": false,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "69faf35ffd9d78bce9f01e47"
+    },
+    "createdAt": {
+      "$date": "2026-06-04T07:52:09.342Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-04T10:47:54.398Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a2140c8eaaeba22c11f7fe8"
+    },
+    "restaurantId": {
+      "$oid": "6a211cc47a6bd9f61bdb3f1c"
+    },
+    "RESTID": "REST1780554948793569",
+    "name": "Dunked Meal Box",
+    "description": "BBQ Zinger Burger, 2 Hot Wings, Med Fries & Pepsi PET",
+    "price": 449,
+    "discount_price": 399,
+    "image": "https://res.cloudinary.com/dssdvnei1/image/upload/v1780564164/Menu/Items/oeqg5xkbsltmoyqjnflb.webp",
+    "isAvailable": true,
+    "stock": 30,
+    "outOfStock": false,
+    "rating": 5,
+    "estimateTimePrepareMenuItem": 60,
+    "isVeg": false,
+    "recommended": true,
+    "trending": true,
+    "categoryId": {
+      "$oid": "69faf28afd9d78bce9f01e2f"
+    },
+    "subcategoryId": {
+      "$oid": "6a1976cf53081932aeffb176"
+    },
+    "createdAt": {
+      "$date": "2026-06-04T09:09:28.672Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-04T09:09:28.672Z"
+    },
+    "__v": 0
+  }
+]

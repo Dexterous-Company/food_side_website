@@ -1,9 +1,10 @@
 import React from 'react';
-
+import Restaurants from "@/views/restaurant_pages/Restaurants";
 const page = () => {
   return (
     <div>
-      <h1>Restaurant Page inside page </h1>
+     {/* <RestaurantDetails /> */}
+     <Restaurants  />
     </div>
   );
 }

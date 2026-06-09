@@ -9,6 +9,8 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+*.zip
+*.rar
 
 # testing
 /coverage
@@ -19,6 +21,7 @@
 
 # production
 /build
+Backupcodes src
 
 # misc
 .DS_Store
@@ -29,9 +32,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
 
 # vercel
 .vercel
