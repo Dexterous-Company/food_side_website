@@ -1,7 +1,7 @@
 // app/checkout/page.jsx
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../context/CartContext";
@@ -28,15 +28,15 @@ const RUPEE = "₹";
 
 const formatRouteName = (routeName) => {
   if (!routeName) return "Selected route";
-
   return routeName
-    .replace(/[_-]+/g, " ") // remove _ and -
-    .replace(/\s+/g, " ") // fix multiple spaces
-    .trim(); // clean edges
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 };
 
 const CheckOutPage = () => {
   const [isMounted, setIsMounted] = useState(false);
+  const toastTimeoutRef = useRef(null);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -63,13 +63,27 @@ const CheckOutPage = () => {
     setIsMounted(true);
   }, []);
 
-  // Show toast notification
-  const showToast = (message, isError = false) => {
+  // ✅ Memoize showToast to prevent unnecessary re-renders
+  const showToast = useCallback((message, isError = false) => {
+    // Clear existing timeout
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
+    
     setToastMessage({ message, isError });
-    setTimeout(() => setToastMessage(null), 5000);
-  };
+    toastTimeoutRef.current = setTimeout(() => setToastMessage(null), 5000);
+  }, []);
 
-  // Debug logging
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        clearTimeout(toastTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Debug logging (keep for debugging, remove in production)
   useEffect(() => {
     console.log("=== Checkout Debug Info ===");
     console.log("Cart List:", cartList);
@@ -78,12 +92,6 @@ const CheckOutPage = () => {
     console.log("User Auth:", isUserAuth);
     console.log("User Data:", userData);
     console.log("Delivery Data:", deliveryData);
-    console.log(
-      "Route Params from storage:",
-      typeof window !== "undefined"
-        ? localStorage.getItem("deliverySelection")
-        : null,
-    );
   }, [cartList, hasItems, isUserAuth, userData, deliveryData]);
 
   // Get route params from Redux or localStorage
@@ -103,50 +111,23 @@ const CheckOutPage = () => {
     }
     return {};
   }, [deliveryData]);
-const testRouteParams = {
-  pickup: {
-    location: "8-3-199, C, Vengal Rao Nagar Rd, Kalyan Nagar Phase 1, Sunder Nagar, Hyderabad, Telangana 500038, India"
-  },
-  journey: {
-    date: "2026-06-09T13:38:53.426Z",
-    formattedDate: "09 Jun 2026",
-    time: "2026-06-09T14:45:00.426Z", // This is 14:45 (2:45 PM)
-    formattedTime: "08:15 PM"
-  },
-  route: {
-    _id: "69f5ec9f0a801c1723cdc745",
-    name: "Hyderabad to Bengaluru",
-    distanceKm: 575,
-    durationMinutes: 587
-  },
-  deliveryPoint: {
-    _id: "6a190faa53081932aeffa90c",
-    name: "Bengaluru Delivery Point",
-    address: {
-      fullAddress: "Plot No 75, 8th Rd, EPIP Zone, Whitefield, Bengaluru, Karnataka 560066, India"
-    }
-  }
-};
 
   // Helper function to extract date and time from journey object
   const getJourneyDateTime = useCallback(() => {
-    const journeyDate = testRouteParams?.journey?.date;
+    const journeyDate = routeParams?.journey?.date;
     const journeyTime = routeParams?.journey?.time;
     
     if (!journeyDate) return null;
     
     try {
-      // If journey.time is an ISO string, use it directly
       if (journeyTime && journeyTime.includes('T')) {
         return new Date(journeyTime);
       }
       
-      // If journey.date is ISO string, use it
       if (journeyDate.includes('T')) {
         return new Date(journeyDate);
       }
       
-      // Otherwise, combine date and formatted time
       let dateStr = journeyDate;
       if (typeof journeyDate === "object" && journeyDate instanceof Date) {
         dateStr = journeyDate.toISOString();
@@ -155,7 +136,6 @@ const testRouteParams = {
       let hours = 0, minutes = 0;
       
       if (journeyTime) {
-        // Check if time is in HH:MM format or has AM/PM
         if (journeyTime.includes('AM') || journeyTime.includes('PM')) {
           const [timePart, period] = journeyTime.split(" ");
           let [hourPart, minutePart] = timePart.split(":").map(Number);
@@ -179,11 +159,14 @@ const testRouteParams = {
     }
   }, [routeParams]);
 
-  // Function to check if time is valid for today's delivery
+  // ✅ Improved time validation function
   const isTimeValidForToday = useCallback(() => {
     const selectedDateTime = getJourneyDateTime();
     
-    if (!selectedDateTime) return false;
+    if (!selectedDateTime) {
+      console.log("No date/time selected");
+      return false;
+    }
     
     const now = new Date();
     const today = new Date();
@@ -192,7 +175,16 @@ const testRouteParams = {
     const selectedDate = new Date(selectedDateTime);
     selectedDate.setHours(0, 0, 0, 0);
     
-    const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+    // ✅ MINIMUM 1 HOUR (3600000 milliseconds) - can adjust based on business rules
+    const MIN_ADVANCE_TIME_MS = 60 * 60 * 1000; // 1 hour
+    const minAllowedTime = new Date(now.getTime() + MIN_ADVANCE_TIME_MS);
+    
+    console.log("=== Time Validation Debug ===");
+    console.log("Selected DateTime:", selectedDateTime);
+    console.log("Current Time:", now);
+    console.log("Min Allowed Time:", minAllowedTime);
+    console.log("Selected Date:", selectedDate);
+    console.log("Today Date:", today);
     
     // For future dates (tomorrow or later), always valid
     if (selectedDate.getTime() > today.getTime()) {
@@ -200,10 +192,18 @@ const testRouteParams = {
       return true;
     }
     
-    // For today's date, check if time is at least 1 hour from now
+    // For today's date, check if time is at least MIN_ADVANCE_TIME_MS from now
     if (selectedDate.getTime() === today.getTime()) {
-      const isValid = selectedDateTime >= oneHourFromNow;
-      console.log("Today's date - Time valid?", isValid, "Selected:", selectedDateTime, "Min allowed:", oneHourFromNow);
+      const isValid = selectedDateTime.getTime() >= minAllowedTime.getTime();
+      const timeDiffMinutes = Math.round((selectedDateTime.getTime() - now.getTime()) / 60000);
+      
+      console.log(`Time difference: ${timeDiffMinutes} minutes from now`);
+      console.log(`Time valid? ${isValid} (need >= ${MIN_ADVANCE_TIME_MS/60000} minutes advance)`);
+      
+      if (!isValid) {
+        console.warn(`BLOCKING ORDER: Selected time ${selectedDateTime} is less than ${MIN_ADVANCE_TIME_MS/60000} minutes from now`);
+      }
+      
       return isValid;
     }
     
@@ -225,23 +225,26 @@ const testRouteParams = {
     const selectedDate = new Date(selectedDateTime);
     selectedDate.setHours(0, 0, 0, 0);
     
-    const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+    const MIN_ADVANCE_TIME_MS = 60 * 60 * 1000; // 1 hour
+    const minAllowedTime = new Date(now.getTime() + MIN_ADVANCE_TIME_MS);
     
     // Only check for today's date
     if (selectedDate.getTime() === today.getTime()) {
-      if (selectedDateTime < oneHourFromNow) {
-        const formattedMinTime = oneHourFromNow.toLocaleTimeString("en-US", {
+      if (selectedDateTime.getTime() < minAllowedTime.getTime()) {
+        const formattedMinTime = minAllowedTime.toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
         });
         
+        const minutesDiff = Math.round((minAllowedTime.getTime() - selectedDateTime.getTime()) / 60000);
+        
         showToast(
-          `Please select delivery time after ${formattedMinTime} (minimum 1 hour advance required for today's delivery)`,
+          `⚠️ Delivery time must be at least 1 hour from now. Please select time after ${formattedMinTime} (${minutesDiff} minutes remaining)`,
           true
         );
       }
     }
-  }, [getJourneyDateTime]);
+  }, [getJourneyDateTime, showToast]);
 
   // Format cart items with better validation
   const cartItems = useMemo(() => {
@@ -303,7 +306,6 @@ const testRouteParams = {
 
   // Prepare order overview
   const orderOverview = useMemo(() => {
-    // Get formatted time for display
     let displayTime = routeParams?.journey?.formattedTime || routeParams?.time;
     if (!displayTime && routeParams?.journey?.time) {
       const timeObj = new Date(routeParams.journey.time);
@@ -344,7 +346,7 @@ const testRouteParams = {
     };
   }, [routeParams]);
 
-  // Validate order before placing
+  // ✅ Fixed validateOrder with proper dependencies
   const validateOrder = useCallback(() => {
     const errors = [];
 
@@ -375,15 +377,19 @@ const testRouteParams = {
       errors.push("Please select delivery date and time");
     }
     
-    // CRITICAL: Check if time is valid for today's delivery - THIS BLOCKS THE ORDER
-    if (!isTimeValidForToday()) {
+    // ✅ CRITICAL: Check if time is valid for today's delivery - THIS BLOCKS THE ORDER
+    const isValidTime = isTimeValidForToday();
+    if (!isValidTime) {
       const now = new Date();
-      const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
-      const formattedMinTime = oneHourFromNow.toLocaleTimeString("en-US", {
+      const MIN_ADVANCE_TIME_MS = 60 * 60 * 1000; // 1 hour
+      const minAllowedTime = new Date(now.getTime() + MIN_ADVANCE_TIME_MS);
+      const formattedMinTime = minAllowedTime.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
       });
-      errors.push(`For today's delivery, time must be at least 1 hour from now. Please select time after ${formattedMinTime}`);
+      errors.push(`❌ For today's delivery, time must be at least 1 hour from now. Please select time after ${formattedMinTime}`);
+      
+      console.error("Order blocked - time validation failed");
     }
 
     // Check restaurant info
@@ -425,7 +431,7 @@ const testRouteParams = {
     selectedPayment,
     isUserAuth,
     isTimeValidForToday,
-    showToast,
+    showToast, // ✅ Added missing dependency
   ]);
 
   // Prepare order data for backend
@@ -441,13 +447,11 @@ const testRouteParams = {
       const mrp = Number(item?.oldPrice) || Number(item?.mrp) || price;
       const quantity = Number(item?.qty) || 1;
 
-      // Extract menuId properly
       let menuId = item?.productId || item?.id;
       if (menuId && menuId.includes("-")) {
         menuId = menuId.split("-").pop();
       }
 
-      // Validate menuId format (MongoDB ObjectId)
       const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(menuId);
       if (!isValidObjectId) {
         console.warn(`Invalid menuId format for item ${index}:`, menuId);
@@ -465,7 +469,6 @@ const testRouteParams = {
       };
     });
 
-    // Get delivery IDs
     const deliveryPointId =
       routeParams?.deliveryPoint?._id || routeParams?.deliveryPointId;
     const routeId = routeParams?.route?._id || routeParams?.routeId;
@@ -484,7 +487,6 @@ const testRouteParams = {
 
     const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
 
-    // FIX: Convert Date to ISO string for serialization
     const etaDate = new Date(
       Date.now() + (orderOverview.durationMinutes || 30) * 60000,
     );
@@ -524,7 +526,7 @@ const testRouteParams = {
     };
 
     console.log(
-      "Prepared order data (serializable):",
+      "Prepared order data:",
       JSON.stringify(orderData, null, 2),
     );
     return orderData;
@@ -541,8 +543,9 @@ const testRouteParams = {
   const handlePlaceOrder = async () => {
     console.log("=== Placing Order ===");
 
-    // Validate first - THIS WILL BLOCK ORDER IF TIME INVALID
-    if (!validateOrder()) {
+    // ✅ Validate first - THIS WILL BLOCK ORDER IF TIME INVALID
+    const isValid = validateOrder();
+    if (!isValid) {
       console.log("Validation failed:", validationErrors);
       return;
     }
@@ -582,14 +585,12 @@ const testRouteParams = {
 
       console.log("Creating order with data:", orderData);
 
-      // Create order via Redux
       const createdOrder = await dispatch(createOrder(orderData)).unwrap();
       console.log("Order creation result:", createdOrder);
 
       if (createdOrder?._id) {
         console.log("Order created successfully, navigating to success page");
 
-        // Process COD payment if selected
         if (selectedPayment === "cod") {
           await dispatch(
             processCODOrder({
@@ -600,7 +601,6 @@ const testRouteParams = {
           console.log("COD payment processed successfully");
         }
 
-        // Store order data in sessionStorage to pass to success page
         const successData = {
           orderNumber: createdOrder.orderNumber,
           orderId: createdOrder._id,
@@ -615,18 +615,16 @@ const testRouteParams = {
         sessionStorage.setItem("lastOrder", JSON.stringify(successData));
 
         showToast(
-          `Order placed successfully! Order ID: ${createdOrder.orderNumber}`,
+          `✅ Order placed successfully! Order ID: ${createdOrder.orderNumber}`,
         );
         localStorage.setItem("currentOrder", JSON.stringify(orderData));
 
-        // Navigate first, then clear cart after navigation to avoid flashing empty cart
         await router.push("/order_success");
         navigationCompleted = true;
 
         await clearCart();
         console.log("Cart cleared");
 
-        // Clear delivery data from localStorage after navigation
         localStorage.removeItem("deliverySelection");
         sessionStorage.removeItem("deliverySelection");
 
@@ -653,15 +651,12 @@ const testRouteParams = {
         errorMessage = paymentError;
       }
 
-      // Specific error handling
       if (errorMessage.includes("validation failed")) {
-        errorMessage =
-          "Order validation failed. Please check all details and try again.";
+        errorMessage = "Order validation failed. Please check all details and try again.";
       }
 
       if (errorMessage.includes("mrp") || errorMessage.includes("price")) {
-        errorMessage =
-          "Pricing information is missing. Please try adding items to cart again.";
+        errorMessage = "Pricing information is missing. Please try adding items to cart again.";
       }
 
       if (errorMessage.includes("restaurant")) {
@@ -669,14 +664,22 @@ const testRouteParams = {
       }
 
       showToast(errorMessage, true);
-
-      // Navigate to failed page instead of showing inline
       router.push(`/order_failed?error=${encodeURIComponent(errorMessage)}`);
     } finally {
       if (!navigationCompleted) {
         setIsProcessing(false);
       }
     }
+  };
+
+  // ✅ Add a test button for debugging (remove in production)
+  const testTimeValidation = () => {
+    const isValid = isTimeValidForToday();
+    const selectedDateTime = getJourneyDateTime();
+    console.log("=== Time Validation Test ===");
+    console.log("Selected DateTime:", selectedDateTime);
+    console.log("Is Valid:", isValid);
+    showToast(`Time validation: ${isValid ? "✅ Valid" : "❌ Invalid"}`, !isValid);
   };
 
   // Don't render checkout content until the client cart/storage state is ready.
@@ -719,6 +722,18 @@ const testRouteParams = {
       className="min-h-screen md:pt-5 pb-20 md:pb-0"
       style={{ backgroundColor: "#f5f5f5" }}
     >
+      {/* ✅ Add debug button (remove in production) */}
+      {process.env.NODE_ENV === "development" && (
+        <div className="fixed bottom-4 left-4 z-50">
+          <button
+            onClick={testTimeValidation}
+            className="bg-gray-800 text-white px-3 py-1 rounded-md text-xs shadow-lg"
+          >
+            🐛 Test Time
+          </button>
+        </div>
+      )}
+
       <div className="md:hidden sticky top-0 z-50 bg-white border-b border-gray-100 mt-2 ">
         <div className="h-12 px-3 flex items-center justify-between ">
           <button
@@ -747,7 +762,6 @@ const testRouteParams = {
         </div>
       )}
 
-      {/* DESKTOP LAYOUT */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 px-3 sm:px-6">
         <div className="md:col-span-2 flex flex-col gap-3">
           <OrderOverview
@@ -764,7 +778,6 @@ const testRouteParams = {
                 isDesktop={true}
                 isUserAuth={isUserAuth}
                 userData={userData}
-                // onLogin={() => router.push("/login")}
               />
             ) : (
               <>

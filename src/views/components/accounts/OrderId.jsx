@@ -811,11 +811,11 @@ export default function OrderId() {
                     <FiCheckCircle className="text-[#FF581B]" />
                     Delivery OTP
                   </h3>
-                  {!otpVerified && (
+                  {/* {!otpVerified && (
                     <button onClick={() => setShowOtpInput(!showOtpInput)} className="text-xs text-[#FF581B] font-medium">
                       {showOtpInput ? "Cancel" : "Enter OTP"}
                     </button>
-                  )}
+                  )} */}
                 </div>
                 {otpVerified ? (
                   <div className="bg-green-50 rounded-xl p-4 flex items-center gap-3">

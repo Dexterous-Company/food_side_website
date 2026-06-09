@@ -436,13 +436,13 @@ export default function Orders() {
                           Cancel
                         </button>
                       )}
-                      <button
+                      <div
                         onClick={() => handleViewDetails(order._id)}
                         className="px-3 py-1.5 rounded-full bg-[#FF581B] text-white text-[11px] font-semibold hover:bg-[#E04A10] transition-colors flex items-center gap-1"
                       >
                         <FiEye size={12} />
                         View Details
-                      </button>
+                      </div>
                     </div>
                   </div>
 

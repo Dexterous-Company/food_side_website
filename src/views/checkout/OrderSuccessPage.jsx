@@ -361,11 +361,11 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
 
                   {/* Location Flow */}
                   <div className="flex gap-3 sm:gap-4 mb-5">
-                    <div className="flex flex-col items-center">
+                    {/* <div className="flex flex-col items-center">
                       <div className="w-3 h-3 rounded-full bg-green-500"></div>
                       <div className="w-0.5 h-20 sm:h-24 bg-gray-200 my-1"></div>
                       <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    </div>
+                    </div> */}
                     <div className="flex-1">
                       {/* <div className="mb-5">
                         <p className="text-xs text-green-600 font-semibold">
@@ -381,7 +381,7 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
                       </div> */}
                       <div>
                         <p className="text-xs text-red-500 font-semibold">
-                          DELIVERY LOCATION
+                          DELIVERY POINT LOCATION
                         </p>
                         <p className="text-sm sm:text-base font-medium text-gray-800 mt-1">
                           {deliveryPointName}
