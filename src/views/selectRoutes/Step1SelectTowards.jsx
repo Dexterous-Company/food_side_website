@@ -500,7 +500,7 @@ export default function Step1SelectTowards({
                 <span className="text-[#F57C00]">Side</span>
               </h1>
 
-              <p className="text-[12px] text-gray-400 mt-1 truncate max-w-[190px]">
+              <p className="text-[12px] text-gray-400 truncate max-w-[190px]">
                 {locationLoading
                   ? "Detecting your location..."
                   : fromLocation || "Location unavailable"}
@@ -521,7 +521,7 @@ export default function Step1SelectTowards({
         </header>
       </div>
 
-      <div className="flex flex-col gap-3 h-full min-h-0 sm:mt-0 mt-2 p-2">
+      <div className="flex flex-col bg-white gap-3 h-full min-h-0 sm:mt-0 mt-2 p-2">
         <div className="">
           <BannerCarousel banners={BANNERS} />
         </div>
@@ -729,7 +729,7 @@ export default function Step1SelectTowards({
                 disabled={!selDest || !selectedDate || !selectedTime}
                 className="flex-1 rounded-xl bg-[#ff581b] px-5 py-3 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#e04d16] disabled:bg-orange-200 disabled:cursor-not-allowed"
               >
-                Next →
+                <div className="text-white">Next →</div>
               </button>
             )}
           </div>
