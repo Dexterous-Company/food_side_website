@@ -16,6 +16,7 @@ import {
 
 const BANNER_ENABLED_ROUTES = [
   "/",
+  "/home",
   "/favorites",
   "/dining",
   "/restaurant",
@@ -178,7 +179,7 @@ export default function ClientLayout({ children }) {
     "/accounts/orders",
     "/accounts/orders/:id",
     "/order_success",
-    
+    "/"
   ];
   const hideFooterMobileRoutes = [
     "/login",
