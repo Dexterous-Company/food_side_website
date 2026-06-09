@@ -419,7 +419,7 @@ export default function DeliverySelectionModal({ onFinish }) {
             Previous
           </button>
 
-          <div className="flex items-center justify-between gap-3 sm:justify-start">
+          <div className="flex items-center justify-between md:mb-10 mb-17 gap-3 sm:justify-start ">
             <div className="sm:block hidden">
               <div className="flex gap-1.5">
                 {STEPS.map((_, i) => (
@@ -436,7 +436,7 @@ export default function DeliverySelectionModal({ onFinish }) {
             <button
               onClick={handleNext}
               disabled={!canNext()}
-              className={`w-full flex items-center justify-center sm:w-28 px-6 py-3 sm:py-2.5 text-sm font-semibold rounded-xl text-white transition-all duration-150
+              className={`w-full flex items-center  justify-center sm:w-28 px-6 py-3 sm:py-2.5 text-sm font-semibold rounded-xl text-white transition-all duration-150
                   ${step === 1 ? "hidden md:inline-flex" : "inline-flex"}
                   ${
                     canNext()

@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectIsDeliveryModalOpen,
+  selectIsMapViewModalOpen,
   setPickupLocation,
 } from "@/redux/delivery/deliverySlice";
 
@@ -164,8 +165,9 @@ export default function ClientLayout({ children }) {
   const hideFooterRoutes = ["/login", "/sign-up", "/register"];
 
   const isDeliveryModalOpen = useSelector(selectIsDeliveryModalOpen);
-  const hideHeader = hideHeaderRoutes.includes(pathname) || isDeliveryModalOpen;
-  const hideFooter = hideFooterRoutes.includes(pathname) || isDeliveryModalOpen;
+  const isMapViewModalOpen = useSelector(selectIsMapViewModalOpen);
+  const hideHeader = hideHeaderRoutes.includes(pathname) || isDeliveryModalOpen || isMapViewModalOpen;
+  const hideFooter = hideFooterRoutes.includes(pathname) || isDeliveryModalOpen || isMapViewModalOpen;
 
   // Mobile control
   const hideHeaderMobileRoutes = [
@@ -245,7 +247,7 @@ export default function ClientLayout({ children }) {
             onPressClear={clearCart}
           />
         </div>
-      )}
+      )}  
 
       {!hideFooterRoutes.includes(pathname) && (
         <div
