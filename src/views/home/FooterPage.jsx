@@ -148,7 +148,7 @@ const FooterPage = () => {
             </div>
 
             {/* Main Footer Content */}
-            <div className="footer-main py-12 lg:py-20 bg-black">
+            <div className="footer-main py-12 lg:py-20 bg-white">
               <div className="container mx-auto px-4 lg:px-8 max-w-[1480px]">
                 {/* Footer Grid */}
                 <div className="footer-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-8 lg:mb-16">
@@ -163,7 +163,7 @@ const FooterPage = () => {
                         />
                       </Link>
                     </div>
-                    <p className="footer-description text-white/70 text-sm lg:text-base leading-relaxed mb-6">
+                    <p className="footer-description text-[#555] font-semibold text-sm lg:text-base leading-relaxed mb-6">
                       Delivering premium culinary experiences with passion,
                       quality ingredients, and exceptional service.
                     </p>
@@ -209,14 +209,14 @@ const FooterPage = () => {
 
                   {/* Quick Links */}
                   <div className="footer-column animate-[fadeInUp_0.8s_ease-out_0.3s_both]">
-                    <h5 className="footer-column-title text-white text-sm lg:text-base font-bold uppercase tracking-wider mb-5 lg:mb-8 relative pb-3 lg:pb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 lg:after:w-12 after:h-0.5 after:bg-[#ff581b] after:rounded-sm">
+                    <h5 className="footer-column-title text-[#121212]  text-sm lg:text-base font-black uppercase tracking-wider mb-5 lg:mb-8 relative pb-3 lg:pb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 lg:after:w-12 after:h-0.5 after:bg-[#ff581b] after:rounded-sm">
                       Quick Menu
                     </h5>
                     <ul className="footer-links space-y-3">
                       <li>
                         <Link
                           href="/"
-                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                          className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Home
                         </Link>
@@ -224,7 +224,7 @@ const FooterPage = () => {
                       <li>
                         <Link
                           href="/about_us"
-                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                          className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           About Us
                         </Link>
@@ -232,7 +232,7 @@ const FooterPage = () => {
                       <li>
                         <Link
                           href="/contact_us"
-                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                          className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Contact Us
                         </Link>
@@ -240,7 +240,7 @@ const FooterPage = () => {
                       <li>
                         <Link
                           href="/refundPolicy"
-                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                          className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           Refund Policy
                         </Link>
@@ -248,7 +248,7 @@ const FooterPage = () => {
                       <li>
                         <Link
                           href="/faq"
-                          className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                          className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                         >
                           FAQ
                         </Link>
@@ -258,7 +258,7 @@ const FooterPage = () => {
 
                   {/* My Account - Dynamic based on login status */}
                   <div className="footer-column animate-[fadeInUp_0.8s_ease-out_0.4s_both]">
-                    <h5 className="footer-column-title text-white text-sm lg:text-base font-bold uppercase tracking-wider mb-5 lg:mb-8 relative pb-3 lg:pb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 lg:after:w-12 after:h-0.5 after:bg-[#ff581b] after:rounded-sm">
+                    <h5 className="footer-column-title text-[#121212] text-sm lg:text-base font-black uppercase tracking-wider mb-5 lg:mb-8 relative pb-3 lg:pb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 lg:after:w-12 after:h-0.5 after:bg-[#ff581b] after:rounded-sm">
                       My Account
                     </h5>
                     <ul className="footer-links space-y-3">
@@ -268,7 +268,7 @@ const FooterPage = () => {
                           <li>
                             <Link
                               href="/accounts"
-                              className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                              className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                             >
                               Dashboard
                             </Link>
@@ -276,7 +276,7 @@ const FooterPage = () => {
                           <li>
                             <Link
                               href="/accounts/profile"
-                              className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                              className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                             >
                               My Profile
                             </Link>
@@ -284,7 +284,7 @@ const FooterPage = () => {
                           <li>
                             <Link
                               href="/accounts/orders"
-                              className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                              className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                             >
                               My Orders
                             </Link>
@@ -292,7 +292,7 @@ const FooterPage = () => {
                           <li>
                             <Link
                               href="/cart"
-                              className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                              className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                             >
                               View Cart
                             </Link>
@@ -300,9 +300,17 @@ const FooterPage = () => {
                           <li>
                             <Link
                               href="/accounts/notifications"
-                              className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                              className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                             >
                               Notification
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/cart"
+                              className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                            >
+                              View Cart
                             </Link>
                           </li>
                         </>
@@ -312,7 +320,7 @@ const FooterPage = () => {
                           <li>
                             <Link
                               href="/login"
-                              className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                              className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                             >
                               Login
                             </Link>
@@ -320,7 +328,7 @@ const FooterPage = () => {
                           <li>
                             <Link
                               href="/sign-up"
-                              className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                              className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                             >
                               Sign Up
                             </Link>
@@ -328,7 +336,7 @@ const FooterPage = () => {
                           <li>
                             <Link
                               href="/cart"
-                              className="text-white/70 text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
+                              className="text-[#555] font-semibold text-sm lg:text-base transition-all duration-300 hover:text-[#ff581b] hover:pl-2 inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full"
                             >
                               View Cart
                             </Link>
@@ -340,37 +348,37 @@ const FooterPage = () => {
 
                   {/* Contact Information */}
                   <div className="footer-column animate-[fadeInUp_0.8s_ease-out_0.5s_both]">
-                    <h5 className="footer-column-title text-white text-sm lg:text-base font-bold uppercase tracking-wider mb-5 lg:mb-8 relative pb-3 lg:pb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 lg:after:w-12 after:h-0.5 after:bg-[#ff581b] after:rounded-sm">
+                    <h5 className="footer-column-title text-[#121212] text-sm lg:text-base font-black uppercase tracking-wider mb-5 lg:mb-8 relative pb-3 lg:pb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 lg:after:w-12 after:h-0.5 after:bg-[#ff581b] after:rounded-sm">
                       Contact Us
                     </h5>
                     <div className="contact-info space-y-4 lg:space-y-5">
                       <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
-                        <FaPhoneAlt className="text-[#ff581b] text-base lg:text-lg group-hover:text-white group-hover:scale-110 transition-all" />
-                        <p className="text-white/70 text-sm lg:text-base">
+                        <FaPhoneAlt className="text-[#ff581b] text-base lg:text-lg group-hover:text-[#f4b400] group-hover:scale-110 transition-all" />
+                        <p className="text-[#555] font-semibold text-sm lg:text-base">
                           +91 8688043861
                         </p>
                       </div>
                       <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
-                        <FaEnvelope className="text-[#ff581b] text-base lg:text-lg group-hover:text-white group-hover:scale-110 transition-all" />
-                        <a
+                        <FaEnvelope className="text-[#ff581b] text-base lg:text-lg group-hover:text-[#f4b400] group-hover:scale-110 transition-all" />
+                        <Link
                           href="mailto:info@foodside.co.in"
-                          className="text-white/70 text-sm lg:text-base"
+                          className="text-[#555] font-semibold text-sm lg:text-base"
                         >
                           info@foodside.co.in
-                        </a>
+                        </Link>
                       </div>
                       <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
-                        <FaEnvelope className="text-[#ff581b] text-base lg:text-lg group-hover:text-white group-hover:scale-110 transition-all" />
-                        <a
+                        <FaEnvelope className="text-[#ff581b] text-base lg:text-lg group-hover:text-[#f4b400] group-hover:scale-110 transition-all" />
+                        <Link
                           href="mailto:admin@foodside.co.in"
-                          className="text-white/70 text-sm lg:text-base"
+                          className="text-[#555] font-semibold text-sm lg:text-base"
                         >
                           admin@foodside.co.in
-                        </a>
+                        </Link>
                       </div>
                       <div className="info-item flex gap-3 lg:gap-4 group transition-all hover:translate-x-2">
-                        <FaClock className="text-[#ff581b] text-base lg:text-lg group-hover:text-white group-hover:scale-110 transition-all" />
-                        <p className="text-white/70 text-sm lg:text-base">
+                        <FaClock className="text-[#ff581b] text-base lg:text-lg group-hover:text-[#f4b400] group-hover:scale-110 transition-all" />
+                        <p className="text-[#555] font-semibold text-sm lg:text-base">
                           Mon-Sat: 9am - 10pm
                         </p>
                       </div>
@@ -386,8 +394,8 @@ const FooterPage = () => {
                 {/* Footer Bottom */}
                 <div className="footer-bottom">
                   <div className="footer-bottom-content flex flex-col lg:flex-row justify-between items-center gap-6">
-                    <p className="copyright-text text-white/60 text-xs lg:text-sm text-center lg:text-left">
-                      &copy; {new Date().getFullYear()} Dexterous Technologie.
+                    <p className="copyright-text text-[#555] font-semibold text-xs lg:text-sm text-center lg:text-left">
+                      &copy; {new Date().getFullYear()}  Bollineni Ventures.
                       All Rights Reserved.
                       <span className="hidden lg:inline mx-2 opacity-40">
                         |
@@ -395,30 +403,31 @@ const FooterPage = () => {
                       <br className="lg:hidden" />
                       <Link
                         href="/privacypolicy"
-                        className="text-[#ff581b] hover:text-white transition-colors mx-1"
+                        className="text-[#ff581b] hover:text-[#121212] transition-colors mx-1"
                       >
                         Privacy Policy
                       </Link>
                       <span className="opacity-40 mx-1">|</span>
                       <Link
                         href="/terms_conditions"
-                        className="text-[#ff581b] hover:text-white transition-colors mx-1"
+                        className="text-[#ff581b] hover:text-[#121212] transition-colors mx-1"
                       >
                         Terms & Conditions
                       </Link>
                     </p>
                     <div className="payment-methods flex items-center gap-3 flex-wrap justify-center">
-                      <span className="payment-label text-white/60 text-[10px] lg:text-xs uppercase tracking-wide font-semibold">
+                      <span className="payment-label text-[#555] text-[10px] lg:text-xs uppercase tracking-wide font-semibold">
                         We Accept:
                       </span>
                       <div className="flex gap-2 lg:gap-3">
-                        <FaCcVisa className="text-white/50 text-xl lg:text-2xl hover:text-white transition-all cursor-pointer hover:scale-110" />
-                        <FaCcMastercard className="text-white/50 text-xl lg:text-2xl hover:text-white transition-all cursor-pointer hover:scale-110" />
-                        <FaCcPaypal className="text-white/50 text-xl lg:text-2xl hover:text-white transition-all cursor-pointer hover:scale-110" />
-                        <FaCcAmex className="text-white/50 text-xl lg:text-2xl hover:text-white transition-all cursor-pointer hover:scale-110" />
+                        <FaCcVisa className="text-[#999] text-xl lg:text-2xl hover:text-[#121212] transition-all cursor-pointer hover:scale-110" />
+                        <FaCcMastercard className="text-[#999] text-xl lg:text-2xl hover:text-[#121212] transition-all cursor-pointer hover:scale-110" />
+                        <FaCcPaypal className="text-[#999] text-xl lg:text-2xl hover:text-[#121212] transition-all cursor-pointer hover:scale-110" />
+                        <FaCcAmex className="text-[#999] text-xl lg:text-2xl hover:text-[#121212] transition-all cursor-pointer hover:scale-110" />
                       </div>
                     </div>
                   </div>
+                  <div className="copyright-text text-[#555] font-semibold text-xs lg:text-sm text-center lg:text-left text-center"> Design by Dexterous Technology</div>
                 </div>
               </div>
             </div>

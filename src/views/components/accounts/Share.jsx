@@ -14,6 +14,7 @@ import {
   FiMail,
 } from "react-icons/fi";
 import { RiWhatsappLine } from "react-icons/ri";
+import Link from "next/link";
 
 const Share = () => {
   const router = useRouter();
@@ -139,7 +140,7 @@ const Share = () => {
                 {shareOptions.map((option, index) => {
                   const Icon = option.icon;
                   return (
-                    <a
+                    <Link
                       key={index}
                       href={option.link}
                       target="_blank"
@@ -147,7 +148,7 @@ const Share = () => {
                       className={`w-10 h-10 rounded-full ${option.color} flex items-center justify-center text-white hover:opacity-80 transition-opacity`}
                     >
                       <Icon size={18} />
-                    </a>
+                    </Link>
                   );
                 })}
               </div>

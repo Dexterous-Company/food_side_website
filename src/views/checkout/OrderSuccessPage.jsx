@@ -482,19 +482,19 @@ const OrderSuccessPage = ({ onContinueShopping }) => {
 
             {/* Buttons */}
             <div className="space-y-3 sm:space-y-4">
-              <button
+              <div
                 onClick={handleTrackOrder}
                 className="w-full bg-gradient-to-r from-[#ff581b] to-[#e04e14] text-white font-semibold py-3 sm:py-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition shadow-md hover:shadow-lg"
               >
                 <FaTruck className="text-white text-lg" />
                 Track Order
-              </button>
-              <button
+              </div>
+              <div
                 onClick={handleBackToHome}
-                className="w-full bg-white border border-gray-200 text-gray-800 font-semibold py-3 sm:py-4 rounded-xl hover:bg-gray-50 transition shadow-sm"
+                className="w-full bg-white border border-gray-200 text-gray-800 font-semibold py-3 sm:py-4 rounded-xl hover:bg-gray-50 transition shadow-sm text-center"
               >
                 Back to Home
-              </button>
+              </div>
             </div>
           </div>
         </div>
