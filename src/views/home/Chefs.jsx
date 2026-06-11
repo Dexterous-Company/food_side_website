@@ -47,15 +47,15 @@ const Chefs = () => {
                   
                   {/* Social Icons */}
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 opacity-0 translate-y-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-                    <a href={chef.social.instagram} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center hover:bg-[#ff581b] hover:border-[#ff581b] transition-all">
+                    <Link href={chef.social.instagram} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center hover:bg-[#ff581b] hover:border-[#ff581b] transition-all">
                       <i className="fab fa-instagram text-sm"></i>
-                    </a>
-                    <a href={chef.social.facebook} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center hover:bg-[#ff581b] hover:border-[#ff581b] transition-all">
+                    </Link>
+                    <Link href={chef.social.facebook} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center hover:bg-[#ff581b] hover:border-[#ff581b] transition-all">
                       <i className="fab fa-facebook-f text-sm"></i>
-                    </a>
-                    <a href={chef.social.twitter} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center hover:bg-[#ff581b] hover:border-[#ff581b] transition-all">
+                    </Link>
+                    <Link href={chef.social.twitter} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center hover:bg-[#ff581b] hover:border-[#ff581b] transition-all">
                       <i className="fab fa-twitter text-sm"></i>
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div className="text-center py-5">

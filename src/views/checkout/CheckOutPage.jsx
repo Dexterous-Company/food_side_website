@@ -734,12 +734,12 @@ const CheckOutPage = () => {
           <p className="text-gray-600 mb-6">
             Add some delicious items to your cart to place an order
           </p>
-          <button
+          <div
             onClick={() => router.push("/")}
             className="px-6 py-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors"
           >
             Browse Restaurants
-          </button>
+          </div>
         </div>
       </div>
     );

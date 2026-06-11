@@ -10,7 +10,7 @@ const About = () => {
   }, []);
 
   return (
-    <section className="py-0 md:py-28 bg-white relative overflow-hidden">
+    <section className="py-0 md:py-10 bg-white relative overflow-hidden">
       {/* Background Blobs */}
       <div className="absolute w-[700px] h-[700px] rounded-full bg-gradient-radial from-[#ff581b]/5 to-transparent top-[-200px] right-[-200px] pointer-events-none" />
       <div className="absolute w-[400px] h-[400px] rounded-full bg-gradient-radial from-[#ff581b]/5 to-transparent bottom-[-100px] left-[-100px] pointer-events-none" />

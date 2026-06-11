@@ -58,7 +58,7 @@ const Page = () => {
 
   return (
     <div>
-      <div className="relative md:block hidden">
+      <div className="relative md:block hidden pt-10">
         <HeroSection />
       </div>
 
