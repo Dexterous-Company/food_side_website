@@ -23,6 +23,7 @@ import {
 } from "react-icons/fa";
 import { logout } from "@/redux/Authentication/AuthenticationSlice";
 import { useCart } from "@/context/CartContext";
+import Link from "next/link";
 
 const HeaderPage = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -185,12 +186,6 @@ const HeaderPage = () => {
           icon: "🛡️",
           desc: "How we use your data",
         },
-        {
-          name: "404 Error Page",
-          link: "/404",
-          icon: "⚠️",
-          desc: "Custom not found page",
-        },
       ],
     },
     { name: "Contact", link: "/contact_us", isDropdown: false },
@@ -198,43 +193,31 @@ const HeaderPage = () => {
 
   // Determine text color based on scroll and page
   const getNavLinkColor = () => {
-    if (scrolled) return "text-[#121212] hover:text-[#ff581b]";
-    if (isHomePage) return "text-white hover:text-[#ff581b]";
     return "text-[#121212] hover:text-[#ff581b]";
   };
 
-  // const getDropdownButtonColor = () => {
-  //   if (scrolled) return "text-[#121212] hover:text-[#ff581b]";
-  //   if (isHomePage) return "text-white hover:text-[#ff581b]";
-  //   return "text-[#121212] hover:text-[#ff581b]";
-  // };
   const getDropdownButtonColor = () => {
-    if (scrolled) return "text-[#121212] hover:text-[#ff581b]";
-    if (isHomePage) return "text-white hover:text-[#ff581b]";
     return "text-[#121212] hover:text-[#ff581b]";
   };
+
+  const menuBarColor = isMobileMenuOpen ? "bg-black" : "bg-black";
+
   return (
     <>
-      {/* MAIN HEADER - Transparent on scroll */}
+      {/* MAIN HEADER */}
       <header
         id="main-header"
-        className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-white shadow-lg"
-            : isHomePage
-              ? "bg-transparent"
-              : "bg-white shadow-md"
-        }`}
+        className="fixed w-full top-0 z-50 bg-white shadow-md transition-all duration-300"
       >
         <nav className="container mx-auto px-4 lg:px-8 max-w-[1480px] py-3 lg:py-0 flex justify-between items-center relative">
           {/* Logo */}
-          <a href="/" className="flex-shrink-0">
+          <Link href="/" className="flex-shrink-0">
             <img
               src="/main_log_fd.png"
               alt="Food Side"
               className="h-12 lg:h-[65px] w-auto transition-all object-contain duration-300"
             />
-          </a>
+          </Link>
 
           {/* Mobile Menu Toggle Button */}
           <button
@@ -246,32 +229,18 @@ const HeaderPage = () => {
               className={`block w-6 h-0.5 rounded-sm transition-all duration-300 ease-in-out ${
                 isMobileMenuOpen
                   ? "translate-y-2 rotate-45"
-                  : scrolled || !isHomePage
-                    ? "bg-black"
-                    : "bg-white"
+                  : menuBarColor
               }`}
             ></span>
             <span
               className={`block w-6 h-0.5 rounded-sm transition-all duration-300 ease-in-out ${
                 isMobileMenuOpen ? "opacity-0 scale-x-0" : ""
-              } ${
-                !isMobileMenuOpen && (scrolled || !isHomePage)
-                  ? "bg-black"
-                  : !isMobileMenuOpen && isHomePage && !scrolled
-                    ? "bg-white"
-                    : "bg-black"
-              }`}
+              } ${menuBarColor}`}
             ></span>
             <span
               className={`block w-6 h-0.5 rounded-sm transition-all duration-300 ease-in-out ${
                 isMobileMenuOpen ? "-translate-y-2 -rotate-45" : ""
-              } ${
-                !isMobileMenuOpen && (scrolled || !isHomePage)
-                  ? "bg-black"
-                  : !isMobileMenuOpen && isHomePage && !scrolled
-                    ? "bg-white"
-                    : "bg-black"
-              }`}
+              } ${menuBarColor}`}
             ></span>
           </button>
 
@@ -336,7 +305,7 @@ const HeaderPage = () => {
                           <div className="bg-gray-50 pl-4 pr-3 py-2">
                             {!item.dropdownColumns &&
                               item.dropdownItems?.map((sub) => (
-                                <a
+                                <Link
                                   key={sub.name}
                                   href={sub.link}
                                   className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white transition-all duration-200 border-l-2 border-transparent hover:border-[#ff581b]"
@@ -358,7 +327,7 @@ const HeaderPage = () => {
                                       {sub.badge}
                                     </span>
                                   )}
-                                </a>
+                                </Link>
                               ))}
 
                             {item.dropdownColumns && (
@@ -368,7 +337,7 @@ const HeaderPage = () => {
                                     Restaurant
                                   </p>
                                   {item.dropdownItemsLeft?.map((sub) => (
-                                    <a
+                                    <Link
                                       key={sub.name}
                                       href={sub.link}
                                       className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white transition-all duration-200 border-l-2 border-transparent hover:border-[#ff581b]"
@@ -385,7 +354,7 @@ const HeaderPage = () => {
                                           {sub.desc}
                                         </small>
                                       </div>
-                                    </a>
+                                    </Link>
                                   ))}
                                 </div>
                                 <div className="h-px bg-gray-200 my-2 mx-3"></div>
@@ -394,7 +363,7 @@ const HeaderPage = () => {
                                     Info Pages
                                   </p>
                                   {item.dropdownItemsRight?.map((sub) => (
-                                    <a
+                                    <Link
                                       key={sub.name}
                                       href={sub.link}
                                       className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white transition-all duration-200 border-l-2 border-transparent hover:border-[#ff581b]"
@@ -411,7 +380,7 @@ const HeaderPage = () => {
                                           {sub.desc}
                                         </small>
                                       </div>
-                                    </a>
+                                    </Link>
                                   ))}
                                 </div>
                               </>
@@ -420,13 +389,13 @@ const HeaderPage = () => {
                         </div>
                       </>
                     ) : (
-                      <a
+                      <Link
                         href={item.link}
                         className="block px-5 py-4 text-[15px] font-semibold text-[#121212] hover:text-[#ff581b] transition-colors"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     )}
                   </li>
                 ))}
@@ -436,12 +405,12 @@ const HeaderPage = () => {
             {/* Mobile Footer Actions */}
             <div className="p-5 border-t border-gray-100 bg-gray-50">
               <div className="flex gap-3 mb-4">
-                <a
+                <Link
                   href="/cart"
                   className="flex-1 bg-gray-200 text-[#121212] font-bold py-3 px-4 rounded-full flex items-center justify-center gap-2 hover:bg-[#ff581b] hover:text-white transition-colors"
                 >
                   <FaShoppingCart size={14} /> Cart ({cartCount})
-                </a>
+                </Link>
               </div>
               {!isLoggedIn ? (
                 <>
@@ -484,8 +453,8 @@ const HeaderPage = () => {
                 <li key={item.name} className="relative group py-3">
                   {item.isDropdown ? (
                     <>
-                      <button
-                        className={`flex items-center gap-1 font-semibold py-2.5 px-3 transition-colors duration-300 cursor-pointer group ${getNavLinkColor()}`}
+                          <button
+                        className={`flex items-center gap-1 font-semibold py-2.5 px-3 transition-colors duration-300 cursor-pointer group ${getDropdownButtonColor()}`}
                       >
                         {item.name}
                         <FaAngleDown className="text-xs transition-transform duration-300 group-hover:rotate-180" />
@@ -500,7 +469,7 @@ const HeaderPage = () => {
                               Choose Layout
                             </p>
                             {item.dropdownItems?.map((sub) => (
-                              <a
+                              <Link
                                 key={sub.name}
                                 href={sub.link}
                                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#F6F3F0] transition-all duration-200 border border-transparent hover:border-orange-100 group/link"
@@ -521,7 +490,7 @@ const HeaderPage = () => {
                                     {sub.badge}
                                   </span>
                                 )}
-                              </a>
+                              </Link>
                             ))}
                           </div>
                         )}
@@ -533,7 +502,7 @@ const HeaderPage = () => {
                                 Restaurant
                               </p>
                               {item.dropdownItemsLeft?.map((sub) => (
-                                <a
+                                <Link
                                   key={sub.name}
                                   href={sub.link}
                                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#F6F3F0] transition-all duration-200 border border-transparent hover:border-orange-100 group/link"
@@ -549,7 +518,7 @@ const HeaderPage = () => {
                                       {sub.desc}
                                     </small>
                                   </div>
-                                </a>
+                                </Link>
                               ))}
                             </div>
                             <div className="w-px bg-black/5 my-1.5 mx-2"></div>
@@ -558,7 +527,7 @@ const HeaderPage = () => {
                                 Info Pages
                               </p>
                               {item.dropdownItemsRight?.map((sub) => (
-                                <a
+                                <Link
                                   key={sub.name}
                                   href={sub.link}
                                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#F6F3F0] transition-all duration-200 border border-transparent hover:border-orange-100 group/link"
@@ -574,7 +543,7 @@ const HeaderPage = () => {
                                       {sub.desc}
                                     </small>
                                   </div>
-                                </a>
+                                </Link>
                               ))}
                             </div>
                           </div>
@@ -582,12 +551,12 @@ const HeaderPage = () => {
                       </div>
                     </>
                   ) : (
-                    <a
+                    <Link
                       href={item.link}
                       className={`block font-semibold py-2.5 px-3 transition-colors duration-300 relative after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-[#ff581b] after:transition-all after:duration-300 hover:after:w-full ${getNavLinkColor()}`}
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   )}
                 </li>
               ))}
@@ -595,25 +564,17 @@ const HeaderPage = () => {
 
             {/* Desktop Header Actions */}
             <div className="flex items-center gap-4 lg:gap-5">
-              <a
+              <Link
                 href="/cart"
-                className={`relative w-10 h-10 lg:w-15 lg:h-11 rounded-full transition-all duration-300 group overflow-hidden cursor-pointer flex items-center justify-center ${
-                  scrolled || !isHomePage
-                    ? "text-[#ff581b] bg-white hover:bg-[#ff581b] hover:text-white"
-                    : "text-white hover:bg-[#ff581b] hover:text-white"
-                }`}
+                className="relative w-10 h-10 lg:w-15 lg:h-11 rounded-full transition-all duration-300 group overflow-hidden cursor-pointer flex items-center justify-center text-[#ff581b] bg-white hover:bg-[#ff581b] hover:text-white"
               >
                 <FaShoppingCart className="text-lg transition-colors" />
                 {cartCount > 0 && (
-                  <span
-                    className={`absolute top-1 right-1 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center z-20 ${
-                      scrolled || !isHomePage ? "bg-black" : "bg-[#ff581b]"
-                    }`}
-                  >
+                  <span className="absolute top-1 right-1 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center z-20 bg-black">
                     {cartCount}
                   </span>
                 )}
-              </a>
+              </Link>
 
               {/* Auth Dropdown - Desktop */}
               {!isLoggedIn ? (

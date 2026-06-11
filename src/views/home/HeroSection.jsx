@@ -123,7 +123,7 @@ const HeroSection = () => {
               <br />
               Food In Town
             </div>
-            <div className="hero-desc text-white/65 text-base sm:text-lg leading-relaxed max-w-[480px]">
+            <div className=" text-white/65 text-base sm:text-lg leading-relaxed max-w-[480px]">
               Handpicked meals prepared with fresh ingredients from trusted
               highway restaurants. Every order ensures a hot, hygienic, and
               satisfying travel food experience. Order now and enjoy seamless

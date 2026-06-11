@@ -183,7 +183,7 @@ const TermsAndCondtion = () => {
               "url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&h=500&fit=crop')",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r  to-transparent" />
         <div className="container relative z-10 mx-auto px-4 md:px-8 max-w-7xl">
           <div className="max-w-2xl" data-aos="fade-up">
             <div className="flex items-center gap-2 text-[#ff581b] text-sm font-semibold uppercase tracking-wider mb-4">
@@ -422,18 +422,18 @@ const TermsAndCondtion = () => {
               <h3 className="font-bold text-[#121212] text-lg mb-2">
                 Email Us
               </h3>
-              <a
+              <Link
                 href="mailto:info@foodside.co.in"
                 className="text-[#ff581b] hover:underline block"
               >
                 info@foodside.co.in
-              </a>
-              <a
+              </Link>
+              <Link
                 href="mailto:admin@foodside.co.in"
                 className="text-gray-500 text-sm hover:text-[#ff581b] block mt-1"
               >
                 admin@foodside.co.in
-              </a>
+              </Link>
             </div>
 
             {/* Phone Card */}
@@ -454,12 +454,12 @@ const TermsAndCondtion = () => {
                 </svg>
               </div>
               <h3 className="font-bold text-[#121212] text-lg mb-2">Call Us</h3>
-              <a
+              <Link
                 href="tel:+918688043861"
                 className="text-[#ff581b] hover:underline"
               >
                 +91 86880 43861
-              </a>
+              </Link>
               <p className="text-gray-400 text-sm mt-1">Mon-Sat: 9AM - 7PM</p>
             </div>
 
