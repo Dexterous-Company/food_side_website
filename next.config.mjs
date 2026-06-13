@@ -1,5 +1,7 @@
 const nextConfig = {
   reactCompiler: true,
+
+  allowedDevOrigins: ["*"],
   images: {
     remotePatterns: [
       {

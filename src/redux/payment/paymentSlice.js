@@ -1,6 +1,6 @@
 // redux/slices/paymentSlice.js
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import paymentService from '../../pages/services/paymentService';
+import paymentService from '../../services/paymentService';
 
 export const processCODOrder = createAsyncThunk(
   'payment/processCODOrder',

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Sidebar from "@/pages/components/accounts/Sidebar";
+import Sidebar from "@/views/components/accounts/Sidebar";
 
 export default function Layout({ children }) {
   const pathname = usePathname();
@@ -9,7 +9,7 @@ export default function Layout({ children }) {
   const isAccountHome = pathname === "/accounts";
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen pb-10 md:pb-0 overflow-hidden">
       {/* Sidebar */}
       <div className="hidden lg:block h-full">
         <Sidebar />
